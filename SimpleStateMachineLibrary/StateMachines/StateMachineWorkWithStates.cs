@@ -1,9 +1,8 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.States;
-using System.Linq;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.StateMachines
+
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
@@ -66,7 +65,7 @@ namespace SimpleStateMachineLibrary.StateMachines
 
         public State AddState(XElement xElement)
         {
-            return States.State.FromXElement(this, Check.Object(xElement));
+            return SimpleStateMachineLibrary.State.FromXElement(this, Check.Object(xElement));
         }
 
         public State TryAddState(string nameState)

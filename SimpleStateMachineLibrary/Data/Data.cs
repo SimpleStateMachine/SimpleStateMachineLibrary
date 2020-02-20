@@ -1,8 +1,6 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
 
-
-namespace SimpleStateMachineLibrary.Datas
+namespace SimpleStateMachineLibrary
 {
     public partial class Data : NamedObject
     {

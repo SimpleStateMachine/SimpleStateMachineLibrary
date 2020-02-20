@@ -1,13 +1,12 @@
-﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.States;
-using SimpleStateMachineLibrary.Transitions;
+﻿
+using SimpleStateMachineLibrary.Helpers;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.StateMachines
+
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
-
         private Transition _Transition(Transition transition, bool exeption)
         {
             return Check.GetElement(_transitions, transition, exeption);
@@ -79,7 +78,7 @@ namespace SimpleStateMachineLibrary.StateMachines
 
         public Transition AddTransition(XElement xElement)
         {
-            return Transitions.Transition.FromXElement(this, Check.Object(xElement));
+            return SimpleStateMachineLibrary.Transition.FromXElement(this, Check.Object(xElement));
         }
 
         public Transition TryAddTransition(string nameTrancition, State stateFrom, State stateTo)

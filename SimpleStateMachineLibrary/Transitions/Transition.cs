@@ -1,10 +1,9 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
-using SimpleStateMachineLibrary.States;
 using System;
 using System.Collections.Generic;
 
-namespace SimpleStateMachineLibrary.Transitions
+
+namespace SimpleStateMachineLibrary
 {
     public partial class Transition : NamedObject
     {

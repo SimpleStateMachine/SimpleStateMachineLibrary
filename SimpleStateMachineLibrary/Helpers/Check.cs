@@ -88,7 +88,7 @@ namespace SimpleStateMachineLibrary.Helpers
             TObject removedObj = default(TObject);
             dictionary?.TryGetValue(nameObject, out removedObj);
 
-            if (removedObj== default(TObject))
+            if (removedObj == default(TObject))
             {
                 if (exeption)
                     throw new KeyNotFoundException(String.Format("Element with name {0} is not deleted because not found. ", nameObject));
@@ -124,13 +124,13 @@ namespace SimpleStateMachineLibrary.Helpers
         public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
         {
             bool contains = Contains(dictionary, nameObject, exeption);
-            return contains ? dictionary[nameObject]:default(TObject);
+            return contains ? dictionary[nameObject] : default(TObject);
         }
 
         public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
         {
             bool contains = Contains(dictionary, obj, exeption);
-            return contains? obj:default(TObject);
+            return contains ? obj : default(TObject);
         }
 
 

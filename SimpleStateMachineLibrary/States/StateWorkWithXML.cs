@@ -1,10 +1,10 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.States
+
+namespace SimpleStateMachineLibrary
 {
-    public partial class State : NamedObject
+    public partial class State
     {
         public static XElement ToXElement(State state)
         {

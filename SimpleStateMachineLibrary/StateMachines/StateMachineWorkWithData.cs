@@ -1,8 +1,9 @@
-﻿using SimpleStateMachineLibrary.Datas;
+﻿
+
+
 using SimpleStateMachineLibrary.Helpers;
 
-
-namespace SimpleStateMachineLibrary.StateMachines
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {

@@ -1,8 +1,6 @@
 using Xunit;
-using SimpleStateMachineLibrary.StateMachines;
-using SimpleStateMachineLibrary.States;
-using SimpleStateMachineLibrary.Transitions;
 using System.Collections.Generic;
+using SimpleStateMachineLibrary;
 
 namespace Tests
 {
@@ -16,7 +14,7 @@ namespace Tests
 
         void Testi1(StateMachine stateMachine, Dictionary<string, object> parameters)
         {
-            stateMachine.InvokeTransitionWithParameters("Transition1", new Dictionary<string, object>() { {"Test1", "Test1" } });
+            stateMachine.InvokeTransitionWithParameters("Transition1", new Dictionary<string, object>() { { "Test1", "Test1" } });
         }
         void Testi2(StateMachine stateMachine, Dictionary<string, object> parameters)
         {
@@ -25,7 +23,6 @@ namespace Tests
         [Fact]
         public void Test1()
         {
-   
             StateMachine stateMachine = new StateMachine();
             State state1 = stateMachine.AddState("State1");
             State state2 = stateMachine.AddState("State2");

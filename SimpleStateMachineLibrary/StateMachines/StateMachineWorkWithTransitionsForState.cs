@@ -1,12 +1,10 @@
-﻿using SimpleStateMachineLibrary.States;
-using SimpleStateMachineLibrary.Transitions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleStateMachineLibrary.StateMachines
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {

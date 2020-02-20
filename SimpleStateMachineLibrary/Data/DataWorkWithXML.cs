@@ -1,12 +1,11 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.Datas
-{
-    public partial class Data : NamedObject
-    {
 
+namespace SimpleStateMachineLibrary
+{
+    public partial class Data
+    {
         public static XElement ToXElement(Data data)
         {
             Check.NamedObject(data);

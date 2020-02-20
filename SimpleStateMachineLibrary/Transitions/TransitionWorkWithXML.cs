@@ -1,8 +1,8 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.Transitions
+
+namespace SimpleStateMachineLibrary
 {
     public partial class Transition : NamedObject
     {

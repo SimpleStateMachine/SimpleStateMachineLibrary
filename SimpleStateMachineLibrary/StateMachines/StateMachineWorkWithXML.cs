@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace SimpleStateMachineLibrary.StateMachines
+
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
 
-        public static XDocument ToXDocument(StateMachine stateMachine, string nameFile = "StateMachine.xml")
+        public static XDocument ToXDocument(StateMachine stateMachine, string nameFile)
         {
             Check.Object(stateMachine);
             Check.Name(nameFile);
@@ -33,7 +34,7 @@ namespace SimpleStateMachineLibrary.StateMachines
             return xDocument;
         }
 
-        public XDocument ToXDocument(string nameFile = "StateMachine.xml")
+        public XDocument ToXDocument(string nameFile)
         {
             return StateMachine.ToXDocument(this, nameFile);
         }

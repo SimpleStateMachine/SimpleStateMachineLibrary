@@ -1,8 +1,7 @@
-﻿using SimpleStateMachineLibrary.StateMachines;
-
-namespace SimpleStateMachineLibrary.Helpers
+﻿namespace SimpleStateMachineLibrary.Helpers
 {
-    public abstract class NamedObject
+
+    public  abstract class NamedObject
     {
         public string Name { get; }
         public StateMachine StateMachine { get; }
@@ -11,7 +10,7 @@ namespace SimpleStateMachineLibrary.Helpers
         {
             StateMachine = Check.Object(stateMachine);
 
-            Name = Check.Name(nameObject);          
+            Name = Check.Name(nameObject);
         }
 
     }

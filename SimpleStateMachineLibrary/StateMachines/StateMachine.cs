@@ -1,13 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-
-using SimpleStateMachineLibrary.States;
-using SimpleStateMachineLibrary.Transitions;
-using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.Datas;
 using System;
+using SimpleStateMachineLibrary.Helpers;
 
-namespace SimpleStateMachineLibrary.StateMachines
+namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {

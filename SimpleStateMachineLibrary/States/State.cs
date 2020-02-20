@@ -1,12 +1,10 @@
 ﻿using SimpleStateMachineLibrary.Helpers;
-using SimpleStateMachineLibrary.StateMachines;
-using SimpleStateMachineLibrary.Transitions;
 using System;
 using System.Collections.Generic;
 
-namespace SimpleStateMachineLibrary.States
-{
 
+namespace SimpleStateMachineLibrary
+{
     public partial class State : NamedObject
     {
         private Action<StateMachine, Dictionary<string, object>> _actionOnEntryWithParameters;
