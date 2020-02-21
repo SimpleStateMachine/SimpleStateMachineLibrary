@@ -32,5 +32,6 @@ namespace SimpleStateMachineLibrary
             string Value = data.Attribute("Value")?.Value;
             return stateMachine.AddData(Name, Value);
         }
+
     }
 }

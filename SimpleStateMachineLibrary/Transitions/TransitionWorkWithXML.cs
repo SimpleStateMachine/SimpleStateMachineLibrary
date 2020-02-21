@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Transition : NamedObject
+    public partial class Transition
     {
         public static XElement ToXElement(Transition transition)
         {
@@ -35,6 +35,5 @@ namespace SimpleStateMachineLibrary
             string To = transition.Attribute("To")?.Value;
             return stateMachine.AddTransition(Name, From, To);
         }
-
     }
 }

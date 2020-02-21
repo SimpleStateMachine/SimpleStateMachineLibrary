@@ -23,11 +23,6 @@ namespace SimpleStateMachineLibrary
             return _Data(nameData, true);
         }
 
-        public Data Data(Data data)
-        {
-            return _Data(data, true);
-        }
-
         public Data TryGetData(string nameData)
         {
             return _Data(nameData, false);
@@ -38,19 +33,13 @@ namespace SimpleStateMachineLibrary
             return _Data(data, false);
         }
 
-        private Data _AddData(Data data, bool exeption)
-        {
-            return Check.AddElement(_data, data, exeption);
-        }
 
         private Data _AddData(string nameData, object valueData, bool exeption)
         {
             if (!Check.NotContains(_data, nameData, exeption))
                 return null;
 
-            Data newData = new Data(this, nameData, valueData);
-            _data.Add(nameData, newData);
-            return newData;
+            return new Data(this, nameData, valueData);
         }
 
         public Data AddData(string nameData, object valueData = default(object))
@@ -58,53 +47,44 @@ namespace SimpleStateMachineLibrary
             return _AddData(nameData, valueData, true);
         }
 
-        public Data AddData(Data data)
-        {
-            return _AddData(data, true);
-        }
-        //public Data AddData(XElement xElement)
-        //{
-        //    return StateMachines.Data.FromXElement(this, xElement);
-        //}
         public Data TryAddData(string nameData, object valueData = default(object))
         {
             return _AddData(nameData, valueData, false);
         }
 
-        public Data TryAddData(Data data)
+        //public Data AddData(XElement xElement)
+        //{
+        //    return StateMachines.Data.FromXElement(this, xElement);
+        //}
+
+        private Data _DeleteData(Data data, bool exeption)
         {
-            return _AddData(data, false);
+            return Check.Remove(_data, data, exeption);
         }
 
-
-        private Data _DeleteData(Data state, bool exeption)
+        private Data _DeleteData(string dataName, bool exeption)
         {
-            return Check.Remove(_data, state, exeption);
-        }
-
-        private Data _DeleteData(string stateName, bool exeption)
-        {
-            return Check.Remove(_data, stateName, exeption);
+            return Check.Remove(_data, dataName, exeption);
         }
 
         public Data DeleteData(string nameData)
         {
-            return _DeleteData(Data(nameData), true);
+            return _DeleteData(nameData, true);
         }
 
         public Data DeleteData(Data data)
         {
-            return _DeleteData(Data(data),true);
+            return _DeleteData(data, true);
         }
 
         public Data TryDeleteData(string nameData)
         {
-            return _DeleteData(Data(nameData), false);
+            return _DeleteData(nameData, false);
         }
 
         public Data TryDeleteData(Data data)
         {
-            return _DeleteData(Data(data), false);
+            return _DeleteData(data, false);
         }
     }
 }

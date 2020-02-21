@@ -16,14 +16,9 @@ namespace SimpleStateMachineLibrary
             return Check.GetElement(_states, state, exeption);
         }
 
-        public State State(string nameState,bool exeption=true)
+        public State State(string nameState, bool exeption = true)
         {
             return _State(nameState, exeption);
-        }
-
-        public State State(State state, bool exeption = true)
-        {
-            return _State(state, exeption);
         }
 
         public State TryGetState(string nameState)
@@ -36,31 +31,17 @@ namespace SimpleStateMachineLibrary
             return _State(state, false);
         }
 
-        private State _AddState(State state, bool exeption)
-        {
-            return Check.AddElement(_states, state, exeption);
-        }
-
-
         private State _AddState(string nameState, bool exeption)
         {
             if (!Check.NotContains(_states, nameState, exeption))
                 return null;
 
-            State newState = new State(this, nameState);
-
-            _states.Add(newState.Name,newState);
-            return newState;
+            return new State(this, nameState);
         }
 
         public State AddState(string nameState)
         {
             return _AddState(nameState, true);
-        }
-
-        public State AddState(State state)
-        {
-            return _AddState(state, true);
         }
 
         public State AddState(XElement xElement)
@@ -73,10 +54,6 @@ namespace SimpleStateMachineLibrary
             return _AddState(nameState, false);
         }
 
-        public State TryAddState(State state)
-        {
-            return _AddState(state, false);
-        }
 
         private State _DeleteState(State state, bool exeption)
         {
@@ -90,7 +67,7 @@ namespace SimpleStateMachineLibrary
 
         public State DeleteState(State state)
         {
-            return _DeleteState(State(state), true);
+            return _DeleteState(state, true);
         }
 
         public State DeleteState(string stateName)
@@ -100,12 +77,12 @@ namespace SimpleStateMachineLibrary
 
         public State TryDeleteState(State state)
         {
-            return _DeleteState(State(state), false);
+            return _DeleteState(state, false);
         }
 
         public State TryDeleteState(string stateName)
         {
-            return _DeleteState(State(stateName), false);
+            return _DeleteState(stateName, false);
         }
     }
 }

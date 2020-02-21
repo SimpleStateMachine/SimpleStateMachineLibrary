@@ -9,17 +9,15 @@ namespace SimpleStateMachineLibrary
     {
         private Dictionary<string, State> _states = new Dictionary<string, State>();
 
-        private Dictionary<string, Transition> _transitions = new Dictionary<string, Transition>();
+        private Dictionary<string, Transition> _transitions  = new Dictionary<string, Transition>();
 
-        private Dictionary<string, Data> _data = new Dictionary<string, Data>();
+        private Dictionary<string, Data> _data  = new Dictionary<string, Data>();
 
         public State CurrentState { get; internal set; }
 
         public Transition CurrentTransition{ get; internal set; }
 
         public State StartState { get; protected set; }
-
-        public State EndState { get; protected set; }
 
         public StateMachine()
         {
@@ -53,14 +51,6 @@ namespace SimpleStateMachineLibrary
             }
         }
 
-        private void CheckEndState()
-        {
-            if (EndState != null)
-            {
-                throw new ArgumentException(String.Format("End state already set. It's {0} ", StartState.Name));
-            }
-        }
-
         private void CheckCurrentTransition()
         {
             if (CurrentTransition == null)
@@ -71,28 +61,14 @@ namespace SimpleStateMachineLibrary
 
         public State SetStartState(State state)
         {
-            CheckStartState();
-            StartState = State(Check.Object(state));
-            return StartState;
+            return SetStartState(state);
         }
 
         public State SetStartState(string stateName)
         {
-            CheckEndState();
-            StartState = State(Check.Object(stateName));
+            CheckStartState();
+            StartState = State(stateName);
             return StartState;
-        }
-
-        public State SetEndState(State state)
-        {
-            EndState = State(Check.Object(state));
-            return EndState;
-        }
-
-        public State SetEndState(string stateName)
-        {
-            EndState = State(Check.Object(stateName));
-            return EndState;
         }
 
         public void InvokeTransition(string nameTransition)
@@ -112,23 +88,23 @@ namespace SimpleStateMachineLibrary
             CurrentState = StartState;
             CurrentState.Entry(startParameters);
             CurrentState.Exit(startParameters);
-            while (CurrentState != EndState)
-            {               
-                _currentParameters = _nextParameters;
-                _nextParameters = null;
+            //while (CurrentState != EndState)
+            //{               
+            //    _currentParameters = _nextParameters;
+            //    _nextParameters = null;
 
-                CurrentTransition = _nextTransition;
-                _nextTransition = null;
+            //    CurrentTransition = _nextTransition;
+            //    _nextTransition = null;
 
-                CheckCurrentTransition();
-                CurrentState = null;
-                CurrentTransition.Invoke(_currentParameters);
-                CurrentState = CurrentTransition.StateTo;
-                CurrentTransition = null;
+            //    CheckCurrentTransition();
+            //    CurrentState = null;
+            //    CurrentTransition.Invoke(_currentParameters);
+            //    CurrentState = CurrentTransition.StateTo;
+            //    CurrentTransition = null;
 
-                CurrentState.Entry(_currentParameters);
-                CurrentState.Exit(_currentParameters);                
-            }
+            //    CurrentState.Entry(_currentParameters);
+            //    CurrentState.Exit(_currentParameters);                
+            //}
         
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SimpleStateMachineLibrary.Helpers
 {
@@ -15,18 +16,19 @@ namespace SimpleStateMachineLibrary.Helpers
         public static TObject Object<TObject>(TObject objectRequested)
         {
             if (Equals(objectRequested, default(TObject)))
-                throw new ArgumentNullException(String.Format("Object of type {0} must be not null", typeof(TObject).ToString()));
+                throw new ArgumentNullException(String.Format("Object of type \"{0}\" must be not null", typeof(TObject).Name));
             return objectRequested;
         }
 
-        public static TObject NamedObject<TObject>(TObject objectRequested) where TObject : NamedObject
+        public static TObject NamedObject<TObject>(TObject objectRequested) where TObject : NamedObject<TObject>
         {
             Check.Object(objectRequested);
             Check.Name(objectRequested.Name);
             return objectRequested;
         }
 
-        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool needContains, bool exeption) where TObject : NamedObject
+
+        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool needContains, bool exeption) where TObject : NamedObject<TObject>
         {
             dictionary = Check.Object(dictionary);
             nameObject = Check.Name(nameObject);
@@ -35,13 +37,13 @@ namespace SimpleStateMachineLibrary.Helpers
                 return true;
             if (exeption)
                 if (needContains)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not found", nameObject));
+                    throw new KeyNotFoundException(String.Format("Element with name \"{0}\" is not found", nameObject));
                 else
-                    throw new ArgumentException(String.Format("Element with name {0} already exists", nameObject));
+                    throw new ArgumentException(String.Format("Element with name \"{0}\" already exists", nameObject));
             return false;
         }
 
-        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool needContains, bool exeption) where TObject : NamedObject
+        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool needContains, bool exeption) where TObject : NamedObject<TObject>
         {
             dictionary = Check.Object(dictionary);
             objectRequested = Check.Object(objectRequested);
@@ -51,36 +53,36 @@ namespace SimpleStateMachineLibrary.Helpers
 
             if (exeption)
                 if (needContains)
-                    throw new KeyNotFoundException(String.Format("Element of type {0} not found", typeof(TObject).ToString()));
+                    throw new KeyNotFoundException(String.Format("Element of type \"{0}\" not found", typeof(TObject).Name));
                 else
-                    throw new ArgumentException(String.Format("Element of type {0} already exists", typeof(TObject).ToString()));
+                    throw new ArgumentException(String.Format("Element of type \"{0}\" already exists", typeof(TObject).Name));
             return false;
         }
 
-
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+       
+        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject<TObject>
         {
             return _Contains(dictionary, nameObject, true, exeption);
         }
 
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject
+        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject<TObject>
         {
             return _Contains(dictionary, objectRequested, true, exeption);
         }
 
-
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+       
+        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject<TObject>
         {
             return _Contains(dictionary, nameObject, false, exeption);
         }
 
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject
+        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject<TObject>
         {
             return _Contains(dictionary, objectRequested, false, exeption);
         }
 
-
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+        
+        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject<TObject>
         {
             dictionary = Check.Object(dictionary);
             nameObject = Check.Name(nameObject);
@@ -91,7 +93,7 @@ namespace SimpleStateMachineLibrary.Helpers
             if (removedObj == default(TObject))
             {
                 if (exeption)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not deleted because not found. ", nameObject));
+                    throw new KeyNotFoundException(String.Format("Element with name \"{0}\" is not deleted because not found. ", nameObject));
                 else
                     return default(TObject);
             }
@@ -100,7 +102,7 @@ namespace SimpleStateMachineLibrary.Helpers
             return removedObj;
         }
 
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
+        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject<TObject>
         {
             dictionary = Check.Object(dictionary);
             obj = Check.NamedObject(obj);
@@ -111,7 +113,7 @@ namespace SimpleStateMachineLibrary.Helpers
             if (removedObj == default(TObject))
             {
                 if (exeption)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not deleted because not found. ", obj.Name));
+                    throw new KeyNotFoundException(String.Format("Element with name \"{0}\" is not deleted because not found. ", obj.Name));
                 else
                     return default(TObject);
             }
@@ -121,34 +123,17 @@ namespace SimpleStateMachineLibrary.Helpers
         }
 
 
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject<TObject>
         {
             bool contains = Contains(dictionary, nameObject, exeption);
             return contains ? dictionary[nameObject] : default(TObject);
         }
 
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
+        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject<TObject>
         {
             bool contains = Contains(dictionary, obj, exeption);
             return contains ? obj : default(TObject);
         }
 
-
-        public static TObject AddElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
-        {
-            return AddElement(dictionary, obj?.Name, obj, exeption);
-        }
-
-        public static TObject AddElement<TObject>(Dictionary<string, TObject> dictionary, string name, TObject obj, bool exeption = true) where TObject : NamedObject
-        {
-            obj = Check.NamedObject(obj);
-            bool nonContains = NotContains(dictionary, name, exeption);
-
-            if (nonContains)
-                return default(TObject);
-
-            dictionary.Add(name, obj);
-            return obj;
-        }
     }
 }

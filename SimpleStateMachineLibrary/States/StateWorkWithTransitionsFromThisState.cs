@@ -11,14 +11,19 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.GetTransitionsFromState(this);
         }
 
+        public List<Transition> TryGetTransitionsFromThis()
+        {
+            return this.StateMachine.TryGetTransitionsFromState(this);
+        }
+
         public Transition AddTransitionFromThis(string nameTrancition, State stateTo)
         {
-            return this.StateMachine.AddTransition(nameTrancition, this, StateMachine.State(stateTo));
+            return this.StateMachine.AddTransition(nameTrancition, this, stateTo);
         }
 
         public Transition AddTransitionFromThis(string nameTrancition, string nameStateTo)
         {
-            return this.StateMachine.AddTransition(nameTrancition, this, StateMachine.State(nameStateTo));
+            return this.StateMachine.AddTransition(nameTrancition, this, nameStateTo);
         }
 
         public Transition TryAddTransitionFromThis(string nameTrancition, State stateTo)
