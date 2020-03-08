@@ -24,6 +24,7 @@ namespace SimpleStateMachineLibrary
 
             return this;
         }
+
         protected internal Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
         {
             Value = valueData;

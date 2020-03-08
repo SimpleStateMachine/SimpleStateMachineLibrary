@@ -36,9 +36,11 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        internal void Invoke(Dictionary<string, object> parameters)
+        internal Transition Invoke(Dictionary<string, object> parameters)
         {
             _onInvoke?.Invoke (this, parameters);
+
+            return this;
         }
 
 

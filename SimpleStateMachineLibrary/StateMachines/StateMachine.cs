@@ -13,13 +13,13 @@ namespace SimpleStateMachineLibrary
 
         private Dictionary<string, Data> _data  = new Dictionary<string, Data>();
 
-        public State CurrentState { get; internal set; }
+        public State CurrentState { get; private set; }
 
-        public Transition CurrentTransition{ get; internal set; }
+        public State PreviousState { get; private set; }
 
-        public State StartState { get; protected set; }
+        public Transition CurrentTransition{ get; private set; }
 
-        private Action<State, State> _onChangeState;
+        public State StartState { get; private set; }
 
         public StateMachine OnChangeState(Action<State, State> actionOnChangeState)
         {
@@ -43,41 +43,22 @@ namespace SimpleStateMachineLibrary
             FromXDocument(this, xDocumentPath);
         }
 
-
         private Transition _nextTransition { get; set; }
 
         private Dictionary<string, object> _currentParameters { get; set; }
 
         private Dictionary<string, object> _nextParameters { get; set; }
 
-        private State _beforeState { get; set; }
-
-
-        private void CheckStartState()
-        {
-            if (StartState != null) 
-            {
-                throw new ArgumentException(String.Format("Start state already set. It's {0} ", StartState.Name));
-            }
-        }
-
-        private void CheckCurrentTransition()
-        {
-            if (CurrentTransition == null)
-            {
-                throw new ArgumentException(String.Format("State with name \"{0}\" doesn't invoke transition", CurrentState.Name));
-            }
-        }
+        private Action<State, State> _onChangeState;
 
         public State SetStartState(State state)
         {
-            CheckStartState();
-            return StartState = state;
+            StartState = state;
+            return state;
         }
 
         public State SetStartState(string stateName)
         {
-            CheckStartState();
             StartState = State(stateName);
             return StartState;
         }
@@ -94,31 +75,49 @@ namespace SimpleStateMachineLibrary
             _nextParameters = parameters;
         }
 
-        public void Start(Dictionary<string, object> startParameters = null)
+        private StateMachine InvokeTransition()
         {
-            CurrentState = StartState;
-            CurrentState.Entry(startParameters);
-            _onChangeState?.Invoke(null, CurrentState);
-            CurrentState.Exit(startParameters);
+            //Mark nextParameters as current
+            _currentParameters = _nextParameters;
+            _nextParameters = null;
 
+            //Mark nextTransition as current
+            CurrentTransition = _nextTransition;
+            _nextTransition = null;
+
+            //Mark currentState as previous
+            PreviousState = CurrentState;
+            CurrentState = null;
+
+            
+            CurrentTransition.Invoke(_currentParameters);
+            CurrentState = CurrentTransition.StateTo;
+            CurrentTransition = null;
+
+            return this;
+        }
+
+        private StateMachine ChangeState()
+        {
+            CurrentState.Entry(_currentParameters);
+            _onChangeState?.Invoke(PreviousState, CurrentState);
+            CurrentState.Exit(_currentParameters);
+
+            return this;
+        }
+
+        public void Start(Dictionary<string, object> startParameters = null)
+        {        
+            CurrentState = StartState;
+            _currentParameters = startParameters;
+
+            ChangeState();
 
             while (_nextTransition != null)
             {
-                _currentParameters = _nextParameters;
-                _nextParameters = null;
+                InvokeTransition();
 
-                CurrentTransition = _nextTransition;
-                _nextTransition = null;
-
-                _beforeState = CurrentState;
-                CurrentState = null;
-                CurrentTransition.Invoke(_currentParameters);
-                CurrentState = CurrentTransition.StateTo;
-                CurrentTransition = null;
-
-                CurrentState.Entry(_currentParameters);
-                _onChangeState?.Invoke(_beforeState, CurrentState);
-                CurrentState.Exit(_currentParameters);
+                ChangeState();
             }
 
         }
