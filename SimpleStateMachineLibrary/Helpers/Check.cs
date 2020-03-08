@@ -16,7 +16,8 @@ namespace SimpleStateMachineLibrary.Helpers
         public static TObject Object<TObject>(TObject objectRequested)
         {
             if (Equals(objectRequested, default(TObject)))
-                throw new ArgumentNullException(String.Format("Object of type \"{0}\" must be not null", typeof(TObject).Name));
+                throw new ArgumentNullException(message: String.Format("Object of type \"{0}\" must be not null", typeof(TObject).Name), paramName: typeof(TObject).Name);
+
             return objectRequested;
         }
 

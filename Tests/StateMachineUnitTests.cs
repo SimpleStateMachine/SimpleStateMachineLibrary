@@ -46,6 +46,10 @@ namespace Tests
 
             Assert.AreEqual(stateMachine.CurrentState.Name, "State3");
 
+            stateMachine.AddData("number1", 55);
+            stateMachine.AddData("name1", "Roman");
+            stateMachine.AddData("result1", 1001.0005);
+
             stateMachine.ToXDocument("text.xml");
         }
 

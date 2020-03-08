@@ -37,7 +37,13 @@ namespace SimpleStateMachineLibrary
                 transitions.Add(transition.Value.ToXElement());
             }
 
+            XElement datas = new XElement("Data");
+            stateMachineXElement.Add(datas);
 
+            foreach (var data in stateMachine._data)
+            {
+                datas.Add(data.Value.ToXElement());
+            }
 
             xDocument.Save(nameFile);
             return xDocument;
@@ -51,17 +57,20 @@ namespace SimpleStateMachineLibrary
         public static StateMachine FromXDocument(StateMachine stateMachine, XDocument xDocument)
         {
             XElement stateMachineXElement = Check.Object(xDocument).Element("StateMachine");
+            stateMachineXElement = Check.Object(stateMachineXElement);
             var States = stateMachineXElement.Element("States")?.Elements()?.ToList();
-            States.ForEach(x => stateMachine.AddState(x));
+            States?.ForEach(x => stateMachine.AddState(x));
             var startState = stateMachineXElement.Element("StartState");
             string nameStartState = startState?.Attribute("Name").Value;
-
             if (!string.IsNullOrEmpty(nameStartState))
                 stateMachine.SetStartState(nameStartState);
 
             var Transitions = stateMachineXElement.Element("Transitions")?.Elements()?.ToList();
-            Transitions.ForEach(x => stateMachine.AddTransition(x));
-           
+            Transitions?.ForEach(x => stateMachine.AddTransition(x));
+
+            var Datas = stateMachineXElement.Element("Data")?.Elements()?.ToList();
+            Datas?.ForEach(x => stateMachine.AddData(x));
+
             return stateMachine;
         }
 

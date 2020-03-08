@@ -17,7 +17,7 @@ namespace SimpleStateMachineLibrary
 
         public XElement ToXElement()
         {
-            XElement element = new XElement("Transition");
+            XElement element = new XElement("Data");
             element.Add(new XAttribute("Name", this.Name));
             element.Add(new XAttribute("Value", this.Value.ToString()));
             return element;

@@ -14,17 +14,19 @@ namespace SimpleStateMachineLibrary
             return element;
         }
 
-        public static State FromXElement(StateMachine stateMachine, XElement state)
-        {
-            string Name = state.Attribute("Name")?.Value;
-            return stateMachine.AddState(Name);
-        }
-
         public XElement ToXElement()
         {
             XElement element = new XElement("State");
             element.Add(new XAttribute("Name", this.Name));
             return element;
         }
+
+        public static State FromXElement(StateMachine stateMachine, XElement state)
+        {
+            string Name = state.Attribute("Name")?.Value;
+            return stateMachine.AddState(Name);
+        }
+
+
     }
 }

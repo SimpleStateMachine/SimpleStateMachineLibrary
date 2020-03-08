@@ -2,6 +2,7 @@
 
 
 using SimpleStateMachineLibrary.Helpers;
+using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
@@ -61,10 +62,10 @@ namespace SimpleStateMachineLibrary
             return _AddData(nameData, valueData, false);
         }
 
-        //public Data AddData(XElement xElement)
-        //{
-        //    return StateMachines.Data.FromXElement(this, xElement);
-        //}
+        public Data AddData(XElement xElement)
+        {
+            return SimpleStateMachineLibrary.Data.FromXElement(this, Check.Object(xElement));
+        }
 
         private Data _DeleteData(Data data, bool exeption)
         {
