@@ -41,6 +41,16 @@ namespace SimpleStateMachineLibrary
             return new Transition(this, nameTrancition, stateFrom, stateTo);
         }
 
+        internal Transition AddTransition(Transition trancition, bool exeption)
+        {
+            if (!Check.NotContains(_transitions, trancition, exeption))
+                return null;
+
+            _transitions.Add(trancition.Name, trancition);
+
+            return trancition;
+        }
+
         public Transition AddTransition(string nameTrancition, State stateFrom, State stateTo)
         {
             return _AddTransition(nameTrancition, stateFrom, stateTo, true);

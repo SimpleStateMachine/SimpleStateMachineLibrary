@@ -16,6 +16,7 @@ namespace SimpleStateMachineLibrary
         {         
             StateFrom = stateFrom;
             StateTo = stateTo;
+            stateMachine.AddTransition(this, true);
         }
 
         public Transition Delete()

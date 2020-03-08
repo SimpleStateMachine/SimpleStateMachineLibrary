@@ -42,6 +42,15 @@ namespace SimpleStateMachineLibrary
             return new Data(this, nameData, valueData);
         }
 
+        internal Data AddData(Data data, bool exeption)
+        {
+            if (!Check.NotContains(_data, data, exeption))
+                return null;
+
+            _data.Add(data.Name, data);
+            return data;
+        }
+
         public Data AddData(string nameData, object valueData = default(object))
         {
             return _AddData(nameData, valueData, true);

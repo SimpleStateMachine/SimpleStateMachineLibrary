@@ -27,6 +27,8 @@ namespace SimpleStateMachineLibrary
         protected internal Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
         {
             Value = valueData;
+
+            stateMachine.AddData(this, true);
         }
 
         public Data Delete()

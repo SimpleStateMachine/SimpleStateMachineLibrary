@@ -35,8 +35,16 @@ namespace SimpleStateMachineLibrary
         {
             if (!Check.NotContains(_states, nameState, exeption))
                 return null;
-
             return new State(this, nameState);
+        }
+        internal State AddState(State state, bool exeption)
+        {
+            if (!Check.NotContains(_states, state, exeption))
+                return null;
+
+            _states.Add(state.Name, state);
+
+            return state;
         }
 
         public State AddState(string nameState)

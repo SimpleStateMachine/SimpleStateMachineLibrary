@@ -12,7 +12,7 @@ namespace SimpleStateMachineLibrary
 
         protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
         {
-
+            StateMachine.AddState(this, true);
         }
 
         public State Delete()
