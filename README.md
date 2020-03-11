@@ -6,7 +6,7 @@ Example:
 
 **Structure**
 ```C#
-           StateMachine stateMachine = new StateMachine();
+ StateMachine stateMachine = new StateMachine();
 
             //Add states
             State state1 = stateMachine.AddState("State1");
@@ -17,10 +17,10 @@ Example:
             //Add transitions three ways:
 
             //Standart way
-            Transition transition2 = stateMachine.AddTransition("Transition2", state2, state3);
+            Transition transition1 = stateMachine.AddTransition("Transition1", state2, state3);
 
             //From state
-            Transition transition1 = state1.AddTransitionFromThis("Transition1", state2);
+            Transition transition2 = state1.AddTransitionFromThis("Transition2", state2);
 
             //To state
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
@@ -35,7 +35,7 @@ Example:
             state1.SetAsStartState();
 
             //Start work
-            stateMachine.Start(parametersForStart);
+            stateMachine.Start();
 ```
 **Example methods**
 ```C#
