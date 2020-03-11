@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System.Xml.Linq;
 
 
@@ -12,15 +13,13 @@ namespace SimpleStateMachineLibrary
             XElement element = new XElement("Data");
             element.Add(new XAttribute("Name", data.Name));
             element.Add(new XAttribute("Value", data.Value.ToString()));
+            data.StateMachine._logger?.LogDebug("Data \"{NameData}\" to XElement", data.Name);
             return element;
         }
 
         public XElement ToXElement()
         {
-            XElement element = new XElement("Data");
-            element.Add(new XAttribute("Name", this.Name));
-            element.Add(new XAttribute("Value", this.Value.ToString()));
-            return element;
+            return Data.ToXElement(this);
         }
 
         public static Data FromXElement(StateMachine stateMachine, XElement data)
@@ -30,6 +29,8 @@ namespace SimpleStateMachineLibrary
 
             string Name = data.Attribute("Name")?.Value;
             string Value = data.Attribute("Value")?.Value;
+
+            stateMachine._logger?.LogDebug("Initialization data \"{NameData}\" from XElement", Name);
             return stateMachine.AddData(Name, Value);
         }
 

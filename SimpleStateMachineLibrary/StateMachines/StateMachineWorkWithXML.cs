@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -74,7 +75,6 @@ namespace SimpleStateMachineLibrary
             return stateMachine;
         }
 
-
         public static StateMachine FromXDocument(StateMachine stateMachine, string xDocumentPath)
         {
             xDocumentPath = Check.Name(xDocumentPath);
@@ -82,15 +82,15 @@ namespace SimpleStateMachineLibrary
             return FromXDocument(stateMachine, xDocument);
         }
 
-        public static StateMachine FromXDocument(XDocument xDocument)
+        public static StateMachine FromXDocument(XDocument xDocument, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine();
+            StateMachine stateMachine = new StateMachine(logger);
             return FromXDocument(stateMachine, xDocument);
         }
 
-        public static StateMachine FromXDocument(string xDocumentPath)
+        public static StateMachine FromXDocument(string xDocumentPath, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine();
+            StateMachine stateMachine = new StateMachine(logger);
             return FromXDocument(stateMachine, xDocumentPath);
         }
 

@@ -6,34 +6,34 @@ namespace SimpleStateMachineLibrary
 {
     public partial class State
     {
-        public List<Transition> GetTransitionsFromThis()
+        public Dictionary<string, Transition> GetTransitionsFromThis()
         {
             return this.StateMachine.GetTransitionsFromState(this);
         }
 
-        public List<Transition> TryGetTransitionsFromThis()
+        public Dictionary<string, Transition> TryGetTransitionsFromThis()
         {
             return this.StateMachine.TryGetTransitionsFromState(this);
         }
 
-        public Transition AddTransitionFromThis(string nameTrancition, State stateTo)
+        public Transition AddTransitionFromThis(string nameTransition, State stateTo)
         {
-            return this.StateMachine.AddTransition(nameTrancition, this, stateTo);
+            return this.StateMachine.AddTransition(nameTransition, this, stateTo);
         }
 
-        public Transition AddTransitionFromThis(string nameTrancition, string nameStateTo)
+        public Transition AddTransitionFromThis(string nameTransition, string nameStateTo)
         {
-            return this.StateMachine.AddTransition(nameTrancition, this, nameStateTo);
+            return this.StateMachine.AddTransition(nameTransition, this, nameStateTo);
         }
 
-        public Transition TryAddTransitionFromThis(string nameTrancition, State stateTo)
+        public Transition TryAddTransitionFromThis(string nameTransition, State stateTo)
         {
-            return this.StateMachine.TryAddTransition(nameTrancition, this, stateTo);
+            return this.StateMachine.TryAddTransition(nameTransition, this, stateTo);
         }
 
-        public Transition TryAddTransitionFromThis(string nameTrancition, string nameStateTo)
+        public Transition TryAddTransitionFromThis(string nameTransition, string nameStateTo)
         {
-            return this.StateMachine.TryAddTransition(nameTrancition, this, nameStateTo);
+            return this.StateMachine.TryAddTransition(nameTransition, this, nameStateTo);
         }
     }
 }

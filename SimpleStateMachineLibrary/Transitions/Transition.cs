@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -16,6 +17,9 @@ namespace SimpleStateMachineLibrary
         {         
             StateFrom = stateFrom;
             StateTo = stateTo;
+
+            stateMachine._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
+
             stateMachine.AddTransition(this, true);
         }
 
@@ -33,13 +37,15 @@ namespace SimpleStateMachineLibrary
         {
             _onInvoke += actionOnTransitionWithParameters;
 
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on invore for transition \"{NameTransition}\"", actionOnTransitionWithParameters.Method.Name, this.Name);
+
             return this;
         }
 
         internal Transition Invoke(Dictionary<string, object> parameters)
         {
             _onInvoke?.Invoke (this, parameters);
-
+            this.StateMachine._logger?.LogDebug("Invore transition \"{NameTransition}\"", this.Name);
             return this;
         }
 

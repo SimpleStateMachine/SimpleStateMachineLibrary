@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System.Xml.Linq;
 
 
@@ -11,19 +12,21 @@ namespace SimpleStateMachineLibrary
             Check.NamedObject(state);
             XElement element = new XElement("State");
             element.Add(new XAttribute("Name", state.Name));
+
+            state.StateMachine._logger?.LogDebug("State \"{NameState}\" to XElement", state.Name);
             return element;
         }
 
         public XElement ToXElement()
         {
-            XElement element = new XElement("State");
-            element.Add(new XAttribute("Name", this.Name));
-            return element;
+            return State.ToXElement(this);
         }
 
         public static State FromXElement(StateMachine stateMachine, XElement state)
         {
             string Name = state.Attribute("Name")?.Value;
+
+            stateMachine._logger?.LogDebug("Initialization state \"{NameState}\" from XElement", Name);
             return stateMachine.AddState(Name);
         }
 

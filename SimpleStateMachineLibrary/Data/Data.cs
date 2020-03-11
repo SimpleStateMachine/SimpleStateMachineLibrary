@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System;
 
 namespace SimpleStateMachineLibrary
@@ -28,6 +29,8 @@ namespace SimpleStateMachineLibrary
         protected internal Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
         {
             Value = valueData;
+
+            stateMachine._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
 
             stateMachine.AddData(this, true);
         }

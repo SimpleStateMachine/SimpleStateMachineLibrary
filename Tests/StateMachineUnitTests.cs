@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleStateMachineLibrary;
 using System.Collections.Generic;
@@ -11,16 +12,21 @@ namespace Tests
         {
             Assert.AreEqual(parameters["Data1"], "Test Data");
 
-            state.StateMachine.InvokeTransitionWithParameters("Transition1", new Dictionary<string, object>() { { "Test1", "Test1" } });
+            state.StateMachine.InvokeTransition("Transition3");
         }
         void Method2(State state, Dictionary<string, object> parameters)
         {
-            state.StateMachine.InvokeTransitionWithParameters("Transition2", new Dictionary<string, object>() { { "Test2", "Test2" } });
+            state.StateMachine.InvokeTransition("Transition2");
         }
         void Method3(State state, Dictionary<string, object> parameters)
         {
-            state.StateMachine.InvokeTransitionWithParameters("Transition3", new Dictionary<string, object>() { { "Test2", "Test2" } });
+            state.StateMachine.InvokeTransition("Transition3");
         }
+        void Method4(State state, Dictionary<string, object> parameters)
+        {
+
+        }
+
         void MethodOnChange(State stateFrom, State stateTo)
         {
 
@@ -30,7 +36,21 @@ namespace Tests
         [TestMethod]
         public void StateMachineFromCode()
         {
-            StateMachine stateMachine = new StateMachine();
+            //var loggerFactory = new LoggerFactory();
+         //   loggerFactory
+         //.AddConsole((log, logLevel) => true)
+         //.AddDebug(LogLevel.Debug);
+        
+
+            var loggerFactory = LoggerFactory.Create(builder => {
+                builder.AddFilter("Microsoft", LogLevel.Warning)
+                       .AddFilter("System", LogLevel.Warning)
+                       .AddFilter("SampleApp.Program", LogLevel.Debug)
+                       .AddConsole();
+            }
+            );
+            var logger = loggerFactory.CreateLogger<StateMachineUnitTests>();
+            StateMachine stateMachine = new StateMachine(logger);
 
             State state1 = stateMachine.AddState("State1");
             State state2 = stateMachine.AddState("State2");
@@ -43,17 +63,19 @@ namespace Tests
             Transition transition2 = stateMachine.AddTransition("Transition2", state2, state3);
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
 
-            state1.SetAsStartState();
+
+            //state1.SetAsStartState();
             state1.OnExit(Method1);
             state2.OnExit(Method2);
             state3.OnExit(Method3);
-
+            state4.OnExit(Method4);
             stateMachine.AddData("int1", 55);
             stateMachine.AddData("string1", "Roman");
             stateMachine.AddData("double1", 1001.0005);
 
 
-            stateMachine.Start(parametersForStart);
+            //stateMachine.InvokeTransition("Transition1");
+             stateMachine.Start(parametersForStart);
 
             Assert.AreEqual(stateMachine.CurrentState.Name, "State4");
 

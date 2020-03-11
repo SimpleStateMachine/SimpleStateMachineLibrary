@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,66 +8,78 @@ namespace SimpleStateMachineLibrary
     public partial class StateMachine
     {
 
-        private List<Transition> GetTransitionsFromState(string stateName, bool exeptions)
+        private Dictionary<string, Transition> GetTransitionsFromState(string stateName, bool exeptions)
         {
             bool contains = Check.Contains(_states, stateName, exeptions);
-            return contains ? _transitions.Values.Where(x => x.StateFrom.Name == stateName).ToList() : new List<Transition>();
+            var transitionsFromState = contains ? _transitions.Values.Where(x => x.StateFrom.Name == stateName).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions from state \"{NameState}\" ", stateName);
+            return transitionsFromState;
         }
 
-        private List<Transition> GetTransitionsFromState(State state, bool exeptions)
+        private Dictionary<string, Transition> GetTransitionsFromState(State state, bool exeptions)
         {
             bool contains = Check.Contains(_states, state, exeptions);
-            return contains ? _transitions.Values.Where(x => x.StateFrom.Name == state.Name).ToList() : new List<Transition>();
+            var transitionsFromState = contains ? _transitions.Values.Where(x => x.StateFrom.Name == state.Name).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions from state \"{NameState}\" ", state.Name);
+            return transitionsFromState;
         }
 
-        private List<Transition> GetTransitionsToState(string stateName, bool exeptions)
+        private Dictionary<string, Transition> GetTransitionsToState(string stateName, bool exeptions)
         {
             bool contains = Check.Contains(_states, stateName, exeptions);
-            return contains ? _transitions.Values.Where(x => x.StateTo.Name == stateName).ToList() : new List<Transition>();
+            var transitionsToState = contains ? _transitions.Values.Where(x => x.StateTo.Name == stateName).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", stateName);
+            return transitionsToState;
         }
 
-        private List<Transition> GetTransitionsToState(State state, bool exeptions)
+        private Dictionary<string, Transition> GetTransitionsToState(State state, bool exeptions)
         {
             bool contains = Check.Contains(_states, state, exeptions);
-            return contains ? _transitions.Values.Where(x => x.StateTo.Name == state.Name).ToList() : new List<Transition>();
+            var transitionsToState = contains ? _transitions.Values.Where(x => x.StateTo.Name == state.Name).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", state.Name);
+            return transitionsToState;
         }
 
-        public List<Transition> GetTransitionsFromState(string stateName)
+        public Dictionary<string, Transition> GetTransitionsFromState(string stateName)
         {
             return GetTransitionsFromState(stateName, true);
         }
 
-        public List<Transition> GetTransitionsFromState(State state)
+        public Dictionary<string, Transition> GetTransitionsFromState(State state)
         {
             return GetTransitionsFromState(state, true);
         }
 
-        public List<Transition> TryGetTransitionsFromState(string stateName)
+        public Dictionary<string, Transition> TryGetTransitionsFromState(string stateName)
         {
             return GetTransitionsFromState(stateName, false);
         }
 
-        public List<Transition> TryGetTransitionsFromState(State state)
+        public Dictionary<string, Transition> TryGetTransitionsFromState(State state)
         {
             return GetTransitionsFromState(state, false);
         }
 
-        public List<Transition> GetTransitionsToState(string stateName)
+        public Dictionary<string, Transition> GetTransitionsToState(string stateName)
         {
             return GetTransitionsToState(stateName, true);
         }
 
-        public List<Transition> GetTransitionsToState(State state)
+        public Dictionary<string, Transition> GetTransitionsToState(State state)
         {
             return GetTransitionsToState(state, true);
         }
 
-        public List<Transition> TryGetTransitionsToState(string stateName)
+        public Dictionary<string, Transition> TryGetTransitionsToState(string stateName)
         {
             return GetTransitionsToState(stateName, false);
         }
 
-        public List<Transition> TryGetTransitionsToState(State state)
+        public Dictionary<string, Transition> TryGetTransitionsToState(State state)
         {
             return GetTransitionsToState(state, false);
         }

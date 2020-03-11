@@ -1,6 +1,7 @@
 ﻿
 
 
+using Microsoft.Extensions.Logging;
 using SimpleStateMachineLibrary.Helpers;
 using System.Xml.Linq;
 
@@ -11,12 +12,26 @@ namespace SimpleStateMachineLibrary
 
         private Data _Data(string nameData, bool exeption)
         {
-            return Check.GetElement(_data, nameData, exeption);
+            var data_ = Check.GetElement(_data, nameData, exeption);
+
+            if (exeption)
+                _logger?.LogDebug("Get data \"{NameData}\"", nameData);
+            else
+                _logger?.LogDebug("Try get data \"{NameData}\"", nameData);
+
+            return data_;
         }
 
         private Data _Data(Data data, bool exeption)
         {
-            return Check.GetElement(_data, data, exeption);
+            var data_ = Check.GetElement(_data, data, exeption);
+
+            if (exeption)
+                _logger?.LogDebug("Get data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try get data \"{NameData}\"", data.Name);
+
+            return data_;
         }
 
         public Data Data(string nameData)
@@ -49,6 +64,12 @@ namespace SimpleStateMachineLibrary
                 return null;
 
             _data.Add(data.Name, data);
+
+            if (exeption)
+                _logger?.LogDebug("Add data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try add data \"{NameData}\"", data.Name);
+
             return data;
         }
 
@@ -69,12 +90,27 @@ namespace SimpleStateMachineLibrary
 
         private Data _DeleteData(Data data, bool exeption)
         {
-            return Check.Remove(_data, data, exeption);
+            var data_ = Check.Remove(_data, data, exeption);
+
+            if (exeption)
+                _logger?.LogDebug("Delete data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try delete data \"{NameData}\"", data.Name);
+
+            return data_;
         }
 
         private Data _DeleteData(string dataName, bool exeption)
         {
-            return Check.Remove(_data, dataName, exeption);
+            var data_ = Check.Remove(_data, dataName, exeption);
+
+            if (exeption)
+                _logger?.LogDebug("Delete data \"{NameData}\"", dataName);
+            else
+                _logger?.LogDebug("Try delete data \"{NameData}\"", dataName);
+
+
+            return data_;
         }
 
         public Data DeleteData(string nameData)
