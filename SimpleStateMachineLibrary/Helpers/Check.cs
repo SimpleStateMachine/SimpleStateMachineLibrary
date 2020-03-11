@@ -1,20 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SimpleStateMachineLibrary.Helpers
 {
     internal class Check
     {
-         //= null
         public static string Name(string name, ILogger logger)
         {
             if (String.IsNullOrEmpty(name))
             {
                 string message = "Name must be not Empty";
                 var ex = new ArgumentNullException(message: message, paramName:"Name");
-                logger.LogError(ex, message);
+                logger?.LogError(ex, message);
                 throw ex;
             }
                
@@ -28,7 +26,7 @@ namespace SimpleStateMachineLibrary.Helpers
                 object[] args = { typeof(TObject).Name };
                 string message = "Object of type \"{0}\" must be not null";
                 var ex = new ArgumentNullException(message: String.Format(message, args), paramName: typeof(TObject).Name);
-                logger.LogError(ex, message, args);
+                logger?.LogError(ex, message, args);
                 throw ex;
             }
                 
@@ -55,7 +53,7 @@ namespace SimpleStateMachineLibrary.Helpers
                 object[] args = { nameObject };
                 string message = "Element with name \"{0}\" is not found";
                 var ex = new KeyNotFoundException(message: String.Format(message, args));
-                logger.LogError(ex, message, args);
+                 logger?.LogError(ex, message, args);
                 throw ex;
             }
 
@@ -74,7 +72,7 @@ namespace SimpleStateMachineLibrary.Helpers
                 object[] args = { objectRequested.Name };
                 string message = "Element with name \"{0}\" is not found";
                 var ex = new KeyNotFoundException(message: String.Format(message, args));
-                logger.LogError(ex, message, args);
+                 logger?.LogError(ex, message, args);
                 throw ex;
             }
 
@@ -92,7 +90,7 @@ namespace SimpleStateMachineLibrary.Helpers
                 object[] args = { nameObject };
                 string message = "Element of type \"{0}\" already exists";
                 var ex = new KeyNotFoundException(message: String.Format(message, args));
-                logger.LogError(ex, message, args);
+                 logger?.LogError(ex, message, args);
                 throw ex;
             }
 
@@ -111,12 +109,13 @@ namespace SimpleStateMachineLibrary.Helpers
                 object[] args = { objectRequested.Name };
                 string message = "Element of type \"{0}\" already exists";
                 var ex = new KeyNotFoundException(message: String.Format(message, args));
-                logger.LogError(ex, message, args);
+                 logger?.LogError(ex, message, args);
                 throw ex;
             }
 
             return notContains;
         }
+
         
         public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
         {
@@ -134,7 +133,7 @@ namespace SimpleStateMachineLibrary.Helpers
                     object[] args = { nameObject };
                     string message = "Element with name \"{0}\" is not deleted because not found";
                     var ex = new KeyNotFoundException(String.Format(message, args));
-                    logger.LogError(ex, message, args);
+                     logger?.LogError(ex, message, args);
                     throw ex;
                 }
                   
@@ -163,7 +162,7 @@ namespace SimpleStateMachineLibrary.Helpers
                     object[] args = { obj.Name };
                     string message = "Element with name \"{0}\" is not deleted because not found";
                     var ex = new KeyNotFoundException(String.Format(message, args));
-                    logger.LogError(ex, message, args);
+                     logger?.LogError(ex, message, args);
                     throw ex;
                 }
                 
