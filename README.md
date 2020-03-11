@@ -1,7 +1,16 @@
 # SimpleStateMachineLibrary
 A C# library for realization simple state-machine
 
-Example:
+## Оглавление
+0. [Features](#Features)
+1. [Examples](#Examples)
+
+## Features
+* Entry/exit events for states
+* Invoke event for transition
+* Export/Import to/from XML
+--------
+## Examples:
 --------
 
 **Structure**
