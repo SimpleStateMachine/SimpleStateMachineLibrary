@@ -24,8 +24,6 @@ namespace Examples
 
         }
 
-        static Dictionary<string, object> parametersForStart = new Dictionary<string, object>() { { "Data1", "Test Data" } };
-
         static void Main(string[] args)
         {
             StateMachine stateMachine = new StateMachine();
@@ -39,10 +37,10 @@ namespace Examples
             //Add transitions three ways:
 
             //Standart way
-            Transition transition2 = stateMachine.AddTransition("Transition2", state2, state3);
+            Transition transition1 = stateMachine.AddTransition("Transition1", state1, state2);
 
             //From state
-            Transition transition1 = state1.AddTransitionFromThis("Transition1", state2);
+            Transition transition2 = state2.AddTransitionFromThis("Transition2", state3);
 
             //To state
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
@@ -53,11 +51,11 @@ namespace Examples
             state3.OnExit(Method3);
             state4.OnExit(Method4);
 
-            //Set start set
+            //Set start state
             state1.SetAsStartState();
 
             //Start work
-            stateMachine.Start(parametersForStart);
+            stateMachine.Start();
         }
     }
 }
