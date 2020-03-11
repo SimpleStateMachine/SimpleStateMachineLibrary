@@ -8,6 +8,7 @@ A C# library for realization simple state-machine on .Net
 ## Features
 
 State machine properties:
+* Start state
 * Entry/exit events for state
 * Invoke event for transition
 * Parameters for transitions
