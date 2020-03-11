@@ -1,9 +1,9 @@
 # SimpleStateMachineLibrary
-A C# library for realization simple state-machine
+A C# library for realization simple state-machine on .Net
 
 ## Сontent
-0. [Features](#Features)
-1. [Examples](#Examples)
+1. [Features](#Features)
+2. [Examples](#Examples)
 
 ## Features
 * Simple structure
