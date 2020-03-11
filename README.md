@@ -31,7 +31,7 @@ Example:
             state3.OnExit(Method3);
             state4.OnExit(Method4);
 
-            //Set start set
+            //Set start state
             state1.SetAsStartState();
 
             //Start work
