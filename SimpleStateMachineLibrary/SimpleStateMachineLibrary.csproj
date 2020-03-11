@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>SimpleStateMachine</Authors>
+    <RepositoryUrl>https://github.com/SimpleStateMachine/SimpleStateMachineLibrary</RepositoryUrl>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>statemachine state-machine finite-state-machine</PackageTags>
+    <PackageProjectUrl>https://github.com/SimpleStateMachine/SimpleStateMachineLibrary</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
