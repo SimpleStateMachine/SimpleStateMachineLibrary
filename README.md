@@ -24,7 +24,7 @@ Useful extensions for work:
 
 ## Examples:
 
-**Structure**
+### Structure ###
 ```C#
             StateMachine stateMachine = new StateMachine();
 
@@ -46,10 +46,10 @@ Useful extensions for work:
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
           
             //Add action on entry or/and exit
-            state1.OnExit(Method1);
-            state2.OnEntry(Method2);
-            state3.OnExit(Method3);
-            state4.OnExit(Method4);
+            state1.OnExit(Action1);
+            state2.OnEntry(Action2);
+            state3.OnExit(Action3);
+            state4.OnExit(Action4);
 
             //Set start state
             state1.SetAsStartState();
@@ -57,25 +57,28 @@ Useful extensions for work:
             //Start work
             stateMachine.Start();
 ```
-**Example methods**
+### Actions Syntax ###
+##### Action on entry/exit #####
 ```C#
-        static void Method1(State state, Dictionary<string, object> parameters)
+        void ActionOnEtnry(State state, Dictionary<string, object> parameters)
         {
+            //you need invoke transition in entry or exit action, differently work state machine will be end
             state.StateMachine.InvokeTransition("Transition1");
         }
-        
-        static  void Method2(State state, Dictionary<string, object> parameters)
-        {
-            state.StateMachine.InvokeTransition("Transition2");
-        }
-        
-        static void Method3(State state, Dictionary<string, object> parameters)
-        {
-            state.StateMachine.InvokeTransition("Transition3");
-        }
-        
-        static void Method4(State state, Dictionary<string, object> parameters)
+
+```
+##### Action on change state #####
+```C#
+        void ActionOnChangeState(State stateFrom, State stateTo)
         {
 
         }
 ```
+##### Action on transition invoke #####
+```C#
+        void ActionOnTransitionInvoke(Transition transition, Dictionary<string, object> parameters)
+        {
+
+        }
+```
+
