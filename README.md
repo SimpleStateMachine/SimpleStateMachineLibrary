@@ -4,6 +4,7 @@ A C# library for realization simple state-machine on .Net
 ## Сontent
 1. [Features](#Features)
 2. [Examples](#Examples)
+3. [License](#License)
 
 ## Features
 
@@ -81,4 +82,9 @@ Useful extensions for work:
 
         }
 ```
+## License
+
+Copyright (c) SimpleStateMachine
+
+Licensed under the [MIT](LICENSE) license.
 
