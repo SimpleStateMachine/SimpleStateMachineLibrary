@@ -1,7 +1,7 @@
 # SimpleStateMachineLibrary
 A C# library for realization simple state-machine
 
-## Оглавление
+## Сontent
 0. [Features](#Features)
 1. [Examples](#Examples)
 
@@ -16,9 +16,7 @@ A C# library for realization simple state-machine
 * Data for sharing between states
 * Change event for data
 
---------
 ## Examples:
---------
 
 **Structure**
 ```C#
