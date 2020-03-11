@@ -9,6 +9,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>statemachine state-machine finite-state-machine</PackageTags>
     <PackageProjectUrl>https://github.com/SimpleStateMachine/SimpleStateMachineLibrary</PackageProjectUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

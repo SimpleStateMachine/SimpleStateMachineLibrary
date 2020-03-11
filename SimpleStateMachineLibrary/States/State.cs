@@ -11,13 +11,30 @@ namespace SimpleStateMachineLibrary
 
         private Action<State, Dictionary<string, object>> _onExit;
 
-        protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
+        internal State(StateMachine stateMachine, string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit) : base(stateMachine, nameState)
         {
             stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
 
-            StateMachine.AddState(this, out bool result,  true);
-           
+            if (actionOnEntry != null)
+            {
+                OnEntry(actionOnEntry);
+            }
+
+            if (actionOnExit != null)
+            {
+                OnExit(actionOnExit);
+            }
+
+            StateMachine.AddState(this, out bool result, true);
         }
+
+        //protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
+        //{
+        //    stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
+
+        //    StateMachine.AddState(this, out bool result,  true);
+           
+        //}
 
         public State Delete()
         {
@@ -35,17 +52,22 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        public State OnEntry(Action<State, Dictionary<string, object>> actionOnEntryWithParameters)
+        public State OnEntry(Action<State, Dictionary<string, object>> actionOnEntry)
         {
-            _onEntry += actionOnEntryWithParameters;
-            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on entry for state \"{NameState}\"", actionOnEntryWithParameters.Method.Name, this.Name);
+
+            actionOnEntry = Check.Object(actionOnEntry, this.StateMachine?._logger);
+
+            _onEntry += actionOnEntry;
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on entry for state \"{NameState}\"", actionOnEntry.Method.Name, this.Name);
             return this;
         }
 
-        public State OnExit(Action<State, Dictionary<string, object>> actionOnExitWithoutParameters)
-        {           
-            _onExit += actionOnExitWithoutParameters;
-            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on exit for state \"{NameState}\"", actionOnExitWithoutParameters.Method.Name, this.Name);
+        public State OnExit(Action<State, Dictionary<string, object>> actionOnExit)
+        {
+            actionOnExit = Check.Object(actionOnExit, this.StateMachine?._logger);
+
+            _onExit += actionOnExit;            
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on exit for state \"{NameState}\"", actionOnExit.Method.Name, this.Name);
             return this;
         }
 

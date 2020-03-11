@@ -7,18 +7,23 @@ namespace SimpleStateMachineLibrary
 {
     public partial class Transition : NamedObject
     {
-        public State StateFrom { get; protected set; }
+        public State StateFrom { get; private set; }
 
-        public State StateTo { get; protected set; }
+        public State StateTo { get; private set; }
 
         private Action<Transition, Dictionary<string, object>> _onInvoke;
 
-        protected internal Transition(StateMachine stateMachine, string nameTransition, State stateFrom, State stateTo) : base(stateMachine, nameTransition)
+        internal Transition(StateMachine stateMachine, string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke) : base(stateMachine, nameTransition)
         {         
             StateFrom = stateFrom;
             StateTo = stateTo;
 
             stateMachine?._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
+
+            if (actionOnInvoke != null)
+            {
+                OnInvoke(actionOnInvoke);
+            }
 
             stateMachine.AddTransition(this, out bool result, true);
         }
@@ -33,11 +38,13 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.TryDeleteTransition(this, out result);
         }
 
-        public Transition OnInvoke(Action<Transition, Dictionary<string, object>> actionOnTransitionWithParameters)
+        public Transition OnInvoke(Action<Transition, Dictionary<string, object>> actionOnInvoke)
         {
-            _onInvoke += actionOnTransitionWithParameters;
+            actionOnInvoke = Check.Object(actionOnInvoke, this.StateMachine?._logger);
 
-            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on invore for transition \"{NameTransition}\"", actionOnTransitionWithParameters.Method.Name, this.Name);
+            _onInvoke += actionOnInvoke;
+
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on invore for transition \"{NameTransition}\"", actionOnInvoke.Method.Name, this.Name);
 
             return this;
         }

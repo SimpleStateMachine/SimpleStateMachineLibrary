@@ -80,7 +80,7 @@ namespace SimpleStateMachineLibrary
         
         public State SetStartState(string stateName)
         {
-            StartState = State(stateName);
+            StartState = GetState(stateName);
 
             _logger?.LogDebug("State \"{NameState}\" set as start", stateName);
 

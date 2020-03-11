@@ -27,7 +27,11 @@ namespace Tests
 
         }
 
-        void MethodOnChange(State stateFrom, State stateTo)
+        void ActionOnTransitionInvoke(Transition transition, Dictionary<string, object> parameters)
+        {
+
+        }
+        void ActionOnChangeState(State stateFrom, State stateTo)
         {
 
         }
@@ -40,17 +44,21 @@ namespace Tests
             var logger = loggerFactory.CreateLogger<StateMachine>();
             StateMachine stateMachine = new StateMachine(logger);
 
-            State state1 = stateMachine.AddState("State1");
+            State state1 = stateMachine.AddState("State1", actionOnExit: Method1);
             State state2 = stateMachine.AddState("State2");
             State state3 = stateMachine.AddState("State3");
             State state4 = stateMachine.AddState("State4");
 
-            stateMachine.OnChangeState(MethodOnChange);
+            state1.Delete();
+            state1.TryDelete(out bool result);
+
+            stateMachine.OnChangeState(ActionOnChangeState);
 
             Transition transition1 = state1.AddTransitionFromThis("Transition1", state2);
             Transition transition2 = stateMachine.AddTransition("Transition2", state2, state3);
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
 
+         
 
             state1.SetAsStartState();
             state1.OnExit(Method1);
@@ -75,11 +83,11 @@ namespace Tests
             var logger = loggerFactory.CreateLogger<StateMachine>();
             StateMachine stateMachine = StateMachine.FromXDocument("text.xml", logger);
 
-            stateMachine.State("State1").OnExit(Method1);
-            stateMachine.State("State2").OnExit(Method2);
-            stateMachine.State("State3").OnExit(Method3);
+            stateMachine.GetState("State1").OnExit(Method1);
+            stateMachine.GetState("State2").OnExit(Method2);
+            stateMachine.GetState("State3").OnExit(Method3);
 
-            stateMachine.OnChangeState(MethodOnChange);
+            stateMachine.OnChangeState(ActionOnChangeState);
 
             stateMachine.Start(parametersForStart);
 

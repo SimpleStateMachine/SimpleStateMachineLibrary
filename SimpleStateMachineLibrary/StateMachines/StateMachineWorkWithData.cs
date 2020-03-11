@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SimpleStateMachineLibrary.Helpers;
+using System;
 using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
@@ -7,7 +8,7 @@ namespace SimpleStateMachineLibrary
     public partial class StateMachine
     {
 
-        private Data _Data(string nameData, out bool result, bool exception)
+        private Data _GetData(string nameData, out bool result, bool exception)
         {
             var data_ = Check.GetElement(_data, nameData, this._logger, out result, exception);
 
@@ -19,7 +20,7 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        private Data _Data(Data data, out bool result, bool exception)
+        private Data _GetData(Data data, out bool result, bool exception)
         {
             var data_ = Check.GetElement(_data, data, this._logger, out result, exception);
 
@@ -31,23 +32,25 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        public Data Data(string nameData)
+
+        public Data GetData(string nameData)
         {
-            return _Data(nameData, out bool result, true);
+            return _GetData(nameData, out bool result, true);
         }
 
         public Data TryGetData(string nameData, out bool result)
         {
-            return _Data(nameData, out result, false);
+            return _GetData(nameData, out result, false);
         }
 
         public Data TryGetData(Data data, out bool result)
         {
-            return _Data(data, out result, false);
+            return _GetData(data, out result, false);
         }
 
 
-        private Data _AddData(string nameData, object valueData, out bool result, bool exception)
+
+        internal Data _AddData(string nameData, object valueData, Action<Data, object, object> actionOnChange,  out bool result, bool exception)
         {
             //throw that element already contains  
             result = Check.NotContains(_data, nameData, this._logger, exception);
@@ -55,7 +58,7 @@ namespace SimpleStateMachineLibrary
             if (!result)
                 return null;
 
-            return new Data(this, nameData, valueData);
+            return new Data(this, nameData, valueData, actionOnChange);
         }
 
         internal Data AddData(Data data, out bool result, bool exception)
@@ -76,20 +79,23 @@ namespace SimpleStateMachineLibrary
             return data;
         }
 
-        public Data AddData(string nameData, object valueData = default(object))
-        {
-            return _AddData(nameData, valueData, out bool result,  true);
-        }
-
-        public Data TryAddData(out bool result, string nameData, object valueData = default(object))
-        {
-            return _AddData(nameData, valueData, out result, false);
-        }
-
-        public Data AddData(XElement xElement)
+        internal Data AddData(XElement xElement)
         {
             return SimpleStateMachineLibrary.Data.FromXElement(this, Check.Object(xElement, this._logger));
         }
+
+
+        public Data AddData(string nameData, object valueData = default(object), Action<Data, object, object> actionOnChange = null)
+        {
+            return _AddData(nameData, valueData, actionOnChange, out bool result,  true);
+        }
+
+        public Data TryAddData(out bool result, string nameData, object valueData = default(object), Action<Data, object, object> actionOnChange = null)
+        {
+            return _AddData(nameData, valueData, actionOnChange, out result, false);
+        }
+
+     
 
         private Data _DeleteData(Data data, out bool result, bool exception)
         {
@@ -115,6 +121,7 @@ namespace SimpleStateMachineLibrary
 
             return data_;
         }
+
 
         public Data DeleteData(string nameData)
         {

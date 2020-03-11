@@ -1,25 +1,24 @@
-﻿using System;
+﻿using SimpleStateMachineLibrary;
+using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using SimpleStateMachineLibrary;
 
 namespace Examples
 {
     class Program
     {
-        static void Method1(State state, Dictionary<string, object> parameters)
+        static void Action1(State state, Dictionary<string, object> parameters)
         {
             state.StateMachine.InvokeTransition("Transition1");
         }
-        static  void Method2(State state, Dictionary<string, object> parameters)
+        static void Action2(State state, Dictionary<string, object> parameters)
         {
             state.StateMachine.InvokeTransition("Transition2");
         }
-        static void Method3(State state, Dictionary<string, object> parameters)
+        static void Action3(State state, Dictionary<string, object> parameters)
         {
             state.StateMachine.InvokeTransition("Transition3");
         }
-        static void Method4(State state, Dictionary<string, object> parameters)
+        static void Action4(State state, Dictionary<string, object> parameters)
         {
 
         }
@@ -44,12 +43,12 @@ namespace Examples
 
             //To state
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
-          
+
             //Add action on entry or/and exit
-            state1.OnExit(Method1);
-            state2.OnEntry(Method2);
-            state3.OnExit(Method3);
-            state4.OnExit(Method4);
+            state1.OnExit(Action1);
+            state2.OnEntry(Action2);
+            state3.OnExit(Action3);
+            state4.OnExit(Action4);
 
             //Set start state
             state1.SetAsStartState();

@@ -16,24 +16,24 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.TryGetTransitionsFromState(this);
         }
 
-        public Transition AddTransitionFromThis(string nameTransition, State stateTo)
+        public Transition AddTransitionFromThis(string nameTransition, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.AddTransition(nameTransition, this, stateTo);
+            return this.StateMachine.AddTransition(nameTransition, this, stateTo, actionOnInvoke);
         }
 
-        public Transition AddTransitionFromThis(string nameTransition, string nameStateTo)
+        public Transition AddTransitionFromThis(string nameTransition, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.AddTransition(nameTransition, this, nameStateTo);
+            return this.StateMachine.AddTransition(nameTransition, this, nameStateTo, actionOnInvoke);
         }
 
-        public Transition TryAddTransitionFromThis(string nameTransition, State stateTo, out bool result)
+        public Transition TryAddTransitionFromThis(out bool result, string nameTransition, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, this, stateTo, out result);
+            return this.StateMachine.TryAddTransition(out result, nameTransition, this, stateTo, actionOnInvoke);
         }
 
-        public Transition TryAddTransitionFromThis(string nameTransition, string nameStateTo, out bool result)
+        public Transition TryAddTransitionFromThis(out bool result, string nameTransition, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, this, nameStateTo, out result);
+            return this.StateMachine.TryAddTransition(out result, nameTransition, this, nameStateTo, actionOnInvoke);
         }
     }
 }

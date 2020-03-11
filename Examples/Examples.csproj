@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleStateMachineLibrary\SimpleStateMachineLibrary.csproj" />
+    <Reference Include="SimpleStateMachineLibrary">
+      <HintPath>..\SimpleStateMachineLibrary\bin\Release\netstandard2.1\SimpleStateMachineLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

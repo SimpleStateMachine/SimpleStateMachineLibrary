@@ -9,7 +9,7 @@ namespace SimpleStateMachineLibrary
     public partial class StateMachine
     {
 
-        public static XDocument ToXDocument(StateMachine stateMachine, string nameFile)
+        private static XDocument ToXDocument(StateMachine stateMachine, string nameFile)
         {
             Check.Object(stateMachine, stateMachine?._logger);
             Check.Name(nameFile, stateMachine?._logger);
@@ -56,7 +56,7 @@ namespace SimpleStateMachineLibrary
             return StateMachine.ToXDocument(this, nameFile);
         }
 
-        public static StateMachine FromXDocument(StateMachine stateMachine, XDocument xDocument)
+        private static StateMachine FromXDocument(StateMachine stateMachine, XDocument xDocument)
         {
             XElement stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
             stateMachineXElement = Check.Object(stateMachineXElement, stateMachine?._logger);
@@ -76,7 +76,7 @@ namespace SimpleStateMachineLibrary
             return stateMachine;
         }
 
-        public static StateMachine FromXDocument(StateMachine stateMachine, string xDocumentPath)
+        private static StateMachine FromXDocument(StateMachine stateMachine, string xDocumentPath)
         {
             xDocumentPath = Check.Name(xDocumentPath, stateMachine?._logger);
             XDocument xDocument = XDocument.Load(xDocumentPath);

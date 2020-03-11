@@ -7,7 +7,7 @@ namespace SimpleStateMachineLibrary
 {
     public partial class Transition
     {
-        public static XElement ToXElement(Transition transition)
+        internal static XElement ToXElement(Transition transition)
         {
             Check.NamedObject(transition, transition?.StateMachine?._logger);
             XElement element = new XElement("Transition");
@@ -19,12 +19,12 @@ namespace SimpleStateMachineLibrary
             return element;
         }
 
-        public XElement ToXElement()
+        internal XElement ToXElement()
         {
             return Transition.ToXElement(this);
         }
 
-        public static Transition FromXElement(StateMachine stateMachine, XElement transition)
+        internal static Transition FromXElement(StateMachine stateMachine, XElement transition)
         {
             stateMachine = Check.Object(stateMachine, stateMachine?._logger);
             transition = Check.Object(transition, stateMachine?._logger);

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SimpleStateMachineLibrary.Helpers;
+using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 
@@ -7,7 +9,7 @@ namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
-        private State _State(string nameState, out bool result, bool exception)
+        private State _GetState(string nameState, out bool result, bool exception)
         {
             var _state = Check.GetElement(_states, nameState, this._logger, out result, exception);
 
@@ -19,35 +21,38 @@ namespace SimpleStateMachineLibrary
             return _state;
         }
 
-        private State _State(State state, out bool result, bool exception)
+        //private State _GetState(State state, out bool result, bool exception)
+        //{
+        //    var _state = Check.GetElement(_states, state, this._logger, out result, exception);
+
+        //    if (exception)
+        //        _logger?.LogDebug("Get state \"{NameState}\"", state.Name);
+        //    else
+        //        _logger?.LogDebug("Try get state \"{NameState}\"", state.Name);
+
+
+        //    return _state;
+        //}
+
+
+        public State GetState(string nameState)
         {
-            var _state = Check.GetElement(_states, state, this._logger, out result, exception);
-
-            if (exception)
-                _logger?.LogDebug("Get state \"{NameState}\"", state.Name);
-            else
-                _logger?.LogDebug("Try get state \"{NameState}\"", state.Name);
-
-
-            return _state;
-        }
-
-        public State State(string nameState, bool exception = true)
-        {
-            return _State(nameState, out bool result, exception);
+            return _GetState(nameState, out bool result, true);
         }
 
         public State TryGetState(string nameState, out bool result)
         {
-            return _State(nameState, out result, false);
+            return _GetState(nameState, out result, false);
         }
 
-        public State TryGetState(State state, out bool result)
-        {
-            return _State(state, out result, false);
-        }
+        //public State TryGetState(State state, out bool result)
+        //{
+        //    return _GetState(state, out result, false);
+        //}
 
-        private State _AddState(string nameState, out bool result, bool exception)
+
+
+        internal State _AddState(string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit, out bool result, bool exception)
         {
             //throw that element already contains  
             result = Check.NotContains(_states, nameState, this._logger, exception);
@@ -56,8 +61,9 @@ namespace SimpleStateMachineLibrary
             if (!result)
                 return null;
 
-            return new State(this, nameState);
+            return new State(this, nameState, actionOnEntry, actionOnExit);
         }
+
         internal State AddState(State state, out bool result, bool exception)
         {
             //throw that element already contains 
@@ -76,20 +82,22 @@ namespace SimpleStateMachineLibrary
             return state;
         }
 
-        public State AddState(string nameState)
-        {
-            return _AddState(nameState, out bool result, true);
-        }
-
-        public State AddState(XElement xElement)
+        internal State AddState(XElement xElement)
         {
             return SimpleStateMachineLibrary.State.FromXElement(this, Check.Object(xElement, this._logger));
         }
 
-        public State TryAddState(string nameState, out bool result)
+
+        public State AddState(string nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
         {
-            return _AddState(nameState, out result, false);
+            return _AddState(nameState, actionOnEntry, actionOnExit, out bool result, true);
         }
+
+        public State TryAddState(out bool result, string nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
+        {
+            return _AddState(nameState, actionOnEntry, actionOnExit, out result, false);
+        }
+
 
 
         private State _DeleteState(State state, out bool result, bool exception)
@@ -118,6 +126,7 @@ namespace SimpleStateMachineLibrary
             return _state;
         }
 
+
         public State DeleteState(State state)
         {
             return _DeleteState(state, out bool result, true);
@@ -125,7 +134,7 @@ namespace SimpleStateMachineLibrary
 
         public State DeleteState(string stateName)
         {
-            return _DeleteState(State(stateName), out bool result, true);
+            return _DeleteState(GetState(stateName), out bool result, true);
         }
 
         public State TryDeleteState(State state, out bool result)

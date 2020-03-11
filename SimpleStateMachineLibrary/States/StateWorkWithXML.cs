@@ -7,7 +7,7 @@ namespace SimpleStateMachineLibrary
 {
     public partial class State
     {
-        public static XElement ToXElement(State state)
+        internal static XElement ToXElement(State state)
         {
             Check.NamedObject(state, state?.StateMachine?._logger);
             XElement element = new XElement("State");
@@ -17,12 +17,12 @@ namespace SimpleStateMachineLibrary
             return element;
         }
 
-        public XElement ToXElement()
+        internal XElement ToXElement()
         {
             return State.ToXElement(this);
         }
 
-        public static State FromXElement(StateMachine stateMachine, XElement state)
+        internal static State FromXElement(StateMachine stateMachine, XElement state)
         {
             string Name = state.Attribute("Name")?.Value;
 

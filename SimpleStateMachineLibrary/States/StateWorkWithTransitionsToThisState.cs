@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace SimpleStateMachineLibrary
@@ -16,24 +17,24 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.TryGetTransitionsToState(this);
         }
 
-        public Transition AddTransitionToThis(string nameTransition, State stateFrom)
+        public Transition AddTransitionToThis(string nameTransition, State stateFrom, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
             return this.StateMachine.AddTransition(nameTransition, stateFrom, this);
         }
 
-        public Transition AddTransitionToThis(string nameTransition, string nameStateFrom)
+        public Transition AddTransitionToThis(string nameTransition, string nameStateFrom, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
             return this.StateMachine.AddTransition(nameTransition, nameStateFrom, this);
         }
 
-        public Transition TryAddTransitionToThis(string nameTransition, State stateFrom, out bool result)
+        public Transition TryAddTransitionToThis(out bool result, string nameTransition, State stateFrom, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, stateFrom, this, out result);
+            return this.StateMachine.TryAddTransition(out result, nameTransition, stateFrom, this, actionOnInvoke);
         }
 
-        public Transition TryAddTransitionToThis(string nameTransition, string nameStateFrom, out bool result)
+        public Transition TryAddTransitionToThis(out bool result, string nameTransition, string nameStateFrom, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, nameStateFrom, this, out result);
+            return this.StateMachine.TryAddTransition(out result, nameTransition, nameStateFrom, this, actionOnInvoke);
         }
 
     }

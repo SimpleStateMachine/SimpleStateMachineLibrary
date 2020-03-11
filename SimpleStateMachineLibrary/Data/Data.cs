@@ -19,18 +19,16 @@ namespace SimpleStateMachineLibrary
 
         private Action<Data, object, object> _onChange;
 
-        public Data OnChange(Action<Data, object, object> actionOnChange)
-        {
-            _onChange += actionOnChange;
-            this.StateMachine._logger?.LogDebugAndInformation("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
-            return this;
-        }
-
-        protected internal Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
+        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object, object> actionOnChange) : base(stateMachine, nameData)
         {
             Value = valueData;
 
             stateMachine?._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
+
+            if (actionOnChange != null)
+            {
+                OnChange(actionOnChange);
+            }
 
             stateMachine.AddData(this, out bool result, true);
         }
@@ -43,6 +41,15 @@ namespace SimpleStateMachineLibrary
         public Data TryDelete(out bool result)
         {
             return this.StateMachine.TryDeleteData(this, out result);
+        }
+
+        public Data OnChange(Action<Data, object, object> actionOnChange)
+        {
+            actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);
+
+            _onChange += actionOnChange;
+            this.StateMachine._logger?.LogDebugAndInformation("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
+            return this;
         }
     }
 }
