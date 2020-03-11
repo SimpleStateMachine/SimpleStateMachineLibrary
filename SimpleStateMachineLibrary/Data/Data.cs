@@ -1,14 +1,38 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
+using System;
 
 namespace SimpleStateMachineLibrary
 {
     public partial class Data : NamedObject
     {
-        public object Value { get; set; }
+        private object _value;
 
-        public Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
+        public object Value 
+        {   get { return _value; }
+            set 
+            {
+                _onChange?.Invoke(this, value, value);
+                _value = value;
+            }
+        }
+
+        private Action<Data, object, object> _onChange;
+
+        public Data OnChange(Action<Data, object, object> actionOnChange)
+        {
+            _onChange += actionOnChange;
+            this.StateMachine._logger?.LogDebugAndInformation("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
+            return this;
+        }
+
+        protected internal Data(StateMachine stateMachine, string nameData, object valueData = null) : base(stateMachine, nameData)
         {
             Value = valueData;
+
+            stateMachine?._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
+
+            stateMachine.AddData(this, out bool result, true);
         }
 
         public Data Delete()
@@ -16,9 +40,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.DeleteData(this);
         }
 
-        public Data TryDelete()
+        public Data TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteData(this);
+            return this.StateMachine.TryDeleteData(this, out result);
         }
     }
 }

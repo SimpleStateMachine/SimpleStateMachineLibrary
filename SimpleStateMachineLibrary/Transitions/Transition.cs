@@ -1,7 +1,7 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System;
 using System.Collections.Generic;
-
 
 namespace SimpleStateMachineLibrary
 {
@@ -11,41 +11,16 @@ namespace SimpleStateMachineLibrary
 
         public State StateTo { get; protected set; }
 
-        private Action<StateMachine, Dictionary<string, object>> _onInvokeWithParameters;
+        private Action<Transition, Dictionary<string, object>> _onInvoke;
 
-        private Action<StateMachine> _onInvokeWithoutParameters;
-
-        private void CheckOnInvokeFunc()
-        {
-            if ((_onInvokeWithParameters != null) || (_onInvokeWithoutParameters != null))
-            {
-                throw new ArgumentException(String.Format("Func on Invoke for Transition with name {0} already set", this.Name));
-            }
-        }
-
-        public Transition OnInvoke(Action<StateMachine> actionOnTransitionWithoutParameters)
-        {
-            CheckOnInvokeFunc();
-
-            _onInvokeWithoutParameters = actionOnTransitionWithoutParameters;
-
-            return this;
-        }
-
-        public Transition OnInvoke(Action<StateMachine, Dictionary<string, object>> actionOnTransitionWithParameters)
-        {
-            CheckOnInvokeFunc();
-
-            _onInvokeWithParameters = actionOnTransitionWithParameters;
-
-            return this;
-        }
-
-
-        public Transition(StateMachine stateMachine, string nameTransition, State stateFrom, State stateTo) : base(stateMachine, nameTransition)
+        protected internal Transition(StateMachine stateMachine, string nameTransition, State stateFrom, State stateTo) : base(stateMachine, nameTransition)
         {         
             StateFrom = stateFrom;
             StateTo = stateTo;
+
+            stateMachine?._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
+
+            stateMachine.AddTransition(this, out bool result, true);
         }
 
         public Transition Delete()
@@ -53,23 +28,27 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.DeleteTransition(this);
         }
 
-        public Transition TryDelete()
+        public Transition TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteTransition(this);
+            return this.StateMachine.TryDeleteTransition(this, out result);
         }
 
-        internal void Invoke(Dictionary<string, object> parameters)
+        public Transition OnInvoke(Action<Transition, Dictionary<string, object>> actionOnTransitionWithParameters)
         {
+            _onInvoke += actionOnTransitionWithParameters;
 
-            if (_onInvokeWithParameters!=null)
-            {
-                _onInvokeWithParameters(this.StateMachine,parameters);
-            }
-            else if (_onInvokeWithoutParameters != null)
-            {
-                _onInvokeWithoutParameters(this.StateMachine);
-            }
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on invore for transition \"{NameTransition}\"", actionOnTransitionWithParameters.Method.Name, this.Name);
+
+            return this;
         }
+
+        internal Transition Invoke(Dictionary<string, object> parameters)
+        {
+            _onInvoke?.Invoke (this, parameters);
+            this.StateMachine._logger?.LogDebugAndInformation("Invoke transition \"{NameTransition}\"", this.Name);
+            return this;
+        }
+
 
     }
 }

@@ -1,110 +1,139 @@
-﻿
-
-
+﻿using Microsoft.Extensions.Logging;
 using SimpleStateMachineLibrary.Helpers;
+using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
 
-        private Data _Data(string nameData, bool exeption)
+        private Data _Data(string nameData, out bool result, bool exception)
         {
-            return Check.GetElement(_data, nameData, exeption);
+            var data_ = Check.GetElement(_data, nameData, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Get data \"{NameData}\"", nameData);
+            else
+                _logger?.LogDebug("Try get data \"{NameData}\"", nameData);
+
+            return data_;
         }
 
-        private Data _Data(Data data, bool exeption)
+        private Data _Data(Data data, out bool result, bool exception)
         {
-            return Check.GetElement(_data, data, exeption);
+            var data_ = Check.GetElement(_data, data, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Get data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try get data \"{NameData}\"", data.Name);
+
+            return data_;
         }
 
         public Data Data(string nameData)
         {
-            return _Data(nameData, true);
+            return _Data(nameData, out bool result, true);
         }
 
-        public Data Data(Data data)
+        public Data TryGetData(string nameData, out bool result)
         {
-            return _Data(data, true);
+            return _Data(nameData, out result, false);
         }
 
-        public Data TryGetData(string nameData)
+        public Data TryGetData(Data data, out bool result)
         {
-            return _Data(nameData, false);
+            return _Data(data, out result, false);
         }
 
-        public Data TryGetData(Data data)
-        {
-            return _Data(data, false);
-        }
 
-        private Data _AddData(Data data, bool exeption)
+        private Data _AddData(string nameData, object valueData, out bool result, bool exception)
         {
-            return Check.AddElement(_data, data, exeption);
-        }
-
-        private Data _AddData(string nameData, object valueData, bool exeption)
-        {
-            if (!Check.NotContains(_data, nameData, exeption))
+            //throw that element already contains  
+            result = Check.NotContains(_data, nameData, this._logger, exception);
+            
+            if (!result)
                 return null;
 
-            Data newData = new Data(this, nameData, valueData);
-            _data.Add(nameData, newData);
-            return newData;
+            return new Data(this, nameData, valueData);
+        }
+
+        internal Data AddData(Data data, out bool result, bool exception)
+        {
+            //throw that element already contains 
+            result = Check.NotContains(_data, data, this._logger, exception);
+            
+            if (!result)
+                return null;
+
+            _data.Add(data.Name, data);
+
+            if (exception)
+                _logger?.LogDebug("Add data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try add data \"{NameData}\"", data.Name);
+
+            return data;
         }
 
         public Data AddData(string nameData, object valueData = default(object))
         {
-            return _AddData(nameData, valueData, true);
+            return _AddData(nameData, valueData, out bool result,  true);
         }
 
-        public Data AddData(Data data)
+        public Data TryAddData(out bool result, string nameData, object valueData = default(object))
         {
-            return _AddData(data, true);
-        }
-        //public Data AddData(XElement xElement)
-        //{
-        //    return StateMachines.Data.FromXElement(this, xElement);
-        //}
-        public Data TryAddData(string nameData, object valueData = default(object))
-        {
-            return _AddData(nameData, valueData, false);
+            return _AddData(nameData, valueData, out result, false);
         }
 
-        public Data TryAddData(Data data)
+        public Data AddData(XElement xElement)
         {
-            return _AddData(data, false);
+            return SimpleStateMachineLibrary.Data.FromXElement(this, Check.Object(xElement, this._logger));
         }
 
-
-        private Data _DeleteData(Data state, bool exeption)
+        private Data _DeleteData(Data data, out bool result, bool exception)
         {
-            return Check.Remove(_data, state, exeption);
+            var data_ = Check.Remove(_data, data, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Delete data \"{NameData}\"", data.Name);
+            else
+                _logger?.LogDebug("Try delete data \"{NameData}\"", data.Name);
+
+            return data_;
         }
 
-        private Data _DeleteData(string stateName, bool exeption)
+        private Data _DeleteData(string dataName, out bool result, bool exception)
         {
-            return Check.Remove(_data, stateName, exeption);
+            var data_ = Check.Remove(_data, dataName, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Delete data \"{NameData}\"", dataName);
+            else
+                _logger?.LogDebug("Try delete data \"{NameData}\"", dataName);
+
+
+            return data_;
         }
 
         public Data DeleteData(string nameData)
         {
-            return _DeleteData(Data(nameData), true);
+            return _DeleteData(nameData, out bool result,  true);
         }
 
         public Data DeleteData(Data data)
         {
-            return _DeleteData(Data(data),true);
+            return _DeleteData(data, out bool result, true);
         }
 
-        public Data TryDeleteData(string nameData)
+        public Data TryDeleteData(string nameData, out bool result)
         {
-            return _DeleteData(Data(nameData), false);
+            return _DeleteData(nameData, out result, false);
         }
 
-        public Data TryDeleteData(Data data)
+        public Data TryDeleteData(Data data, out bool result)
         {
-            return _DeleteData(Data(data), false);
+            return _DeleteData(data, out result, false);
         }
     }
 }

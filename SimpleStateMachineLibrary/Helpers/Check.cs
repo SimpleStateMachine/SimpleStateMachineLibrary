@@ -1,154 +1,192 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 
 namespace SimpleStateMachineLibrary.Helpers
 {
-    public class Check
+    internal class Check
     {
-        public static string Name(string name)
+        public static string Name(string name, ILogger logger)
         {
             if (String.IsNullOrEmpty(name))
-                throw new ArgumentNullException("Name must be not Empty");
+            {
+                string message = "Name must be not Empty";
+                var ex = new ArgumentNullException(message: message, paramName:"Name");
+                logger?.LogError(ex, message);
+                throw ex;
+            }
+               
             return name;
         }
 
-        public static TObject Object<TObject>(TObject objectRequested)
+        public static TObject Object<TObject>(TObject objectRequested, ILogger logger)
         {
             if (Equals(objectRequested, default(TObject)))
-                throw new ArgumentNullException(String.Format("Object of type {0} must be not null", typeof(TObject).ToString()));
+            {
+                object[] args = { typeof(TObject).Name };
+                string message = "Object of type \"{0}\" must be not null";
+                var ex = new ArgumentNullException(message: String.Format(message, args), paramName: typeof(TObject).Name);
+                logger?.LogError(ex, message, args);
+                throw ex;
+            }
+                
+
             return objectRequested;
         }
 
-        public static TObject NamedObject<TObject>(TObject objectRequested) where TObject : NamedObject
+        public static TObject NamedObject<TObject>(TObject objectRequested, ILogger logger) where TObject : NamedObject
         {
-            Check.Object(objectRequested);
-            Check.Name(objectRequested.Name);
+            Check.Object(objectRequested, logger);
+            Check.Name(objectRequested.Name, logger);
             return objectRequested;
         }
 
-        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool needContains, bool exeption) where TObject : NamedObject
+       
+        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, bool exception = true) where TObject : NamedObject
         {
-            dictionary = Check.Object(dictionary);
-            nameObject = Check.Name(nameObject);
+            dictionary = Check.Object(dictionary, logger);
+            nameObject = Check.Name(nameObject, logger);
+            bool contains = dictionary.ContainsKey(nameObject);
 
-            if (needContains == dictionary.ContainsKey(nameObject))
-                return true;
-            if (exeption)
-                if (needContains)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not found", nameObject));
-                else
-                    throw new ArgumentException(String.Format("Element with name {0} already exists", nameObject));
-            return false;
+            if ((exception)&&(!contains))
+            {
+                object[] args = { nameObject };
+                string message = "Element with name \"{0}\" is not found";
+                var ex = new KeyNotFoundException(message: String.Format(message, args));
+                 logger?.LogError(ex, message, args);
+                throw ex;
+            }
+
+            return contains;
         }
 
-        private static bool _Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool needContains, bool exeption) where TObject : NamedObject
+        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) where TObject : NamedObject
         {
-            dictionary = Check.Object(dictionary);
-            objectRequested = Check.Object(objectRequested);
+            dictionary = Check.Object(dictionary, logger);
+            objectRequested = Check.Object(objectRequested, logger);
 
-            if (needContains == dictionary.ContainsValue(objectRequested))
-                return true;
+            bool contains = dictionary.ContainsValue(objectRequested);
 
-            if (exeption)
-                if (needContains)
-                    throw new KeyNotFoundException(String.Format("Element of type {0} not found", typeof(TObject).ToString()));
-                else
-                    throw new ArgumentException(String.Format("Element of type {0} already exists", typeof(TObject).ToString()));
-            return false;
+            if ((exception) && (!contains))
+            {
+                object[] args = { objectRequested.Name };
+                string message = "Element with name \"{0}\" is not found";
+                var ex = new KeyNotFoundException(message: String.Format(message, args));
+                 logger?.LogError(ex, message, args);
+                throw ex;
+            }
+
+            return contains;
         }
 
-
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, bool exception = true) where TObject : NamedObject
         {
-            return _Contains(dictionary, nameObject, true, exeption);
+            dictionary = Check.Object(dictionary, logger);
+            nameObject = Check.Name(nameObject, logger);
+            bool notContains = !dictionary.ContainsKey(nameObject);
+
+            if ((exception) && (!notContains))
+            {
+                object[] args = { nameObject };
+                string message = "Element of type \"{0}\" already exists";
+                var ex = new KeyNotFoundException(message: String.Format(message, args));
+                 logger?.LogError(ex, message, args);
+                throw ex;
+            }
+
+            return notContains;
         }
 
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject
+        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) where TObject : NamedObject
         {
-            return _Contains(dictionary, objectRequested, true, exeption);
+            dictionary = Check.Object(dictionary, logger);
+            objectRequested = Check.Object(objectRequested, logger);
+
+            bool notContains = !dictionary.ContainsValue(objectRequested);
+
+            if ((exception) && (!notContains))
+            {
+                object[] args = { objectRequested.Name };
+                string message = "Element of type \"{0}\" already exists";
+                var ex = new KeyNotFoundException(message: String.Format(message, args));
+                 logger?.LogError(ex, message, args);
+                throw ex;
+            }
+
+            return notContains;
         }
 
-
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+        
+        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
         {
-            return _Contains(dictionary, nameObject, false, exeption);
-        }
-
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, bool exeption = true) where TObject : NamedObject
-        {
-            return _Contains(dictionary, objectRequested, false, exeption);
-        }
-
-
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
-        {
-            dictionary = Check.Object(dictionary);
-            nameObject = Check.Name(nameObject);
+            result = false;
+            dictionary = Check.Object(dictionary, logger);
+            nameObject = Check.Name(nameObject, logger);
 
             TObject removedObj = default(TObject);
             dictionary?.TryGetValue(nameObject, out removedObj);
 
             if (removedObj == default(TObject))
             {
-                if (exeption)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not deleted because not found. ", nameObject));
+                if (exception)
+                {
+                    object[] args = { nameObject };
+                    string message = "Element with name \"{0}\" is not deleted because not found";
+                    var ex = new KeyNotFoundException(String.Format(message, args));
+                     logger?.LogError(ex, message, args);
+                    throw ex;
+                }
+                  
                 else
                     return default(TObject);
             }
 
             dictionary.Remove(nameObject);
+            result = true;
             return removedObj;
         }
 
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
+        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
         {
-            dictionary = Check.Object(dictionary);
-            obj = Check.NamedObject(obj);
+            result = false;
+            dictionary = Check.Object(dictionary, logger);
+            obj = Check.NamedObject(obj, logger);
 
             TObject removedObj = default(TObject);
             dictionary?.TryGetValue(obj.Name, out removedObj);
 
             if (removedObj == default(TObject))
             {
-                if (exeption)
-                    throw new KeyNotFoundException(String.Format("Element with name {0} is not deleted because not found. ", obj.Name));
+                if (exception)
+                {
+                    object[] args = { obj.Name };
+                    string message = "Element with name \"{0}\" is not deleted because not found";
+                    var ex = new KeyNotFoundException(String.Format(message, args));
+                     logger?.LogError(ex, message, args);
+                    throw ex;
+                }
+                
                 else
                     return default(TObject);
             }
 
             dictionary.Remove(obj.Name);
+            result = true;
             return removedObj;
         }
 
 
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, bool exeption = true) where TObject : NamedObject
+        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
         {
-            bool contains = Contains(dictionary, nameObject, exeption);
-            return contains ? dictionary[nameObject] : default(TObject);
+            result = Contains(dictionary, nameObject, logger, exception);
+            return result ? dictionary[nameObject] : default(TObject);
         }
 
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
+        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
         {
-            bool contains = Contains(dictionary, obj, exeption);
-            return contains ? obj : default(TObject);
+            result = Contains(dictionary, obj, logger, exception);
+            return result ? obj : default(TObject);
         }
 
-
-        public static TObject AddElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, bool exeption = true) where TObject : NamedObject
-        {
-            return AddElement(dictionary, obj?.Name, obj, exeption);
-        }
-
-        public static TObject AddElement<TObject>(Dictionary<string, TObject> dictionary, string name, TObject obj, bool exeption = true) where TObject : NamedObject
-        {
-            obj = Check.NamedObject(obj);
-            bool nonContains = NotContains(dictionary, name, exeption);
-
-            if (nonContains)
-                return default(TObject);
-
-            dictionary.Add(name, obj);
-            return obj;
-        }
     }
 }

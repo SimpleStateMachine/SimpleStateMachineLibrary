@@ -1,82 +1,32 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System;
 using System.Collections.Generic;
-
 
 namespace SimpleStateMachineLibrary
 {
     public partial class State : NamedObject
     {
-        private Action<StateMachine, Dictionary<string, object>> _actionOnEntryWithParameters;
-        private Action<StateMachine> _actionOnEntryWithoutParameters;
-        private Action<StateMachine, Dictionary<string, object>> _actionOnExitWithParameters;
-        private Action<StateMachine> _actionOnExitWithoutParameters;
-        
-        public State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
-        {
+        private Action<State, Dictionary<string, object>> _onEntry;
 
+        private Action<State, Dictionary<string, object>> _onExit;
+
+        protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
+        {
+            stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
+
+            StateMachine.AddState(this, out bool result,  true);
+           
         }
 
-        private void CheckOnEntryFunc()
-        {
-            if((_actionOnEntryWithParameters != null)|| (_actionOnEntryWithoutParameters != null))
-            {
-                throw new ArgumentException(String.Format("Func on Entry for State with name {0} already set", this.Name));
-            }
-        }
-
-        private void CheckOnExitFunc()
-        {
-            if ((_actionOnExitWithParameters != null) || (_actionOnExitWithoutParameters != null))
-            {
-                throw new ArgumentException(String.Format("Func on Exit for State with name {0} already set", this.Name));
-            }
-        }
-
-        public State OnEntry(Action<StateMachine> actionOnEntryWithoutParameters)
-        {
-            CheckOnEntryFunc();
-
-            _actionOnEntryWithoutParameters = actionOnEntryWithoutParameters;
-
-            return this;
-        }
-
-        public State OnEntry(Action<StateMachine, Dictionary<string, object>> actionOnEntryWithParameters)
-        {
-            CheckOnEntryFunc();
-
-            _actionOnEntryWithParameters = actionOnEntryWithParameters;
-
-            return this;
-        }
-
-        public State OnExit(Action<StateMachine> actionOnExitWithoutParameters)
-        {
-            CheckOnExitFunc();
-
-            _actionOnExitWithoutParameters = actionOnExitWithoutParameters;
-
-            return this;
-        }
-
-        public State OnExit(Action<StateMachine, Dictionary<string, object>> actionOnExitWithParameters)
-        {
-            CheckOnExitFunc();
-
-            _actionOnExitWithParameters = actionOnExitWithParameters;
-
-            return this;
-        }
-   
         public State Delete()
         {
             return this.StateMachine.DeleteState(this);
         }
 
-        public State TryDelete()
+        public State TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteState(this);
+            return this.StateMachine.TryDeleteState(this, out result);
         }
 
         public State SetAsStartState()
@@ -85,37 +35,30 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        public State SetAsEndState()
+        public State OnEntry(Action<State, Dictionary<string, object>> actionOnEntryWithParameters)
         {
-            this.StateMachine.SetEndState(this);
+            _onEntry += actionOnEntryWithParameters;
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on entry for state \"{NameState}\"", actionOnEntryWithParameters.Method.Name, this.Name);
+            return this;
+        }
+
+        public State OnExit(Action<State, Dictionary<string, object>> actionOnExitWithoutParameters)
+        {           
+            _onExit += actionOnExitWithoutParameters;
+            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on exit for state \"{NameState}\"", actionOnExitWithoutParameters.Method.Name, this.Name);
             return this;
         }
 
         internal void Entry(Dictionary<string, object> parameters)
         {
-
-            if (_actionOnEntryWithParameters != null)
-            {
-               _actionOnEntryWithParameters(this.StateMachine, parameters);
-            }
-            else if (_actionOnEntryWithoutParameters != null)
-            {
-                _actionOnEntryWithoutParameters(this.StateMachine);
-            }
-
+            _onEntry?.Invoke (this, parameters);
+            this.StateMachine._logger?.LogDebugAndInformation("Entry to state \"{NameState}\"",  this.Name);
         }
 
         internal void Exit(Dictionary<string, object> parameters)
         {
-            if (_actionOnExitWithParameters != null)
-            {
-                 _actionOnExitWithParameters(this.StateMachine, parameters);
-            }
-            else if (_actionOnExitWithoutParameters != null)
-            {
-                 _actionOnExitWithoutParameters(this.StateMachine);
-            }
-
+            _onExit?.Invoke(this, parameters);
+            this.StateMachine._logger?.LogDebugAndInformation("Exit from state \"{NameState}\"", this.Name);
         }
     }
 }

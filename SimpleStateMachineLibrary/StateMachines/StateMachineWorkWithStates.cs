@@ -1,4 +1,5 @@
-﻿using SimpleStateMachineLibrary.Helpers;
+﻿using Microsoft.Extensions.Logging;
+using SimpleStateMachineLibrary.Helpers;
 using System.Xml.Linq;
 
 
@@ -6,106 +7,135 @@ namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
-        private State _State(string nameState, bool exeption)
+        private State _State(string nameState, out bool result, bool exception)
         {
-            return Check.GetElement(_states, nameState, exeption);
+            var _state = Check.GetElement(_states, nameState, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Get state \"{NameState}\"", nameState);
+            else
+                _logger?.LogDebug("Try get state \"{NameState}\"", nameState);
+
+            return _state;
         }
 
-        private State _State(State state, bool exeption)
+        private State _State(State state, out bool result, bool exception)
         {
-            return Check.GetElement(_states, state, exeption);
+            var _state = Check.GetElement(_states, state, this._logger, out result, exception);
+
+            if (exception)
+                _logger?.LogDebug("Get state \"{NameState}\"", state.Name);
+            else
+                _logger?.LogDebug("Try get state \"{NameState}\"", state.Name);
+
+
+            return _state;
         }
 
-        public State State(string nameState,bool exeption=true)
+        public State State(string nameState, bool exception = true)
         {
-            return _State(nameState, exeption);
+            return _State(nameState, out bool result, exception);
         }
 
-        public State State(State state, bool exeption = true)
+        public State TryGetState(string nameState, out bool result)
         {
-            return _State(state, exeption);
+            return _State(nameState, out result, false);
         }
 
-        public State TryGetState(string nameState)
+        public State TryGetState(State state, out bool result)
         {
-            return _State(nameState, false);
+            return _State(state, out result, false);
         }
 
-        public State TryGetState(State state)
+        private State _AddState(string nameState, out bool result, bool exception)
         {
-            return _State(state, false);
-        }
+            //throw that element already contains  
+            result = Check.NotContains(_states, nameState, this._logger, exception);
 
-        private State _AddState(State state, bool exeption)
-        {
-            return Check.AddElement(_states, state, exeption);
-        }
-
-
-        private State _AddState(string nameState, bool exeption)
-        {
-            if (!Check.NotContains(_states, nameState, exeption))
+            
+            if (!result)
                 return null;
 
-            State newState = new State(this, nameState);
+            return new State(this, nameState);
+        }
+        internal State AddState(State state, out bool result, bool exception)
+        {
+            //throw that element already contains 
+            result = Check.NotContains(_states, state, this._logger, exception);
+         
+            if (!result)
+                return null;
 
-            _states.Add(newState.Name,newState);
-            return newState;
+            _states.Add(state.Name, state);
+
+            if (exception)
+                _logger?.LogDebug("Add state \"{NameState}\"", state.Name);
+            else
+                _logger?.LogDebug("Try add state \"{NameState}\"", state.Name);
+
+            return state;
         }
 
         public State AddState(string nameState)
         {
-            return _AddState(nameState, true);
-        }
-
-        public State AddState(State state)
-        {
-            return _AddState(state, true);
+            return _AddState(nameState, out bool result, true);
         }
 
         public State AddState(XElement xElement)
         {
-            return SimpleStateMachineLibrary.State.FromXElement(this, Check.Object(xElement));
+            return SimpleStateMachineLibrary.State.FromXElement(this, Check.Object(xElement, this._logger));
         }
 
-        public State TryAddState(string nameState)
+        public State TryAddState(string nameState, out bool result)
         {
-            return _AddState(nameState, false);
+            return _AddState(nameState, out result, false);
         }
 
-        public State TryAddState(State state)
+
+        private State _DeleteState(State state, out bool result, bool exception)
         {
-            return _AddState(state, false);
+            
+            var _state  = Check.Remove(_states, state, this._logger, out result, exception);
+
+
+            if (exception)
+                _logger?.LogDebug("Delete state \"{NameState}\"", state.Name);
+            else
+                _logger?.LogDebug("Try delete state \"{NameState}\"", state.Name);
+
+            return _state;
         }
 
-        private State _DeleteState(State state, bool exeption)
+        private State _DeleteState(string stateName, out bool result, bool exception)
         {
-            return Check.Remove(_states, state, exeption);
-        }
+            var _state = Check.Remove(_states, stateName, this._logger, out result, exception);
 
-        private State _DeleteState(string stateName, bool exeption)
-        {
-            return Check.Remove(_states, stateName, exeption);
+            if (exception)
+                _logger?.LogDebug("Delete state \"{NameState}\"", stateName);
+            else
+                _logger?.LogDebug("Try delete state \"{NameState}\"", stateName);
+
+            return _state;
         }
 
         public State DeleteState(State state)
         {
-            return _DeleteState(State(state), true);
+            return _DeleteState(state, out bool result, true);
         }
 
         public State DeleteState(string stateName)
         {
-            return _DeleteState(State(stateName), true);
+            return _DeleteState(State(stateName), out bool result, true);
         }
 
-        public State TryDeleteState(State state)
+        public State TryDeleteState(State state, out bool result)
         {
-            return _DeleteState(State(state), false);
+            return _DeleteState(state, out  result, false);
         }
 
-        public State TryDeleteState(string stateName)
+        public State TryDeleteState(string stateName, out bool result)
         {
-            return _DeleteState(State(stateName), false);
+            return _DeleteState(stateName, out result, false);
         }
     }
 }

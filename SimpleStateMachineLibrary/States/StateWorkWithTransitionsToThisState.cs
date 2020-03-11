@@ -6,29 +6,34 @@ namespace SimpleStateMachineLibrary
     public partial class State
     {
 
-        public List<Transition> GetTransitionsToThis()
+        public Dictionary<string, Transition> GetTransitionsToThis()
         {
             return this.StateMachine.GetTransitionsToState(this);
         }
 
-        public Transition AddTransitionToThis(string nameTrancition, State stateFrom)
+        public Dictionary<string, Transition> TryGetTransitionsToThis()
         {
-            return this.StateMachine.AddTransition(nameTrancition, StateMachine.State(stateFrom), this);
+            return this.StateMachine.TryGetTransitionsToState(this);
         }
 
-        public Transition AddTransitionToThis(string nameTrancition, string nameStateFrom)
+        public Transition AddTransitionToThis(string nameTransition, State stateFrom)
         {
-            return this.StateMachine.AddTransition(nameTrancition, StateMachine.State(nameStateFrom), this);
+            return this.StateMachine.AddTransition(nameTransition, stateFrom, this);
         }
 
-        public Transition TryAddTransitionToThis(string nameTrancition, State stateFrom)
+        public Transition AddTransitionToThis(string nameTransition, string nameStateFrom)
         {
-            return this.StateMachine.TryAddTransition(nameTrancition, StateMachine.State(stateFrom), this);
+            return this.StateMachine.AddTransition(nameTransition, nameStateFrom, this);
         }
 
-        public Transition TryAddTransitionToThis(string nameTrancition, string nameStateFrom)
+        public Transition TryAddTransitionToThis(string nameTransition, State stateFrom, out bool result)
         {
-            return this.StateMachine.TryAddTransition(nameTrancition, StateMachine.State(nameStateFrom), this);
+            return this.StateMachine.TryAddTransition(nameTransition, stateFrom, this, out result);
+        }
+
+        public Transition TryAddTransitionToThis(string nameTransition, string nameStateFrom, out bool result)
+        {
+            return this.StateMachine.TryAddTransition(nameTransition, nameStateFrom, this, out result);
         }
 
     }

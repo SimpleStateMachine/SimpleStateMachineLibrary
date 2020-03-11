@@ -1,17 +1,16 @@
 ﻿namespace SimpleStateMachineLibrary.Helpers
 {
 
-    public  abstract class NamedObject
+    public abstract class NamedObject
     {
         public string Name { get; }
+
         public StateMachine StateMachine { get; }
 
-        public NamedObject(StateMachine stateMachine, string nameObject)
+        protected internal NamedObject(StateMachine stateMachine, string nameObject)
         {
-            StateMachine = Check.Object(stateMachine);
-
-            Name = Check.Name(nameObject);
+            Name = Check.Name(nameObject, stateMachine?._logger);
+            StateMachine = Check.Object(stateMachine, stateMachine?._logger);
         }
-
     }
 }
