@@ -6,15 +6,20 @@ A C# library for realization simple state-machine on .Net
 2. [Examples](#Examples)
 
 ## Features
-* Simple structure
+
+State machine properties:
 * Entry/exit events for state
 * Invoke event for transition
-* Export/Import to/from XML
 * Parameters for transitions
-* Parameters for entry/exit
+* Parameters for entry/exit for state
+
+Useful extensions 
 * State changed event for state machine
 * Data for sharing between states
 * Change event for data
+* Export/Import to/from XML
+* Logging
+
 
 ## Examples:
 
