@@ -4,7 +4,7 @@ using System;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Data : NamedObject<Data>
+    public partial class Data : NamedObject
     {
         private object _value;
 
@@ -22,7 +22,7 @@ namespace SimpleStateMachineLibrary
         public Data OnChange(Action<Data, object, object> actionOnChange)
         {
             _onChange += actionOnChange;
-
+            this.StateMachine._logger?.LogDebugAndInformation("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
             return this;
         }
 
@@ -30,9 +30,9 @@ namespace SimpleStateMachineLibrary
         {
             Value = valueData;
 
-            stateMachine._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
+            stateMachine?._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
 
-            stateMachine.AddData(this, true);
+            stateMachine.AddData(this, out bool result, true);
         }
 
         public Data Delete()
@@ -40,9 +40,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.DeleteData(this);
         }
 
-        public Data TryDelete()
+        public Data TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteData(this);
+            return this.StateMachine.TryDeleteData(this, out result);
         }
     }
 }

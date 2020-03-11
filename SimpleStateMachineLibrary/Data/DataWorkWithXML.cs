@@ -9,7 +9,7 @@ namespace SimpleStateMachineLibrary
     {
         public static XElement ToXElement(Data data)
         {
-            Check.NamedObject(data);
+            Check.NamedObject(data, data?.StateMachine?._logger);
             XElement element = new XElement("Data");
             element.Add(new XAttribute("Name", data.Name));
             element.Add(new XAttribute("Value", data.Value.ToString()));
@@ -24,13 +24,13 @@ namespace SimpleStateMachineLibrary
 
         public static Data FromXElement(StateMachine stateMachine, XElement data)
         {
-            stateMachine = Check.Object(stateMachine);
-            data = Check.Object(data);
+            stateMachine = Check.Object(stateMachine, stateMachine?._logger);
+            data = Check.Object(data, stateMachine?._logger);
 
             string Name = data.Attribute("Name")?.Value;
             string Value = data.Attribute("Value")?.Value;
 
-            stateMachine._logger?.LogDebug("Initialization data \"{NameData}\" from XElement", Name);
+            stateMachine?._logger?.LogDebug("Initialization data \"{NameData}\" from XElement", Name);
             return stateMachine.AddData(Name, Value);
         }
 

@@ -26,14 +26,14 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.AddTransition(nameTransition, nameStateFrom, this);
         }
 
-        public Transition TryAddTransitionToThis(string nameTransition, State stateFrom)
+        public Transition TryAddTransitionToThis(string nameTransition, State stateFrom, out bool result)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, stateFrom, this);
+            return this.StateMachine.TryAddTransition(nameTransition, stateFrom, this, out result);
         }
 
-        public Transition TryAddTransitionToThis(string nameTransition, string nameStateFrom)
+        public Transition TryAddTransitionToThis(string nameTransition, string nameStateFrom, out bool result)
         {
-            return this.StateMachine.TryAddTransition(nameTransition, nameStateFrom, this);
+            return this.StateMachine.TryAddTransition(nameTransition, nameStateFrom, this, out result);
         }
 
     }

@@ -9,7 +9,7 @@ namespace SimpleStateMachineLibrary
     {
         public static XElement ToXElement(State state)
         {
-            Check.NamedObject(state);
+            Check.NamedObject(state, state?.StateMachine?._logger);
             XElement element = new XElement("State");
             element.Add(new XAttribute("Name", state.Name));
 
@@ -26,7 +26,7 @@ namespace SimpleStateMachineLibrary
         {
             string Name = state.Attribute("Name")?.Value;
 
-            stateMachine._logger?.LogDebug("Initialization state \"{NameState}\" from XElement", Name);
+            stateMachine?._logger?.LogDebug("Initialization state \"{NameState}\" from XElement", Name);
             return stateMachine.AddState(Name);
         }
 

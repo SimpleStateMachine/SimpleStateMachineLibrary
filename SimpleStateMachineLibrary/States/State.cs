@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class State : NamedObject<State>
+    public partial class State : NamedObject
     {
         private Action<State, Dictionary<string, object>> _onEntry;
 
@@ -13,9 +13,9 @@ namespace SimpleStateMachineLibrary
 
         protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
         {
-            stateMachine._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
+            stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
 
-            StateMachine.AddState(this, true);
+            StateMachine.AddState(this, out bool result,  true);
            
         }
 
@@ -24,9 +24,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.DeleteState(this);
         }
 
-        public State TryDelete()
+        public State TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteState(this);
+            return this.StateMachine.TryDeleteState(this, out result);
         }
 
         public State SetAsStartState()
@@ -52,13 +52,13 @@ namespace SimpleStateMachineLibrary
         internal void Entry(Dictionary<string, object> parameters)
         {
             _onEntry?.Invoke (this, parameters);
-            this.StateMachine._logger?.LogDebug("Entry to state \"{NameState}\"",  this.Name);
+            this.StateMachine._logger?.LogDebugAndInformation("Entry to state \"{NameState}\"",  this.Name);
         }
 
         internal void Exit(Dictionary<string, object> parameters)
         {
             _onExit?.Invoke(this, parameters);
-            this.StateMachine._logger?.LogDebug("Exit from state \"{NameState}\"", this.Name);
+            this.StateMachine._logger?.LogDebugAndInformation("Exit from state \"{NameState}\"", this.Name);
         }
     }
 }

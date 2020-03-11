@@ -9,7 +9,7 @@ namespace SimpleStateMachineLibrary
     {
         public static XElement ToXElement(Transition transition)
         {
-            Check.NamedObject(transition);
+            Check.NamedObject(transition, transition?.StateMachine?._logger);
             XElement element = new XElement("Transition");
             element.Add(new XAttribute("Name", transition.Name));
             element.Add(new XAttribute("From", transition.StateFrom.Name));
@@ -26,14 +26,14 @@ namespace SimpleStateMachineLibrary
 
         public static Transition FromXElement(StateMachine stateMachine, XElement transition)
         {
-            stateMachine = Check.Object(stateMachine);
-            transition = Check.Object(transition);
+            stateMachine = Check.Object(stateMachine, stateMachine?._logger);
+            transition = Check.Object(transition, stateMachine?._logger);
 
             string Name = transition.Attribute("Name")?.Value;
             string From = transition.Attribute("From")?.Value;
             string To = transition.Attribute("To")?.Value;
 
-            stateMachine._logger?.LogDebug("Initialization transition \"{NameTransition}\" from XElement", Name);
+            stateMachine?._logger?.LogDebug("Initialization transition \"{NameTransition}\" from XElement", Name);
             return stateMachine.AddTransition(Name, From, To);
         }
     }

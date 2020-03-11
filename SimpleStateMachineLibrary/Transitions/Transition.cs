@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Transition : NamedObject<Transition>
+    public partial class Transition : NamedObject
     {
         public State StateFrom { get; protected set; }
 
@@ -18,9 +18,9 @@ namespace SimpleStateMachineLibrary
             StateFrom = stateFrom;
             StateTo = stateTo;
 
-            stateMachine._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
+            stateMachine?._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
 
-            stateMachine.AddTransition(this, true);
+            stateMachine.AddTransition(this, out bool result, true);
         }
 
         public Transition Delete()
@@ -28,9 +28,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.DeleteTransition(this);
         }
 
-        public Transition TryDelete()
+        public Transition TryDelete(out bool result)
         {
-            return this.StateMachine.TryDeleteTransition(this);
+            return this.StateMachine.TryDeleteTransition(this, out result);
         }
 
         public Transition OnInvoke(Action<Transition, Dictionary<string, object>> actionOnTransitionWithParameters)
@@ -45,7 +45,7 @@ namespace SimpleStateMachineLibrary
         internal Transition Invoke(Dictionary<string, object> parameters)
         {
             _onInvoke?.Invoke (this, parameters);
-            this.StateMachine._logger?.LogDebug("Invore transition \"{NameTransition}\"", this.Name);
+            this.StateMachine._logger?.LogDebugAndInformation("Invoke transition \"{NameTransition}\"", this.Name);
             return this;
         }
 

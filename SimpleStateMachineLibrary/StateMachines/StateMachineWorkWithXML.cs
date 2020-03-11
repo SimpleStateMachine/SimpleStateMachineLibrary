@@ -11,8 +11,8 @@ namespace SimpleStateMachineLibrary
 
         public static XDocument ToXDocument(StateMachine stateMachine, string nameFile)
         {
-            Check.Object(stateMachine);
-            Check.Name(nameFile);
+            Check.Object(stateMachine, stateMachine?._logger);
+            Check.Name(nameFile, stateMachine?._logger);
             XDocument xDocument = new XDocument();  
             XElement stateMachineXElement = new XElement("StateMachine");
             xDocument.Add(stateMachineXElement);
@@ -47,6 +47,7 @@ namespace SimpleStateMachineLibrary
             }
 
             xDocument.Save(nameFile);
+            stateMachine?._logger?.LogDebug("StateMachine to XDocument");
             return xDocument;
         }
 
@@ -57,8 +58,8 @@ namespace SimpleStateMachineLibrary
 
         public static StateMachine FromXDocument(StateMachine stateMachine, XDocument xDocument)
         {
-            XElement stateMachineXElement = Check.Object(xDocument).Element("StateMachine");
-            stateMachineXElement = Check.Object(stateMachineXElement);
+            XElement stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
+            stateMachineXElement = Check.Object(stateMachineXElement, stateMachine?._logger);
             var States = stateMachineXElement.Element("States")?.Elements()?.ToList();
             States?.ForEach(x => stateMachine.AddState(x));
             var startState = stateMachineXElement.Element("StartState");
@@ -71,13 +72,13 @@ namespace SimpleStateMachineLibrary
 
             var Datas = stateMachineXElement.Element("Data")?.Elements()?.ToList();
             Datas?.ForEach(x => stateMachine.AddData(x));
-
+            stateMachine?._logger?.LogDebug("StateMachine from XDocument");
             return stateMachine;
         }
 
         public static StateMachine FromXDocument(StateMachine stateMachine, string xDocumentPath)
         {
-            xDocumentPath = Check.Name(xDocumentPath);
+            xDocumentPath = Check.Name(xDocumentPath, stateMachine?._logger);
             XDocument xDocument = XDocument.Load(xDocumentPath);
             return FromXDocument(stateMachine, xDocument);
         }
