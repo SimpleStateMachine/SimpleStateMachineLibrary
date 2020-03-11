@@ -14,7 +14,7 @@ State machine properties:
 * Parameters for transitions
 * Parameters for entry/exit for state
 
-Useful extensions 
+Useful extensions for work:
 * State changed event for state machine
 * Data for sharing between states
 * Change event for data
