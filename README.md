@@ -4,7 +4,8 @@ A C# library for realization simple state-machine on .Net
 ## Сontent
 1. [Features](#Features)
 2. [Examples](#Examples)
-3. [License](#License)
+4. [Documantation](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki)
+4. [License](#License)
 
 ## Features
 
