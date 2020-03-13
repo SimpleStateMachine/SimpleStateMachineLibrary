@@ -49,7 +49,12 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        internal Transition Invoke(Dictionary<string, object> parameters)
+        public InvokeParameters Invoke(Dictionary<string, object> parameters)
+        {
+            return StateMachine.InvokeTransition(this, parameters);
+        }
+       
+        internal Transition Invoking(Dictionary<string, object> parameters)
         {
             _onInvoke?.Invoke (this, parameters);
             this.StateMachine._logger?.LogDebugAndInformation("Invoke transition \"{NameTransition}\"", this.Name);

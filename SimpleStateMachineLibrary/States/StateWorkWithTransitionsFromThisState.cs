@@ -11,9 +11,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.GetTransitionsFromState(this);
         }
 
-        public Dictionary<string, Transition> TryGetTransitionsFromThis()
+        public Dictionary<string, Transition> TryGetTransitionsFromThis(out bool result)
         {
-            return this.StateMachine.TryGetTransitionsFromState(this);
+            return this.StateMachine.TryGetTransitionsFromState(this, out result);
         }
 
         public Transition AddTransitionFromThis(string nameTransition, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)

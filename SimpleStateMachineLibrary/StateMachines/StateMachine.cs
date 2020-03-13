@@ -87,32 +87,38 @@ namespace SimpleStateMachineLibrary
             return StartState;
         }
 
-        public InvokeParameters InvokeTransition(string nameTransition)
+        public InvokeParameters InvokeTransition(string nameTransition, Dictionary<string, object> parameters=null)
         {
             _nextTransition = Check.GetElement(_transitions, nameTransition, this._logger, out bool result, true);
 
-            if(_nextTransition.StateFrom!=CurrentState)
+            CheckBeforeInvoke(this._logger);
+
+            return new InvokeParameters(this);
+        }
+
+        private void CheckBeforeInvoke(ILogger logger)
+        {
+            if (_nextTransition.StateFrom != CurrentState)
             {
-                object[] args = { nameTransition, CurrentState?.Name };
+                object[] args = { _nextTransition.Name, CurrentState?.Name };
                 string message = "Transition \"{0}\" not available from state \"{0}\"";
                 var exception = new ArgumentException(message: String.Format(message, args));
                 _logger?.LogError(exception, message, args);
 
                 throw exception;
             }
-            _logger?.LogDebug("Transition \"{NameTransition}\" set as next", nameTransition);
+            _logger?.LogDebug("Transition \"{NameTransition}\" set as next", _nextTransition.Name);
+        }
+
+        public InvokeParameters InvokeTransition(Transition transition, Dictionary<string, object> parameters = null)
+        {
+            _nextTransition = Check.NamedObject(transition, this._logger);
+
+            CheckBeforeInvoke(this._logger);
 
             return new InvokeParameters(this);
         }
 
-        public InvokeParameters InvokeTransitionWithParameters(string nameTransition, Dictionary<string, object> parameters)
-        {        
-            InvokeTransition(nameTransition);
-
-            _nextParameters = parameters;
-
-            return new InvokeParameters(this);
-        }
 
         private StateMachine InvokeTransition()
         {
@@ -130,7 +136,7 @@ namespace SimpleStateMachineLibrary
             CurrentState = null;
 
             
-            CurrentTransition.Invoke(_currentParameters);
+            CurrentTransition.Invoking(_currentParameters);
             CurrentState = CurrentTransition.StateTo;
             CurrentTransition = null;
 

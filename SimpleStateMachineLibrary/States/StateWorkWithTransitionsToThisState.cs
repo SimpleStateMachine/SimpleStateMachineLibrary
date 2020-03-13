@@ -12,9 +12,9 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.GetTransitionsToState(this);
         }
 
-        public Dictionary<string, Transition> TryGetTransitionsToThis()
+        public Dictionary<string, Transition> TryGetTransitionsToThis(out bool result)
         {
-            return this.StateMachine.TryGetTransitionsToState(this);
+            return this.StateMachine.TryGetTransitionsToState(this, out result);
         }
 
         public Transition AddTransitionToThis(string nameTransition, State stateFrom, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
