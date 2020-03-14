@@ -84,23 +84,23 @@ Useful extensions for work:
         }
 ```
 ## Documentation
-* [[StateMachine]]
+* StateMachine
     * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
     * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
     * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
-* [[State]]
+* State
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Delete)
     * [Entry](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Entry)
     * [Exit](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exit)
-* [[Transition]]
+* Transition
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Get)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Delete)
     * [Invoke](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Invoke)
     * [Parameters](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Parameters)
-* [[Data]]
+* Data
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Get)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Delete)
