@@ -50,7 +50,7 @@ namespace SimpleStateMachineLibrary
 
 
 
-        internal Data _AddData(string nameData, object valueData, Action<Data, object, object> actionOnChange,  out bool result, bool exception)
+        internal Data _AddData(string nameData, object valueData, Action<Data, object> actionOnChange,  out bool result, bool exception)
         {
             //throw that element already contains  
             result = Check.NotContains(_data, nameData, this._logger, exception);
@@ -85,12 +85,12 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        public Data AddData(string nameData, object valueData = default(object), Action<Data, object, object> actionOnChange = null)
+        public Data AddData(string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
         {
             return _AddData(nameData, valueData, actionOnChange, out bool result,  true);
         }
 
-        public Data TryAddData(out bool result, string nameData, object valueData = default(object), Action<Data, object, object> actionOnChange = null)
+        public Data TryAddData(out bool result, string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
         {
             return _AddData(nameData, valueData, actionOnChange, out result, false);
         }

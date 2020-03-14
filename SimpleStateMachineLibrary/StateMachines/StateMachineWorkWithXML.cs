@@ -89,10 +89,10 @@ namespace SimpleStateMachineLibrary
             return FromXDocument(stateMachine, xDocument);
         }
 
-        public static StateMachine FromXDocument(string xDocumentPath, ILogger logger = null)
+        public static StateMachine FromXDocument(string xmlFilePath, ILogger logger = null)
         {
             StateMachine stateMachine = new StateMachine(logger);
-            return FromXDocument(stateMachine, xDocumentPath);
+            return FromXDocument(stateMachine, xmlFilePath);
         }
 
     }

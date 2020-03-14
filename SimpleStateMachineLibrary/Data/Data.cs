@@ -12,14 +12,14 @@ namespace SimpleStateMachineLibrary
         {   get { return _value; }
             set 
             {
-                _onChange?.Invoke(this, value, value);
+                _onChange?.Invoke(this, value);
                 _value = value;
             }
         }
 
-        private Action<Data, object, object> _onChange;
+        private Action<Data, object> _onChange;
 
-        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object, object> actionOnChange) : base(stateMachine, nameData)
+        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object> actionOnChange) : base(stateMachine, nameData)
         {
             Value = valueData;
 
@@ -43,7 +43,7 @@ namespace SimpleStateMachineLibrary
             return this.StateMachine.TryDeleteData(this, out result);
         }
 
-        public Data OnChange(Action<Data, object, object> actionOnChange)
+        public Data OnChange(Action<Data, object> actionOnChange)
         {
             actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);
 
