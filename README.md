@@ -1,6 +1,7 @@
 # SimpleStateMachineLibrary [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
-
+## Give a Star! :star:
+If you like or are using this project please give it a star. Thanks!
 ## Сontent
 1. [Features](#Features)
 2. [Examples](#Examples)
