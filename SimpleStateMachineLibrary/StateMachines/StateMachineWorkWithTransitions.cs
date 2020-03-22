@@ -37,17 +37,17 @@ namespace SimpleStateMachineLibrary
         public Transition GetTransition(string nameTransition)
         {
             return _GetTransition(nameTransition, out bool result, true);
+        }        
+
+        public Transition TryGetTransition(string nameTransition, out bool result)
+        {
+            return _GetTransition(nameTransition, out result, false);
         }
 
         //public Transition TryGetTransition(Transition transition, out bool result)
         //{
         //    return _GetTransition(transition, out result, false);
         //}
-
-        public Transition TryGetTransition(string nameTransition, out bool result)
-        {
-            return _GetTransition(nameTransition, out result, false);
-        }
 
 
 

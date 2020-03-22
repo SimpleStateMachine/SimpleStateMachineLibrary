@@ -26,23 +26,6 @@ namespace SimpleStateMachineLibrary
             return transitionsFromState;
         }
 
-        private Dictionary<string, Transition> GetTransitionsToState(string stateName, out bool result, bool exceptions)
-        {
-            result = Check.Contains(_states, stateName, this._logger, exceptions);
-            var transitionsToState = result ? _transitions.Values.Where(x => x.StateTo.Name == stateName).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
-
-            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", stateName);
-            return transitionsToState;
-        }
-
-        private Dictionary<string, Transition> GetTransitionsToState(State state, out bool result, bool exceptions)
-        {
-            result = Check.Contains(_states, state, this._logger, exceptions);
-            var transitionsToState = result ? _transitions.Values.Where(x => x.StateTo.Name == state.Name).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
-
-            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", state.Name);
-            return transitionsToState;
-        }
 
         public Dictionary<string, Transition> GetTransitionsFromState(string stateName)
         {
@@ -63,6 +46,27 @@ namespace SimpleStateMachineLibrary
         {
             return GetTransitionsFromState(state, out result,  false);
         }
+
+
+
+        private Dictionary<string, Transition> GetTransitionsToState(string stateName, out bool result, bool exceptions)
+        {
+            result = Check.Contains(_states, stateName, this._logger, exceptions);
+            var transitionsToState = result ? _transitions.Values.Where(x => x.StateTo.Name == stateName).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", stateName);
+            return transitionsToState;
+        }
+
+        private Dictionary<string, Transition> GetTransitionsToState(State state, out bool result, bool exceptions)
+        {
+            result = Check.Contains(_states, state, this._logger, exceptions);
+            var transitionsToState = result ? _transitions.Values.Where(x => x.StateTo.Name == state.Name).ToDictionary(x => x.Name, x => x) : new Dictionary<string, Transition>();
+
+            _logger?.LogDebug("Get transitions to state \"{NameState}\" ", state.Name);
+            return transitionsToState;
+        }
+
 
         public Dictionary<string, Transition> GetTransitionsToState(string stateName)
         {

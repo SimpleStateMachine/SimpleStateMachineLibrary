@@ -9,7 +9,7 @@ namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
-        private State _GetState(string nameState, out bool result, bool exception)
+        internal State _GetState(string nameState, out bool result, bool exception)
         {
             var _state = Check.GetElement(_states, nameState, this._logger, out result, exception);
 
