@@ -1,10 +1,12 @@
 # SimpleStateMachineLibrary [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
-
+## Give a Star! :star:
+If you like or are using this project please give it a star. Thanks!
 ## Сontent
 1. [Features](#Features)
 2. [Examples](#Examples)
-3. [License](#License)
+4. [Documentation](#Documentation)
+4. [License](#License)
 
 ## Features
 
@@ -82,6 +84,28 @@ Useful extensions for work:
 
         }
 ```
+## Documentation
+* StateMachine
+    * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
+    * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
+    * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
+* State
+    * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
+    * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
+    * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Delete)
+    * [Entry](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Entry)
+    * [Exit](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exit)
+* Transition
+    * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Create)
+    * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Get)
+    * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Delete)
+    * [Invoke](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Invoke)
+    * [Parameters](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Parameters)
+* Data
+    * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Create)
+    * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Get)
+    * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Delete)
+    * [Change](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Change)
 ## License
 
 Copyright (c) SimpleStateMachine
