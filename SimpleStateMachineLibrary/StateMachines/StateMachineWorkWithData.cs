@@ -8,7 +8,7 @@ namespace SimpleStateMachineLibrary
     public partial class StateMachine
     {
 
-        private Data _GetData(string nameData, out bool result, bool exception)
+        internal Data _GetData(string nameData, out bool result, bool exception)
         {
             var data_ = Check.GetElement(_data, nameData, this._logger, out result, exception);
 
@@ -20,17 +20,17 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        private Data _GetData(Data data, out bool result, bool exception)
-        {
-            var data_ = Check.GetElement(_data, data, this._logger, out result, exception);
+        //private Data _GetData(Data data, out bool result, bool exception)
+        //{
+        //    var data_ = Check.GetElement(_data, data, this._logger, out result, exception);
 
-            if (exception)
-                _logger?.LogDebug("Get data \"{NameData}\"", data.Name);
-            else
-                _logger?.LogDebug("Try get data \"{NameData}\"", data.Name);
+        //    if (exception)
+        //        _logger?.LogDebug("Get data \"{NameData}\"", data.Name);
+        //    else
+        //        _logger?.LogDebug("Try get data \"{NameData}\"", data.Name);
 
-            return data_;
-        }
+        //    return data_;
+        //}
 
 
         public Data GetData(string nameData)
@@ -43,10 +43,10 @@ namespace SimpleStateMachineLibrary
             return _GetData(nameData, out result, false);
         }
 
-        public Data TryGetData(Data data, out bool result)
-        {
-            return _GetData(data, out result, false);
-        }
+        //public Data TryGetData(Data data, out bool result)
+        //{
+        //    return _GetData(data, out result, false);
+        //}
 
 
 
