@@ -26,7 +26,6 @@ namespace SimpleStateMachineLibrary
             return transitionsFromState;
         }
 
-
         public Dictionary<string, Transition> GetTransitionsFromState(string stateName)
         {
             return GetTransitionsFromState(stateName, out bool result,  true);
@@ -66,7 +65,6 @@ namespace SimpleStateMachineLibrary
             _logger?.LogDebug("Get transitions to state \"{NameState}\" ", state.Name);
             return transitionsToState;
         }
-
 
         public Dictionary<string, Transition> GetTransitionsToState(string stateName)
         {

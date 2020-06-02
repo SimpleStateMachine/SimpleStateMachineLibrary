@@ -49,8 +49,7 @@ namespace Tests
             State state3 = stateMachine.AddState("State3");
             State state4 = stateMachine.AddState("State4");
 
-            state1.Delete();
-            state1.TryDelete(out bool result);
+            Assert.IsTrue(stateMachine.StateExists("State1"));
 
             stateMachine.OnChangeState(ActionOnChangeState);
 
@@ -58,7 +57,7 @@ namespace Tests
             Transition transition2 = stateMachine.AddTransition("Transition2", state2, state3);
             Transition transition3 = state4.AddTransitionToThis("Transition3", state3);
 
-         
+            Assert.IsTrue(stateMachine.TransitionExists("Transition1"));
 
             state1.SetAsStartState();
             state1.OnExit(Method1);
@@ -68,6 +67,8 @@ namespace Tests
             stateMachine.AddData("int1", 55);
             stateMachine.AddData("string1", "Roman");
             stateMachine.AddData("double1", 1001.0005);
+
+            Assert.IsTrue(stateMachine.DataExists("int1"));
 
             stateMachine.Start(parametersForStart);
 
@@ -81,6 +82,9 @@ namespace Tests
         {
             var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug); });
             var logger = loggerFactory.CreateLogger<StateMachine>();
+
+
+
             StateMachine stateMachine = StateMachine.FromXDocument("text.xml", logger);
 
             stateMachine.GetState("State1").OnExit(Method1);
