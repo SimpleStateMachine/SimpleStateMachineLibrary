@@ -1,5 +1,12 @@
 # SimpleStateMachineLibrary [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
+# Why SimpleStateMachine?
+ Create state machine in **two steps** :
+1. Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) ♦️
+2. Load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)📑
+ 
+ Just describe your app logic and run the state machine🚀
+ 
 ## Give a Star! :star:
 If you like or are using this project please give it a star. Thanks!
 ## Сontent
