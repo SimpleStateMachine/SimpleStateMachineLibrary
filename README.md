@@ -93,18 +93,21 @@ Useful extensions for work:
 * State
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Delete)
     * [Entry](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Entry)
     * [Exit](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exit)
 * Transition
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Delete)
     * [Invoke](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Invoke)
     * [Parameters](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Parameters)
 * Data
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Delete)
     * [Change](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Change)
 ## License
