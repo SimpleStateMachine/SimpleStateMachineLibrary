@@ -38,7 +38,7 @@ namespace SimpleStateMachineLibrary
                 transitions.Add(transition.Value.ToXElement());
             }
 
-            XElement datas = new XElement("Data");
+            XElement datas = new XElement("DATA");
             stateMachineXElement.Add(datas);
 
             foreach (var data in stateMachine._data)
@@ -70,7 +70,7 @@ namespace SimpleStateMachineLibrary
             var Transitions = stateMachineXElement.Element("Transitions")?.Elements()?.ToList();
             Transitions?.ForEach(x => stateMachine.AddTransition(x));
 
-            var Datas = stateMachineXElement.Element("Data")?.Elements()?.ToList();
+            var Datas = stateMachineXElement.Element("DATA")?.Elements()?.ToList();
             Datas?.ForEach(x => stateMachine.AddData(x));
             stateMachine?._logger?.LogDebug("StateMachine from XDocument");
             return stateMachine;

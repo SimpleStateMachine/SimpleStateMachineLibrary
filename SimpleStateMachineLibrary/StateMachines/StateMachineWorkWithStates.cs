@@ -33,7 +33,10 @@ namespace SimpleStateMachineLibrary
 
         //    return _state;
         //}
-
+        public bool StateExists(string nameState)
+        {
+            return Check.Contains(_states, nameState, this._logger, false);
+        }
 
         public State GetState(string nameState)
         {

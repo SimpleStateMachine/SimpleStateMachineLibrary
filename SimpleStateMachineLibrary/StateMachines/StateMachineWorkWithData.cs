@@ -31,7 +31,10 @@ namespace SimpleStateMachineLibrary
 
         //    return data_;
         //}
-
+        public bool DataExists(string nameData)
+        {
+            return Check.Contains(_data, nameData, this._logger, false);
+        }
 
         public Data GetData(string nameData)
         {

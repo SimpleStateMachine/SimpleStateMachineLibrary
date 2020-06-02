@@ -158,16 +158,21 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        public void Start(Dictionary<string, object> startParameters = null)
-        {        
-            if(StartState==null)
+        private void CheckStartState()
+        {
+            if (StartState == null)
             {
                 string message = "Start state not set";
                 var exception = new NullReferenceException(message: message);
                 _logger?.LogError(exception, message);
                 throw exception;
-                
+
             }
+        }
+
+        public void Start(Dictionary<string, object> startParameters = null)
+        {
+            CheckStartState();
 
             _logger?.LogDebugAndInformation("Start work state machine");
 

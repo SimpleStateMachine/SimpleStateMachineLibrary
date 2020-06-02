@@ -33,6 +33,10 @@ namespace SimpleStateMachineLibrary
             return _transition;
         }
 
+        public bool TransitionExists(string nameTransition)
+        {
+            return Check.Contains(_transitions, nameTransition, this._logger, false);
+        }
 
         public Transition GetTransition(string nameTransition)
         {
