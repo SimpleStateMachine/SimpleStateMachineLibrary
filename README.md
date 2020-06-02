@@ -86,6 +86,7 @@ Useful extensions for work:
 ```
 ## Documentation
 * StateMachine
+    * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Create)
     * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
     * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
     * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
