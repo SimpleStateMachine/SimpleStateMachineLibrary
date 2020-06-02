@@ -1,5 +1,12 @@
 # SimpleStateMachineLibrary [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
+# Why SimpleStateMachine?
+ Create state machine in **two steps** :
+1. Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) ♦️
+2. Load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)📑
+ 
+ Just describe your app logic and run the state machine🚀
+ 
 ## Give a Star! :star:
 If you like or are using this project please give it a star. Thanks!
 ## Сontent
@@ -86,24 +93,28 @@ Useful extensions for work:
 ```
 ## Documentation
 * StateMachine
+    * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Create)
     * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
     * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
     * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
 * State
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Delete)
     * [Entry](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Entry)
     * [Exit](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Exit)
 * Transition
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Delete)
     * [Invoke](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Invoke)
     * [Parameters](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Transition#Parameters)
 * Data
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Get)
+    * [Exists](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Exists)
     * [Delete](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Delete)
     * [Change](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/Data#Change)
 ## License
