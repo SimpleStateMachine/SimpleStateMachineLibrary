@@ -1,13 +1,15 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleStateMachineLibrary;
+using System;
 using System.Collections.Generic;
 
 namespace Tests
 {
     [TestClass]
-    public class StateMachineUnitTests
+    public class StateMachineTests
     {
+
         void Method1(State state, Dictionary<string, object> parameters)
         {
             Assert.AreEqual(parameters["Data1"], "Test Data");
@@ -36,14 +38,14 @@ namespace Tests
 
         }
         static Dictionary<string, object> parametersForStart = new Dictionary<string, object>() { { "Data1", "Test Data" } };
-
+        static Dictionary<string, object> parametersForStart2 = new Dictionary<string, object>() { { "string", "stroka" } };
+        [TestCategory("StateMachine")]
         [TestMethod]
         public void StateMachineFromCode()
         {
             var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug); });
             var logger = loggerFactory.CreateLogger<StateMachine>();
             StateMachine stateMachine = new StateMachine(logger);
-
             State state1 = stateMachine.AddState("State1", actionOnExit: Method1);
             State state2 = stateMachine.AddState("State2");
             State state3 = stateMachine.AddState("State3");
@@ -69,14 +71,15 @@ namespace Tests
             stateMachine.AddData("double1", 1001.0005);
 
             Assert.IsTrue(stateMachine.DataExists("int1"));
-
             stateMachine.Start(parametersForStart);
 
             Assert.AreEqual(stateMachine.CurrentState.Name, "State4");
-        
+
             stateMachine.ToXDocument("text.xml");
+
         }
 
+        [TestCategory("StateMachine")]
         [TestMethod]
         public void StateMachineFromXML()
         {

@@ -7,25 +7,26 @@ namespace SimpleStateMachineLibrary
 {
     public partial class Transition : NamedObject
     {
-        public State StateFrom { get; private set; }
+        public string StateFrom { get; private set; }
 
-        public State StateTo { get; private set; }
+        public string StateTo { get; private set; }
 
         private Action<Transition, Dictionary<string, object>> _onInvoke;
 
-        internal Transition(StateMachine stateMachine, string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke) : base(stateMachine, nameTransition)
-        {         
-            StateFrom = stateFrom;
-            StateTo = stateTo;
+        internal Transition(StateMachine stateMachine, string nameTransition, string stateFrom, string stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke) : base(stateMachine, nameTransition)
+        {
 
-            stateMachine?._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom.Name, stateTo.Name);
+            StateFrom = stateMachine._StateExists(stateFrom, out _, true);
+            StateTo = stateMachine._StateExists(stateTo, out _, true);
+
+            stateMachine?._logger?.LogDebug("Create transition \"{NameTransition}\" from state \"{NameStateFrom}\" to state \"{NameStateTo}\"", nameTransition, stateFrom, stateTo);
 
             if (actionOnInvoke != null)
             {
                 OnInvoke(actionOnInvoke);
             }
 
-            stateMachine.AddTransition(this, out bool result, true);
+            stateMachine.AddTransition(this, out _, true);
         }
 
         public Transition Delete()

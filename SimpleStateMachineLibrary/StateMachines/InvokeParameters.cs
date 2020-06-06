@@ -18,6 +18,7 @@ namespace SimpleStateMachineLibrary
     {
         public static InvokeParameters AddParameter(this InvokeParameters invokeParameters, string nameParameter, object valueParameter)
         {
+
             if(invokeParameters.StateMachine._nextParameters ==null)
             {
                 invokeParameters.StateMachine._nextParameters = new Dictionary<string, object>();
@@ -29,6 +30,7 @@ namespace SimpleStateMachineLibrary
 
         public static InvokeParameters AddParameters(this InvokeParameters invokeParameters, Dictionary<string, object> parameters)
         {
+
             if (invokeParameters.StateMachine._nextParameters == null)
             {
                 invokeParameters.StateMachine._nextParameters = new Dictionary<string, object>();

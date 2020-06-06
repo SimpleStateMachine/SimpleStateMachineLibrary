@@ -23,11 +23,11 @@ namespace SimpleStateMachineLibrary
                 states.Add(state.Value.ToXElement());
             }
 
-            if (stateMachine?.StartState != null)
+            if (stateMachine?._startState != null)
             {
                 XElement startState = new XElement("StartState");
                 stateMachineXElement.Add(startState);
-                startState.Add(new XAttribute("Name", stateMachine.StartState.Name));
+                startState.Add(new XAttribute("Name", stateMachine._startState));
             }
 
             XElement transitions = new XElement("Transitions");

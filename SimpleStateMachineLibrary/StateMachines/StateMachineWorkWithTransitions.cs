@@ -33,9 +33,18 @@ namespace SimpleStateMachineLibrary
             return _transition;
         }
 
+        internal string _TransitionExists(string nameTransition, out bool result,  bool exeption)
+        {
+            return Check.Contains(_transitions, nameTransition, this._logger, out result, exeption);
+        }
+        internal string TransitionExists(string nameTransition, out bool result)
+        {
+            return _TransitionExists(nameTransition, out result, true);
+        }
         public bool TransitionExists(string nameTransition)
         {
-            return Check.Contains(_transitions, nameTransition, this._logger, false);
+            nameTransition = _TransitionExists(nameTransition,out bool result, false);
+            return result;
         }
 
         public Transition GetTransition(string nameTransition)
@@ -58,7 +67,7 @@ namespace SimpleStateMachineLibrary
 
 
 
-        internal Transition _AddTransition(string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke, out bool result, bool exception)
+        internal Transition _AddTransition(string nameTransition, string stateFrom, string stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke, out bool result, bool exception)
         {
             //throw that element already contains 
             result = Check.NotContains(_transitions, nameTransition, this._logger, exception);
@@ -95,42 +104,42 @@ namespace SimpleStateMachineLibrary
 
         public Transition AddTransition(string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom, stateTo, actionOnInvoke, out bool result, true);
+            return _AddTransition(nameTransition, stateFrom?.Name, stateTo?.Name, actionOnInvoke, out bool result, true);
         }
 
         public Transition AddTransition(string nameTransition, State stateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom, GetState(nameStateTo), actionOnInvoke, out bool result, true);
+            return _AddTransition(nameTransition, stateFrom?.Name, nameStateTo, actionOnInvoke, out bool result, true);
         }
 
         public Transition AddTransition(string nameTransition, string nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, GetState(nameStateFrom), stateTo, actionOnInvoke, out bool result, true);
+            return _AddTransition(nameTransition, nameStateFrom, stateTo?.Name, actionOnInvoke, out bool result, true);
         }
 
         public Transition AddTransition(string nameTransition, string nameStateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, GetState(nameStateFrom), GetState(nameStateTo), actionOnInvoke, out bool result, true);
+            return _AddTransition(nameTransition, nameStateFrom, nameStateTo, actionOnInvoke, out bool result, true);
         }
 
         public Transition TryAddTransition(out bool result, string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom, stateTo, actionOnInvoke, out result, false);
+            return _AddTransition(nameTransition, stateFrom?.Name, stateTo?.Name, actionOnInvoke, out result, false);
         }
 
         public Transition TryAddTransition(out bool result, string nameTransition, State stateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom, GetState(nameStateTo), actionOnInvoke, out result, false);
+            return _AddTransition(nameTransition, stateFrom?.Name, nameStateTo, actionOnInvoke, out result, false);
         }
 
         public Transition TryAddTransition(out bool result, string nameTransition, string nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, GetState(nameStateFrom), stateTo, actionOnInvoke, out result, false);
+            return _AddTransition(nameTransition, nameStateFrom, stateTo?.Name, actionOnInvoke, out result, false);
         }
 
         public Transition TryAddTransition(out bool result, string nameTransition, string nameStateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, GetState(nameStateFrom), GetState(nameStateTo), actionOnInvoke, out result, false);
+            return _AddTransition(nameTransition, nameStateFrom, nameStateTo, actionOnInvoke, out result, false);
         }
 
 

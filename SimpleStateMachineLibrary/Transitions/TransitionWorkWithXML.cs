@@ -12,8 +12,8 @@ namespace SimpleStateMachineLibrary
             Check.NamedObject(transition, transition?.StateMachine?._logger);
             XElement element = new XElement("Transition");
             element.Add(new XAttribute("Name", transition.Name));
-            element.Add(new XAttribute("From", transition.StateFrom.Name));
-            element.Add(new XAttribute("To", transition.StateTo.Name));
+            element.Add(new XAttribute("From", transition.StateFrom));
+            element.Add(new XAttribute("To", transition.StateTo));
 
             transition.StateMachine._logger?.LogDebug("Transition \"{NameTransition}\" to XElement", transition.Name);
             return element;

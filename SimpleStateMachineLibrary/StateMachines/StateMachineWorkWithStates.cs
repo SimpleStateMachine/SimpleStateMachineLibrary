@@ -33,9 +33,15 @@ namespace SimpleStateMachineLibrary
 
         //    return _state;
         //}
+
+        internal string _StateExists(string nameState, out bool result,  bool exeption)
+        {
+            return Check.Contains(_states, nameState, this._logger, out result, exeption);
+        }
         public bool StateExists(string nameState)
         {
-            return Check.Contains(_states, nameState, this._logger, false);
+            nameState = _StateExists(nameState, out bool result, false);
+            return result;
         }
 
         public State GetState(string nameState)
@@ -113,6 +119,7 @@ namespace SimpleStateMachineLibrary
                 _logger?.LogDebug("Delete state \"{NameState}\"", state.Name);
             else
                 _logger?.LogDebug("Try delete state \"{NameState}\"", state.Name);
+
 
             return _state;
         }
