@@ -9,18 +9,19 @@ namespace SimpleStateMachineLibrary
     public partial class StateMachine
     {
 
-        private static XDocument ToXDocument(StateMachine stateMachine, string nameFile)
-        {
+        internal static XDocument _ToXDocument(StateMachine stateMachine, string nameFile, bool withLog)
+        {          
             Check.Object(stateMachine, stateMachine?._logger);
             Check.Name(nameFile, stateMachine?._logger);
             XDocument xDocument = new XDocument();  
             XElement stateMachineXElement = new XElement("StateMachine");
             xDocument.Add(stateMachineXElement);
+            stateMachine?._logger.LogDebug("StateMachine to XDocument");
             XElement states = new XElement("States");
             stateMachineXElement.Add(states);
             foreach(var state in stateMachine._states)
             {
-                states.Add(state.Value.ToXElement());
+                states.Add(state.Value.ToXElement(withLog));
             }
 
             if (stateMachine?._startState != null)
@@ -35,7 +36,7 @@ namespace SimpleStateMachineLibrary
 
             foreach (var transition in stateMachine._transitions)
             {
-                transitions.Add(transition.Value.ToXElement());
+                transitions.Add(transition.Value._ToXElement(withLog));
             }
 
             XElement datas = new XElement("DATA");
@@ -43,56 +44,56 @@ namespace SimpleStateMachineLibrary
 
             foreach (var data in stateMachine._data)
             {
-                datas.Add(data.Value.ToXElement());
+                datas.Add(data.Value._ToXElement(withLog));
             }
 
             xDocument.Save(nameFile);
-            stateMachine?._logger?.LogDebug("StateMachine to XDocument");
+       
             return xDocument;
         }
 
         public XDocument ToXDocument(string nameFile)
         {
-            return StateMachine.ToXDocument(this, nameFile);
+            return StateMachine._ToXDocument(this, nameFile, true);
         }
 
-        private static StateMachine FromXDocument(StateMachine stateMachine, XDocument xDocument)
+        internal static StateMachine _FromXDocument(StateMachine stateMachine, XDocument xDocument, bool withLog)
         {
             XElement stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
             stateMachineXElement = Check.Object(stateMachineXElement, stateMachine?._logger);
             var States = stateMachineXElement.Element("States")?.Elements()?.ToList();
-            States?.ForEach(x => stateMachine.AddState(x));
+            States?.ForEach(x => stateMachine._AddState(x, true));
             var startState = stateMachineXElement.Element("StartState");
             string nameStartState = startState?.Attribute("Name").Value;
             if (!string.IsNullOrEmpty(nameStartState))
                 stateMachine.SetStartState(nameStartState);
 
             var Transitions = stateMachineXElement.Element("Transitions")?.Elements()?.ToList();
-            Transitions?.ForEach(x => stateMachine.AddTransition(x));
+            Transitions?.ForEach(x => stateMachine._AddTransition(x, true));
 
             var Datas = stateMachineXElement.Element("DATA")?.Elements()?.ToList();
-            Datas?.ForEach(x => stateMachine.AddData(x));
-            stateMachine?._logger?.LogDebug("StateMachine from XDocument");
+            Datas?.ForEach(x => stateMachine._AddData(x, true));
+            stateMachine?._logger.LogDebug("StateMachine from XDocument");
             return stateMachine;
         }
 
-        private static StateMachine FromXDocument(StateMachine stateMachine, string xDocumentPath)
+        internal static StateMachine _FromXDocument(StateMachine stateMachine, string xDocumentPath, bool withLog)
         {
             xDocumentPath = Check.Name(xDocumentPath, stateMachine?._logger);
             XDocument xDocument = XDocument.Load(xDocumentPath);
-            return FromXDocument(stateMachine, xDocument);
+            return _FromXDocument(stateMachine, xDocument, withLog);
         }
 
         public static StateMachine FromXDocument(XDocument xDocument, ILogger logger = null)
         {
             StateMachine stateMachine = new StateMachine(logger);
-            return FromXDocument(stateMachine, xDocument);
+            return _FromXDocument(stateMachine, xDocument, true);
         }
 
         public static StateMachine FromXDocument(string xmlFilePath, ILogger logger = null)
         {
             StateMachine stateMachine = new StateMachine(logger);
-            return FromXDocument(stateMachine, xmlFilePath);
+            return _FromXDocument(stateMachine, xmlFilePath, true);
         }
 
     }

@@ -11,9 +11,11 @@ namespace SimpleStateMachineLibrary
 
         private Action<State, Dictionary<string, object>> _onExit;
 
-        internal State(StateMachine stateMachine, string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit) : base(stateMachine, nameState)
+        internal State(StateMachine stateMachine, string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit, bool withLog) : base(stateMachine, nameState)
         {
-            stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
+            //stateMachine?._logger.LogDebug("Create state \"{NameState}\" ", nameState);
+
+            StateMachine._AddState(this, out bool result, true, withLog);
 
             if (actionOnEntry != null)
             {
@@ -24,17 +26,8 @@ namespace SimpleStateMachineLibrary
             {
                 OnExit(actionOnExit);
             }
-
-            StateMachine.AddState(this, out bool result, true);
+            
         }
-
-        //protected internal State(StateMachine stateMachine, string nameState) : base(stateMachine, nameState)
-        //{
-        //    stateMachine?._logger?.LogDebug("Create state \"{NameState}\" ", nameState);
-
-        //    StateMachine.AddState(this, out bool result,  true);
-           
-        //}
 
         public State Delete()
         {
@@ -58,7 +51,7 @@ namespace SimpleStateMachineLibrary
             actionOnEntry = Check.Object(actionOnEntry, this.StateMachine?._logger);
 
             _onEntry += actionOnEntry;
-            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on entry for state \"{NameState}\"", actionOnEntry.Method.Name, this.Name);
+            this.StateMachine._logger.LogDebug("Method \"{NameMethod}\" subscribe on entry for state \"{NameState}\"", actionOnEntry.Method.Name, this.Name);
             return this;
         }
 
@@ -67,20 +60,24 @@ namespace SimpleStateMachineLibrary
             actionOnExit = Check.Object(actionOnExit, this.StateMachine?._logger);
 
             _onExit += actionOnExit;            
-            this.StateMachine._logger?.LogDebug("Method \"{NameMethod}\" subscribe on exit for state \"{NameState}\"", actionOnExit.Method.Name, this.Name);
+            this.StateMachine._logger.LogDebug("Method \"{NameMethod}\" subscribe on exit for state \"{NameState}\"", actionOnExit.Method.Name, this.Name);
             return this;
         }
 
-        internal void Entry(Dictionary<string, object> parameters)
+        internal void _Entry(Dictionary<string, object> parameters, bool withLog)
         {
             _onEntry?.Invoke (this, parameters);
-            this.StateMachine._logger?.LogDebugAndInformation("Entry to state \"{NameState}\"",  this.Name);
+
+            if(withLog)
+                this.StateMachine._logger.LogDebug("Entry to state \"{NameState}\"",  this.Name);
         }
 
-        internal void Exit(Dictionary<string, object> parameters)
+        internal void _Exit(Dictionary<string, object> parameters, bool withLog)
         {
             _onExit?.Invoke(this, parameters);
-            this.StateMachine._logger?.LogDebugAndInformation("Exit from state \"{NameState}\"", this.Name);
+
+            if (withLog)
+                this.StateMachine._logger.LogDebug("Exit from state \"{NameState}\"", this.Name);
         }
     }
 }

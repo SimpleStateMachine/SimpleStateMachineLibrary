@@ -62,7 +62,6 @@ namespace Tests
             Assert.IsTrue(stateMachine.TransitionExists("Transition1"));
 
             state1.SetAsStartState();
-            state1.OnExit(Method1);
             state2.OnExit(Method2);
             state3.OnExit(Method3);
             state4.OnExit(Method4);
@@ -85,8 +84,6 @@ namespace Tests
         {
             var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug); });
             var logger = loggerFactory.CreateLogger<StateMachine>();
-
-
 
             StateMachine stateMachine = StateMachine.FromXDocument("text.xml", logger);
 

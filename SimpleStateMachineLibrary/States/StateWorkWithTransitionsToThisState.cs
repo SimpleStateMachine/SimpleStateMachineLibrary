@@ -6,7 +6,6 @@ namespace SimpleStateMachineLibrary
 {
     public partial class State
     {
-
         public Dictionary<string, Transition> GetTransitionsToThis()
         {
             return this.StateMachine.GetTransitionsToState(this);
@@ -36,6 +35,5 @@ namespace SimpleStateMachineLibrary
         {
             return this.StateMachine.TryAddTransition(out result, nameTransition, nameStateFrom, this, actionOnInvoke);
         }
-
     }
 }

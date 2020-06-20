@@ -7,22 +7,25 @@ namespace SimpleStateMachineLibrary
 {
     public partial class Data
     {
-        internal static XElement ToXElement(Data data)
+        internal static XElement _ToXElement(Data data, bool withLog)
         {
             Check.NamedObject(data, data?.StateMachine?._logger);
             XElement element = new XElement("Data");
             element.Add(new XAttribute("Name", data.Name));
             element.Add(new XAttribute("Value", data.Value.ToString()));
-            data.StateMachine._logger?.LogDebug("Data \"{NameData}\" to XElement", data.Name);
+
+            if(withLog)
+                data.StateMachine._logger.LogDebug("Data \"{NameData}\" to XElement", data.Name);
+
             return element;
         }
 
-        internal XElement ToXElement()
+        internal XElement _ToXElement(bool withLog)
         {
-            return Data.ToXElement(this);
+            return Data._ToXElement(this, withLog);
         }
 
-        internal static Data FromXElement(StateMachine stateMachine, XElement data)
+        internal static Data _FromXElement(StateMachine stateMachine, XElement data, bool withLog)
         {
             stateMachine = Check.Object(stateMachine, stateMachine?._logger);
             data = Check.Object(data, stateMachine?._logger);
@@ -30,8 +33,12 @@ namespace SimpleStateMachineLibrary
             string Name = data.Attribute("Name")?.Value;
             string Value = data.Attribute("Value")?.Value;
 
-            stateMachine?._logger?.LogDebug("Initialization data \"{NameData}\" from XElement", Name);
-            return stateMachine.AddData(Name, Value);
+            Data dataObj = stateMachine._AddData(Name, Value, null, result: out bool result, exception:true, withLog: false);
+
+            if((result)&&(withLog))
+                stateMachine?._logger.LogDebug("Initialization data \"{NameData}\" from XElement", Name);
+
+            return dataObj;
         }
 
     }

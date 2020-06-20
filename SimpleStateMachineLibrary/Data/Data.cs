@@ -19,18 +19,18 @@ namespace SimpleStateMachineLibrary
 
         private Action<Data, object> _onChange;
 
-        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object> actionOnChange) : base(stateMachine, nameData)
+        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object> actionOnChange, bool withLog) : base(stateMachine, nameData)
         {
             Value = valueData;
 
-            stateMachine?._logger?.LogDebug("Create data \"{NameData}\" ", nameData);
+            //stateMachine?._logger.LogDebug("Create data \"{NameData}\" ", nameData);
+
+            stateMachine._AddData(this, out _, true, withLog);
 
             if (actionOnChange != null)
             {
                 OnChange(actionOnChange);
-            }
-
-            stateMachine.AddData(this, out bool result, true);
+            }  
         }
 
         public Data Delete()
@@ -48,7 +48,7 @@ namespace SimpleStateMachineLibrary
             actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);
 
             _onChange += actionOnChange;
-            this.StateMachine._logger?.LogDebugAndInformation("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
+            this.StateMachine._logger.LogDebug("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
             return this;
         }
     }

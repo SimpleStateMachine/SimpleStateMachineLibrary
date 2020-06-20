@@ -19,10 +19,10 @@ namespace SimpleStateMachineLibrary
 
         private Dictionary<string, Data> _data  = new Dictionary<string, Data>();
 
-        internal string _currentState;
+        public string CurrentStateName { get; private set; }
 
-        internal string _previousState;
-        internal string _currentTransition { get; private set; }
+        public string PreviousStateName{ get; private set; }
+        public string CurrentTransitionName { get; private set; }
 
         internal string _nextTransition;
         internal string _startState { get; private set; }
@@ -33,10 +33,9 @@ namespace SimpleStateMachineLibrary
 
         internal Action<State, State> _onChangeState;
 
-        public State CurrentState { get { return GetState(_currentState); } }
-        public Transition CurrentTransition { get { return GetTransition(_currentTransition); } }
-
-
+        public State CurrentState { get { return _GetState(CurrentStateName, out _, true, false); } }
+        public Transition CurrentTransition { get { return _GetTransition(CurrentTransitionName, out _, true, false); } }
+        public State PreviousState { get { return _GetState(PreviousStateName, out _, true, false); } }
 
 
 
@@ -58,46 +57,47 @@ namespace SimpleStateMachineLibrary
 
         public StateMachine(XDocument xDocument, ILogger logger = null) : this(logger)
         {
-            FromXDocument(this, xDocument);
+            _FromXDocument(this, xDocument, true);
           
         }
 
         public StateMachine(string xDocumentPath, ILogger logger = null): this(logger)
         {
-            FromXDocument(this, xDocumentPath);
+            _FromXDocument(this, xDocumentPath, true);
         }
 
         public StateMachine OnChangeState(Action<State, State> actionOnChangeState)
         {
             _onChangeState += actionOnChangeState;
-            _logger?.LogDebug("Method \"{NameMethod}\" subscribe on change state State Machine", actionOnChangeState.Method.Name);
+            _logger.LogDebug("Method \"{NameMethod}\" subscribe on change state for State Machine", actionOnChangeState.Method.Name);
             return this;
         }
 
         public State SetStartState(State state)
         {
-            _startState = _StateExists(state.Name, out _, true);
+            _startState = _StateExists(state.Name, out _, true, false);
 
-            _logger?.LogDebug("State \"{NameState}\" set as start", state.Name);
+            _logger.LogDebug("State \"{NameState}\" set as start", state.Name);
 
             return state;
         }
         
         public State SetStartState(string stateName)
         {
-            State state = GetState(stateName);
+            State state = _GetState(stateName, out bool result, true, false);
             _startState = state.Name;
 
-            _logger?.LogDebug("State \"{NameState}\" set as start", stateName);
+            if(result)
+                _logger.LogDebug("State \"{NameState}\" set as start", stateName);
 
             return state;
         }
 
         public InvokeParameters InvokeTransition(string nameTransition, Dictionary<string, object> parameters=null)
         {
-            _nextTransition = TransitionExists(nameTransition, out _);
+            _nextTransition = _TransitionExists(nameTransition, out _,true, false);
 
-            CheckBeforeInvoke(this._logger);
+            _CheckBeforeInvoke(this._logger, true);
 
             InvokeParameters invokeParameters = new InvokeParameters(this);
             if(parameters!=null)
@@ -105,19 +105,21 @@ namespace SimpleStateMachineLibrary
             return invokeParameters;
         }
 
-        private void CheckBeforeInvoke(ILogger logger)
+        internal void _CheckBeforeInvoke(ILogger logger, bool withLog)
         {
-            Transition transition = GetTransition(_nextTransition);
-            if (transition.StateFrom!= _currentState)
+            Transition transition = _GetTransition(_nextTransition, out _, true, false);
+            if (transition.StateFrom!= CurrentStateName)
             {
-                object[] args = { _nextTransition, _currentState };
+                object[] args = { _nextTransition, CurrentStateName };
                 string message = "Transition \"{0}\" not available from state \"{0}\"";
                 var exception = new ArgumentException(message: String.Format(message, args));
-                _logger?.LogError(exception, message, args);
+                _logger.LogError(exception, message, args);
 
                 throw exception;
             }
-            _logger?.LogDebug("Transition \"{NameTransition}\" set as next", _nextTransition);
+
+            if(withLog)
+                _logger.LogDebug("Transition \"{NameTransition}\" set as next", _nextTransition);
         }
 
         public InvokeParameters InvokeTransition(Transition transition, Dictionary<string, object> parameters = null)
@@ -126,7 +128,7 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        private StateMachine InvokeTransition()
+        internal StateMachine _InvokeTransition()
         {
 
             //Mark nextParameters as current
@@ -134,76 +136,81 @@ namespace SimpleStateMachineLibrary
             _nextParameters = null;
 
             //Mark nextTransition as current
-            _currentTransition = _nextTransition;
+            CurrentTransitionName = _nextTransition;
             _nextTransition = null;
 
             //Mark currentState as previous
-            _previousState = _currentState;
-            _currentState = null;
+            PreviousStateName = CurrentStateName;
+            CurrentStateName = null;
 
-            Transition currentTransition = GetTransition(_currentTransition);
-            currentTransition.Invoking(_currentParameters);
-            _currentState = currentTransition.StateTo;
-            _currentTransition = null;
+            Transition currentTransition = _GetTransition(CurrentTransitionName, out _, true, false);
+            currentTransition._Invoking(_currentParameters);
+            CurrentStateName = currentTransition.StateTo;
+            CurrentTransitionName = null;
 
             return this;
         }
 
-        private StateMachine ChangeState()
+        internal StateMachine _ChangeState()
         {
-            State currentState = GetState(_currentState);
-            currentState.Entry(_currentParameters);
+            State currentState = _GetState(CurrentStateName, out bool result, true, false);
+            currentState._Entry(_currentParameters, true);
             State previousState = null;
-            object[] obj = { _previousState, _currentState };
+            List<object> obj = new List<object>(); 
             string message;
-            if (string.IsNullOrEmpty(_previousState))
+
+            if (string.IsNullOrEmpty(PreviousStateName))
             {
-                message = "State \"{StateNew}\" was set";
+                obj.Add(CurrentStateName);
+                 message = "State \"{StateNew}\" was set";
             }
             else
             {
+                obj.Add(PreviousStateName);
+                obj.Add(CurrentStateName);
                 message = "State \"{StateOld}\" change on  \"{StateNew}\"";
-                previousState = GetState(_previousState);
-            }      
+                previousState = _GetState(PreviousStateName, out _, true, false);
+            }
+
             _onChangeState?.Invoke(previousState, currentState);
-            _logger?.LogDebug(message, obj);
-            currentState.Exit(_currentParameters);
+            _logger.LogDebug(message, obj.ToArray());
+            currentState._Exit(_currentParameters, true);
 
             return this;
         }
 
-        private void CheckStartState()
+        internal void _CheckStartState()
         {
             string message;
             if (string.IsNullOrEmpty(_startState))
             {
                 message = "Start state not set";
                 var exception = new NullReferenceException(message: message);
-                _logger?.LogError(exception, message);
+                _logger.LogError(exception, message);
                 throw exception;
             }
-            _startState = _StateExists(_startState, out _, true);          
-            _currentState = _startState;        
+            _startState = _StateExists(_startState, out _, true, false);          
+            CurrentStateName = _startState;        
         }
 
         public void Start(Dictionary<string, object> startParameters = null)
         {
-            CheckStartState();
+            _CheckStartState();
      
-            _logger?.LogDebugAndInformation("Start work state machine");
+            _logger.LogInformation("Start work state machine");
             _currentParameters = startParameters;
 
-            ChangeState();
+            _ChangeState();
 
             while (_nextTransition != null)
             {
-                InvokeTransition();
+                _InvokeTransition();
 
-                ChangeState();
+                _ChangeState();
             }
-            _logger?.LogDebugAndInformation("End work state machine");
+            _logger.LogInformation("End work state machine");
 
         }
-
+       
     }
 }
