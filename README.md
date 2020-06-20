@@ -1,6 +1,6 @@
-[![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary?color=blue)](https://www.nuget.org/packages/SimpleStateMachineLibrary)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
-[![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary?color=yellow)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
+[![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 # SimpleStateMachineLibrary 
 A C# library for realization simple state-machine on .Net
