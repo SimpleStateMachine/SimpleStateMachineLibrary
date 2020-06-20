@@ -100,6 +100,10 @@ Useful extensions for work:
     * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
     * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
     * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
+    * [OnChangeState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#OnChangeState)
+    * [CurrentState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#CurrentState)
+    * [PreviousState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#PreviousState)
+    * [CurrentTransition](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#CurrentTransition)
 * State
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
