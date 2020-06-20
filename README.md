@@ -1,4 +1,7 @@
-# SimpleStateMachineLibrary [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) 
+[![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
+[![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
+# SimpleStateMachineLibrary 
 A C# library for realization simple state-machine on .Net
 # Why SimpleStateMachine?
  Create state machine in **two steps** :
@@ -97,6 +100,10 @@ Useful extensions for work:
     * [Import](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Import)
     * [Export](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Export)
     * [Logging](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#Logging)
+    * [OnChangeState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#OnChangeState)
+    * [CurrentState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#CurrentState)
+    * [PreviousState](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#PreviousState)
+    * [CurrentTransition](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/StateMachine#CurrentTransition)
 * State
     * [Create](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Create)
     * [Get](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki/State#Get)
