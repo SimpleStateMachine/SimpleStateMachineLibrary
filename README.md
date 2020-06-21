@@ -39,6 +39,7 @@ Useful extensions for work:
 * Logging
 
 ## Documentation
+Documentation here: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki
 
 ## License
 
