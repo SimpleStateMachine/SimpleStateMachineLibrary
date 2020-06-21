@@ -9,14 +9,14 @@ Create state machine in **three** steps :
 ```C#
 StateMachine stateMachine = new StateMachine("scheme.xml");
 ```
-**2.** Describe your app logic on events
+**2.** Describe your app logic on events⚡
  ```C#
 stateMachine.GetState("State1").OnExit(Action1);
 stateMachine.GetState("State2").OnEntry(Action2);
 stateMachine.GetTransition("Transition1").OnInvoke(Action3);
 stateMachine.OnChangeState(Action4);
 ```
-**3.** Run the state machine
+**3.** Run the state machine🚘
  ```C#
 stateMachine.Start();
 ```
