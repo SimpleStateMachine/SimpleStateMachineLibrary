@@ -1,19 +1,20 @@
 
 # SimpleStateMachineLibrary [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
-Create state machine in three steps :
-1. Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) and load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)
+
+Create state machine in **three** steps :
+**1.** Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) and load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)
 ```C#
 StateMachine stateMachine = new StateMachine("scheme.xml");
 ```
-2. Describe your app logic on events
+**2.** Describe your app logic on events
  ```C#
 stateMachine.GetState("State1").OnExit(Action1);
 stateMachine.GetState("State2").OnEntry(Action2);
 stateMachine.GetTransition("Transition1").OnInvoke(Action3);
 stateMachine.OnChangeState(Action4);
 ```
-3. Run the state machine
+**3.** Run the state machine
  ```C#
 stateMachine.Start(parametersForStart);
 ```
