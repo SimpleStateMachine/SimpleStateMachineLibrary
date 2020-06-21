@@ -2,6 +2,9 @@
 # SimpleStateMachineLibrary [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
 
+ ## Give a Star! :star:
+If you like or are using this project please give it a star. Thanks!
+
  # Why SimpleStateMachine?
 Create state machine in **three** steps :
 
@@ -20,9 +23,6 @@ stateMachine.OnChangeState(Action4);
  ```C#
 stateMachine.Start();
 ```
- ## Give a Star! :star:
-If you like or are using this project please give it a star. Thanks!
-
 ## Features💡 
 
 State machine properties:
