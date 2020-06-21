@@ -17,7 +17,7 @@ stateMachine.OnChangeState(Action4);
 ```
 **3.** Run the state machine
  ```C#
-stateMachine.Start(parametersForStart);
+stateMachine.Start();
 ```
 ## Features
 
