@@ -3,6 +3,7 @@
 A C# library for realization simple state-machine on .Net
 
 Create state machine in **three** steps :
+
 **1.** Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) and load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)
 ```C#
 StateMachine stateMachine = new StateMachine("scheme.xml");
