@@ -4,6 +4,8 @@
 [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 # SimpleStateMachineLibrary 
 A C# library for realization simple state-machine on .Net
+
+Documentation: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary
 # Why SimpleStateMachine?
  Create state machine in **two steps** :
 1. Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) ♦️
