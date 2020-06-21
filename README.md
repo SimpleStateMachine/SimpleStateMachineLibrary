@@ -36,6 +36,11 @@ Useful extensions for work:
 * Export/Import to/from XML
 * Logging
 
+## Getting Started
+Install from Nuget:
+```sh
+ Install-Package SimpleStateMachineLibrary 
+```
 ## Documentation📄 
 Documentation here: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki
 
