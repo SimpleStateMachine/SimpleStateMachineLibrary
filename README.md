@@ -2,6 +2,7 @@
 # SimpleStateMachineLibrary [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
 A C# library for realization simple state-machine on .Net
 
+ # Why SimpleStateMachine?
 Create state machine in **three** steps :
 
 **1.** Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) and load scheme in your project using [library](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)
