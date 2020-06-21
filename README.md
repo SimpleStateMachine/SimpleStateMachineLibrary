@@ -20,7 +20,7 @@ stateMachine.OnChangeState(Action4);
  ```C#
 stateMachine.Start();
 ```
-## Features
+## Features↗️ 
 
 State machine properties:
 * Start state
@@ -36,7 +36,7 @@ Useful extensions for work:
 * Export/Import to/from XML
 * Logging
 
-## Documentation
+## Documentation📄 
 Documentation here: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki
 
 ## License
