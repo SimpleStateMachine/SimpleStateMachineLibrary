@@ -5,7 +5,7 @@
 # SimpleStateMachineLibrary 
 A C# library for realization simple state-machine on .Net
 
-Documentation: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki
+[📄Documentation](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki)
 # Why SimpleStateMachine?
  Create state machine in **two steps** :
 1. Create scheme in  [node editor](https://github.com/SimpleStateMachine/SimpleStateMachineNodeEditor) ♦️
