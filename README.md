@@ -39,7 +39,7 @@ Useful extensions for work:
 * Export/Import to/from XML
 * Logging
 
-## Getting Started
+## Getting Started📂
 Install from Nuget:
 ```sh
  Install-Package SimpleStateMachineLibrary 
