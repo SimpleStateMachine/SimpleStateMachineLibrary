@@ -1,5 +1,5 @@
 
-# SimpleStateMachineLibrary [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
+# SimpleStateMachineLibrary [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/badge/chat-slack-blueviolet.svg)](https://join.slack.com/t/simplestatemachine/shared_invite/zt-fnfhvvsx-fTejcpPn~PPb2ojdG_MQBg) [![](https://img.shields.io/badge/chat-telegram-blue.svg)](https://t.me/joinchat/HMLJFkv9do6aDV188rhd0w)
 A C# library for realization simple state-machine on .Net
 
  ## Give a Star! :star:
@@ -46,6 +46,14 @@ Install from Nuget:
 ```
 ## Documentation📄 
 Documentation here: https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/wiki
+
+ ## FAQ❔
+ If you think you have found a bug, create a github [issue](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary/issues).
+ 
+ But if you just have questions about how to use:
+ 
+- [Slack channel](https://join.slack.com/t/simplestatemachine/shared_invite/zt-fnfhvvsx-fTejcpPn~PPb2ojdG_MQBg)
+- [Telegram channel](https://t.me/joinchat/HMLJFkv9do6aDV188rhd0w)
 
 ## License📑
 
