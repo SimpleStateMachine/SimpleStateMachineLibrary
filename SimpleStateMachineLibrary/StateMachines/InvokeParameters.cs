@@ -4,19 +4,19 @@ using System.Text;
 
 namespace SimpleStateMachineLibrary
 {
-    public class InvokeParameters
+    public class InvokeParameters<TKeyState, TKeyTransition, TKeyData>
     {
-        internal InvokeParameters(StateMachine stateMachine)
+        internal InvokeParameters(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine)
         {
             StateMachine = stateMachine;
         }
 
-        internal StateMachine StateMachine;
+        internal StateMachine<TKeyState, TKeyTransition, TKeyData> StateMachine;
     }
 
     public static class InvokeParametersExtension
     {
-        public static InvokeParameters AddParameter(this InvokeParameters invokeParameters, string nameParameter, object valueParameter)
+        public static InvokeParameters<TKeyState, TKeyTransition, TKeyData> AddParameter<TKeyState, TKeyTransition, TKeyData>(this InvokeParameters<TKeyState, TKeyTransition, TKeyData> invokeParameters, string nameParameter, object valueParameter)
         {
 
             if(invokeParameters.StateMachine._nextParameters ==null)
@@ -28,7 +28,7 @@ namespace SimpleStateMachineLibrary
             return invokeParameters;
         }
 
-        public static InvokeParameters AddParameters(this InvokeParameters invokeParameters, Dictionary<string, object> parameters)
+        public static InvokeParameters<TKeyState, TKeyTransition, TKeyData> AddParameters<TKeyState, TKeyTransition, TKeyData>(this InvokeParameters<TKeyState, TKeyTransition, TKeyData> invokeParameters, Dictionary<string, object> parameters)
         {
 
             if (invokeParameters.StateMachine._nextParameters == null)

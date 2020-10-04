@@ -7,22 +7,22 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class StateMachine
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
-        internal string _TransitionExists(string nameTransition, out bool result,  bool exeption, bool withLog)
+        internal TKeyTransition _TransitionExists(TKeyTransition nameTransition, out bool result,  bool exeption, bool withLog)
         {
-            return Check.Contains(_transitions, nameTransition, this._logger, out result, exeption);
+            return Check.Contains<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, nameTransition, this._logger, out result, exeption);
         }
 
-        public bool TransitionExists(string nameTransition)
+        public bool TransitionExists(TKeyTransition nameTransition)
         {
             nameTransition = _TransitionExists(nameTransition,out bool result, false, true);
             return result;
         }
 
-        internal Transition _GetTransition(string nameTransition, out bool result, bool exception, bool withLog)
+        internal Transition _GetTransition(TKeyTransition nameTransition, out bool result, bool exception, bool withLog)
         {
-            var _transition = Check.GetElement(_transitions, nameTransition, this._logger, out result, exception);
+            var _transition = Check.GetElement<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, nameTransition, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -35,21 +35,21 @@ namespace SimpleStateMachineLibrary
             return _transition;
         }
 
-        public Transition GetTransition(string nameTransition)
+        public Transition GetTransition(TKeyTransition nameTransition)
         {
             return _GetTransition(nameTransition, out bool result, true, true);
         }
 
-        public Transition TryGetTransition(string nameTransition, out bool result)
+        public Transition TryGetTransition(TKeyTransition nameTransition, out bool result)
         {
             return _GetTransition(nameTransition, out result, false, true);
         }
 
 
-        internal Transition _AddTransition(string nameTransition, string stateFrom, string stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke, out bool result, bool exception, bool withLog)
+        internal Transition _AddTransition(TKeyTransition nameTransition, TKeyState stateFrom, TKeyState stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains 
-            result = Check.NotContains(_transitions, nameTransition, this._logger, exception);
+            result = Check.NotContains<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, nameTransition, this._logger, exception);
              
             if (!result)
                 return null;
@@ -60,7 +60,7 @@ namespace SimpleStateMachineLibrary
         internal Transition _AddTransition(Transition transition, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains 
-            result = Check.NotContains(_transitions, transition, this._logger, exception);
+            result = Check.NotContains<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, transition, this._logger, exception);
              
             if (!result)
                 return null;
@@ -83,42 +83,42 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        public Transition AddTransition(string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
-        {
-            return _AddTransition(nameTransition, stateFrom?.Name, stateTo?.Name, actionOnInvoke, out bool result, true, true);
+        public Transition AddTransition(TKeyTransition nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        {           
+            return _AddTransition(nameTransition, stateFrom == null ? default(TKeyState) : stateFrom.Name, stateTo == null ? default(TKeyState) : stateTo.Name, actionOnInvoke, out bool result, true, true);
         }
 
-        public Transition AddTransition(string nameTransition, State stateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition AddTransition(TKeyTransition nameTransition, State stateFrom, TKeyState nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom?.Name, nameStateTo, actionOnInvoke, out bool result, true, true);
+            return _AddTransition(nameTransition, stateFrom == null ? default(TKeyState) : stateFrom.Name, nameStateTo, actionOnInvoke, out bool result, true, true);
         }
 
-        public Transition AddTransition(string nameTransition, string nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition AddTransition(TKeyTransition nameTransition, TKeyState nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, nameStateFrom, stateTo?.Name, actionOnInvoke, out bool result, true, true);
+            return _AddTransition(nameTransition, nameStateFrom, stateTo == null ? default(TKeyState) : stateTo.Name, actionOnInvoke, out bool result, true, true);
         }
 
-        public Transition AddTransition(string nameTransition, string nameStateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition AddTransition(TKeyTransition nameTransition, TKeyState nameStateFrom, TKeyState nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
             return _AddTransition(nameTransition, nameStateFrom, nameStateTo, actionOnInvoke, out bool result, true, true);
         }
 
-        public Transition TryAddTransition(out bool result, string nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition TryAddTransition(out bool result, TKeyTransition nameTransition, State stateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom?.Name, stateTo?.Name, actionOnInvoke, out result, false, true);
+            return _AddTransition(nameTransition, stateFrom == null ? default(TKeyState) : stateFrom.Name, stateTo == null ? default(TKeyState) : stateTo.Name, actionOnInvoke, out result, false, true);
         }
 
-        public Transition TryAddTransition(out bool result, string nameTransition, State stateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition TryAddTransition(out bool result, TKeyTransition nameTransition, State stateFrom, TKeyState nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, stateFrom?.Name, nameStateTo, actionOnInvoke, out result, false, true);
+            return _AddTransition(nameTransition, stateFrom == null ? default(TKeyState) : stateFrom.Name, nameStateTo, actionOnInvoke, out result, false, true);
         }
 
-        public Transition TryAddTransition(out bool result, string nameTransition, string nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition TryAddTransition(out bool result, TKeyTransition nameTransition, TKeyState nameStateFrom, State stateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
-            return _AddTransition(nameTransition, nameStateFrom, stateTo?.Name, actionOnInvoke, out result, false, true);
+            return _AddTransition(nameTransition, nameStateFrom, stateTo == null ? default(TKeyState) : stateTo.Name, actionOnInvoke, out result, false, true);
         }
 
-        public Transition TryAddTransition(out bool result, string nameTransition, string nameStateFrom, string nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
+        public Transition TryAddTransition(out bool result, TKeyTransition nameTransition, TKeyState nameStateFrom, TKeyState nameStateTo, Action<Transition, Dictionary<string, object>> actionOnInvoke = null)
         {
             return _AddTransition(nameTransition, nameStateFrom, nameStateTo, actionOnInvoke, out result, false, true);
         }
@@ -128,7 +128,7 @@ namespace SimpleStateMachineLibrary
 
         internal Transition _DeleteTransition(Transition transition, out bool result, bool exception, bool withLog)
         {
-            var _transition = Check.Remove(_transitions, transition, this._logger,out result, exception);
+            var _transition = Check.Remove<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, transition, this._logger,out result, exception);
 
             if (withLog)
             {
@@ -141,9 +141,9 @@ namespace SimpleStateMachineLibrary
             return _transition;
         }
 
-        internal Transition _DeleteTransition(string transitionName, out bool result, bool exception, bool withLog)
+        internal Transition _DeleteTransition(TKeyTransition transitionName, out bool result, bool exception, bool withLog)
         {
-            var _transition = Check.Remove(_transitions, transitionName, this._logger, out result, exception);
+            var _transition = Check.Remove<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(_transitions, transitionName, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -162,7 +162,7 @@ namespace SimpleStateMachineLibrary
             return _DeleteTransition(transition, out bool result, true, true);
         }
 
-        public Transition DeleteTransition(string transitionName)
+        public Transition DeleteTransition(TKeyTransition transitionName)
         {
             return _DeleteTransition(transitionName, out bool result, true, true);
         }
@@ -172,7 +172,7 @@ namespace SimpleStateMachineLibrary
             return _DeleteTransition(transition, out result, false, true);
         }
 
-        public Transition TryDeleteTransition(string transitionName, out bool result)
+        public Transition TryDeleteTransition(TKeyTransition transitionName, out bool result)
         {
             return _DeleteTransition(transitionName, out result, false, true);
         }

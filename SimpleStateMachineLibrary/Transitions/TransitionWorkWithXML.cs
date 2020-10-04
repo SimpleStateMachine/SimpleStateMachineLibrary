@@ -5,41 +5,49 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Transition
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
-        internal static XElement _ToXElement(Transition transition, bool withLog)
+        public partial class Transition
         {
-            Check.NamedObject(transition, transition?.StateMachine?._logger);
-            XElement element = new XElement("Transition");
-            element.Add(new XAttribute("Name", transition.Name));
-            element.Add(new XAttribute("From", transition.StateFrom));
-            element.Add(new XAttribute("To", transition.StateTo));
-            
-            if(withLog)
-                transition.StateMachine._logger.LogDebug("Transition \"{NameTransition}\" to XElement", transition.Name);
+            internal static XElement _ToXElement(Transition transition, bool withLog)
+            {
+                Check.NamedObject<TKeyTransition, TKeyState, TKeyTransition, TKeyData, Transition>(transition, transition?.StateMachine?._logger);
+                XElement element = new XElement("Transition");
+                element.Add(new XAttribute("Name", transition.Name));
+                element.Add(new XAttribute("From", transition.StateFrom));
+                element.Add(new XAttribute("To", transition.StateTo));
 
-            return element;
-        }
+                if (withLog)
+                    transition.StateMachine._logger.LogDebug("Transition \"{NameTransition}\" to XElement", transition.Name);
 
-        internal XElement _ToXElement(bool withLog)
-        {
-            return Transition._ToXElement(this, withLog);
-        }
+                return element;
+            }
 
-        internal static Transition _FromXElement(StateMachine stateMachine, XElement transition, bool withLog)
-        {
-            stateMachine = Check.Object(stateMachine, stateMachine?._logger);
-            transition = Check.Object(transition, stateMachine?._logger);
+            internal XElement _ToXElement(bool withLog)
+            {
+                return Transition._ToXElement(this, withLog);
+            }
 
-            string Name = transition.Attribute("Name")?.Value;
-            string From = transition.Attribute("From")?.Value;
-            string To = transition.Attribute("To")?.Value;
+            internal static Transition _FromXElement(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine, XElement transition, bool withLog)
+            {
+                stateMachine = Check.Object(stateMachine, stateMachine?._logger);
+                transition = Check.Object(transition, stateMachine?._logger);
 
-            Transition transitionObj = stateMachine._AddTransition(Name, From, To, null, out bool result, true, false);
-            if((result)&&(withLog))
-                stateMachine?._logger.LogDebug("Initialization transition \"{NameTransition}\" from XElement", Name);
+                //string Name = transition.Attribute("Name")?.Value;
+                //string From = transition.Attribute("From")?.Value;
+                //string To = transition.Attribute("To")?.Value;
 
-            return transitionObj;
+                //GMIKE
+                TKeyTransition Name = default;
+                TKeyState From = default;
+                TKeyState To = default;
+
+                Transition transitionObj = stateMachine._AddTransition(Name, From, To, null, out bool result, true, false);
+                if ((result) && (withLog))
+                    stateMachine?._logger.LogDebug("Initialization transition \"{NameTransition}\" from XElement", Name);
+
+                return transitionObj;
+            }
         }
     }
 }

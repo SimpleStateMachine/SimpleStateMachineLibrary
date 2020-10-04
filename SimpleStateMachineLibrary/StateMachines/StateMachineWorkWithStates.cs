@@ -6,23 +6,23 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class StateMachine
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
 
-        internal string _StateExists(string nameState, out bool result,  bool exeption, bool withLog)
+        internal TKeyState _StateExists(TKeyState nameState, out bool result,  bool exeption, bool withLog)
         {
-            return Check.Contains(_states, nameState, this._logger, out result, exeption);
+            return Check.Contains<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, nameState, this._logger, out result, exeption);
         }
 
-        public bool StateExists(string nameState)
+        public bool StateExists(TKeyState nameState)
         {
             nameState = _StateExists(nameState, out bool result, false, true);
             return result;
         }
 
-        internal State _GetState(string nameState, out bool result, bool exception, bool withLog)
+        internal State _GetState(TKeyState nameState, out bool result, bool exception, bool withLog)
         {
-            var _state = Check.GetElement(_states, nameState, this._logger, out result, exception);
+            var _state = Check.GetElement<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, nameState, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -35,20 +35,20 @@ namespace SimpleStateMachineLibrary
             return _state;
         }
 
-        public State GetState(string nameState)
+        public State GetState(TKeyState nameState)
         {
             return _GetState(nameState, out bool result, true, true);
         }
 
-        public State TryGetState(string nameState, out bool result)
+        public State TryGetState(TKeyState nameState, out bool result)
         {
             return _GetState(nameState, out result, false, true);
         }
 
-        internal State _AddState(string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit, out bool result, bool exception, bool withLog)
+        internal State _AddState(TKeyState nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains  
-            result = Check.NotContains(_states, nameState, this._logger, exception);
+            result = Check.NotContains<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, nameState, this._logger, exception);
 
             
             if (!result)
@@ -60,7 +60,7 @@ namespace SimpleStateMachineLibrary
         internal State _AddState(State state, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains 
-            result = Check.NotContains(_states, state, this._logger, exception);
+            result = Check.NotContains<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, state, this._logger, exception);
          
             if (!result)
                 return null;
@@ -84,12 +84,12 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        public State AddState(string nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
+        public State AddState(TKeyState nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
         {
             return _AddState(nameState, actionOnEntry, actionOnExit, out bool result, true, true);
         }
 
-        public State TryAddState(out bool result, string nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
+        public State TryAddState(out bool result, TKeyState nameState, Action<State, Dictionary<string, object>> actionOnEntry = null, Action<State, Dictionary<string, object>> actionOnExit = null)
         {
             return _AddState(nameState, actionOnEntry, actionOnExit, out result, false, true);
         }
@@ -99,7 +99,7 @@ namespace SimpleStateMachineLibrary
         internal State _DeleteState(State state, out bool result, bool exception, bool withLog)
         {
             
-            var _state  = Check.Remove(_states, state, this._logger, out result, exception);
+            var _state  = Check.Remove<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, state, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -112,9 +112,9 @@ namespace SimpleStateMachineLibrary
             return _state;
         }
 
-        internal State _DeleteState(string stateName, out bool result, bool exception, bool withLog)
+        internal State _DeleteState(TKeyState stateName, out bool result, bool exception, bool withLog)
         {
-            var _state = Check.Remove(_states, stateName, this._logger, out result, exception);
+            var _state = Check.Remove<TKeyState, TKeyState, TKeyTransition, TKeyData, State>(_states, stateName, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -133,7 +133,7 @@ namespace SimpleStateMachineLibrary
             return _DeleteState(state, out bool result, true, true);
         }
 
-        public State DeleteState(string stateName)
+        public State DeleteState(TKeyState stateName)
         {
             return _DeleteState(_GetState(stateName, out bool result, true, false), out result, true, true);
         }
@@ -143,7 +143,7 @@ namespace SimpleStateMachineLibrary
             return _DeleteState(state, out  result, false, true);
         }
 
-        public State TryDeleteState(string stateName, out bool result)
+        public State TryDeleteState(TKeyState stateName, out bool result)
         {
             return _DeleteState(stateName, out result, false, true);
         }

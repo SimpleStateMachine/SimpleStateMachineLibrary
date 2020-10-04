@@ -10,22 +10,22 @@ using Microsoft.Extensions.Logging;
 namespace SimpleStateMachineLibrary
 {
 
-    public partial class StateMachine
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>: IStateMachine
     {
        
-        private Dictionary<string, State> _states = new Dictionary<string, State>();
+        private Dictionary<TKeyState, State> _states = new Dictionary<TKeyState, State>();
 
-        private Dictionary<string, Transition> _transitions  = new Dictionary<string, Transition>();
+        private Dictionary<TKeyTransition, Transition> _transitions  = new Dictionary<TKeyTransition, Transition>();
 
-        private Dictionary<string, Data> _data  = new Dictionary<string, Data>();
+        private Dictionary<TKeyData, Data> _data  = new Dictionary<TKeyData, Data>();
 
-        public string CurrentStateName { get; private set; }
+        public TKeyState CurrentStateName { get; private set; }
 
-        public string PreviousStateName{ get; private set; }
-        public string CurrentTransitionName { get; private set; }
+        public TKeyState PreviousStateName { get; private set; }
+        public TKeyTransition CurrentTransitionName { get; private set; }
 
-        internal string _nextTransition;
-        internal string _startState { get; private set; }
+        internal TKeyTransition _nextTransition;
+        internal TKeyState _startState { get; private set; }
 
         internal Dictionary<string, object> _currentParameters;
 
@@ -58,7 +58,7 @@ namespace SimpleStateMachineLibrary
         public StateMachine(XDocument xDocument, ILogger logger = null) : this(logger)
         {
             _FromXDocument(this, xDocument, true);
-          
+
         }
 
         public StateMachine(string xDocumentPath, ILogger logger = null): this(logger)
@@ -66,7 +66,7 @@ namespace SimpleStateMachineLibrary
             _FromXDocument(this, xDocumentPath, true);
         }
 
-        public StateMachine OnChangeState(Action<State, State> actionOnChangeState)
+        public StateMachine<TKeyState, TKeyTransition, TKeyData> OnChangeState(Action<State, State> actionOnChangeState)
         {
             _onChangeState += actionOnChangeState;
             _logger.LogDebug("Method \"{NameMethod}\" subscribe on change state for State Machine", actionOnChangeState.Method.Name);
@@ -82,7 +82,7 @@ namespace SimpleStateMachineLibrary
             return state;
         }
         
-        public State SetStartState(string stateName)
+        public State SetStartState(TKeyState stateName)
         {
             State state = _GetState(stateName, out bool result, true, false);
             _startState = state.Name;
@@ -93,13 +93,13 @@ namespace SimpleStateMachineLibrary
             return state;
         }
 
-        public InvokeParameters InvokeTransition(string nameTransition, Dictionary<string, object> parameters=null)
+        public InvokeParameters<TKeyState, TKeyTransition, TKeyData> InvokeTransition(TKeyTransition nameTransition, Dictionary<string, object> parameters=null)
         {
             _nextTransition = _TransitionExists(nameTransition, out _,true, false);
 
             _CheckBeforeInvoke(this._logger, true);
 
-            InvokeParameters invokeParameters = new InvokeParameters(this);
+            InvokeParameters<TKeyState, TKeyTransition, TKeyData> invokeParameters = new InvokeParameters<TKeyState, TKeyTransition, TKeyData>(this);
             if(parameters!=null)
                 invokeParameters.AddParameters(parameters);
             return invokeParameters;
@@ -108,7 +108,7 @@ namespace SimpleStateMachineLibrary
         internal void _CheckBeforeInvoke(ILogger logger, bool withLog)
         {
             Transition transition = _GetTransition(_nextTransition, out _, true, false);
-            if (transition.StateFrom!= CurrentStateName)
+            if (!object.Equals(transition.StateFrom,CurrentStateName))
             {
                 object[] args = { _nextTransition, CurrentStateName };
                 string message = "Transition \"{0}\" not available from state \"{0}\"";
@@ -122,36 +122,36 @@ namespace SimpleStateMachineLibrary
                 _logger.LogDebug("Transition \"{NameTransition}\" set as next", _nextTransition);
         }
 
-        public InvokeParameters InvokeTransition(Transition transition, Dictionary<string, object> parameters = null)
+        public InvokeParameters<TKeyState, TKeyTransition, TKeyData> InvokeTransition(Transition transition, Dictionary<string, object> parameters = null)
         {
-            return InvokeTransition(transition?.Name, parameters);
+            return InvokeTransition(transition==null?default:transition.Name, parameters);
         }
 
 
-        internal StateMachine _InvokeTransition()
+        internal StateMachine<TKeyState, TKeyTransition, TKeyData> _InvokeTransition()
         {
 
             //Mark nextParameters as current
             _currentParameters = _nextParameters;
-            _nextParameters = null;
+            _nextParameters = default;
 
             //Mark nextTransition as current
             CurrentTransitionName = _nextTransition;
-            _nextTransition = null;
+            _nextTransition = default;
 
             //Mark currentState as previous
             PreviousStateName = CurrentStateName;
-            CurrentStateName = null;
+            CurrentStateName = default;
 
             Transition currentTransition = _GetTransition(CurrentTransitionName, out _, true, false);
             currentTransition._Invoking(_currentParameters);
             CurrentStateName = currentTransition.StateTo;
-            CurrentTransitionName = null;
+            CurrentTransitionName = default;
 
             return this;
         }
 
-        internal StateMachine _ChangeState()
+        internal StateMachine<TKeyState, TKeyTransition, TKeyData> _ChangeState()
         {
             State currentState = _GetState(CurrentStateName, out bool result, true, false);
             currentState._Entry(_currentParameters, true);
@@ -159,7 +159,7 @@ namespace SimpleStateMachineLibrary
             List<object> obj = new List<object>(); 
             string message;
 
-            if (string.IsNullOrEmpty(PreviousStateName))
+            if (object.Equals(PreviousStateName, default(TKeyState)))
             {
                 obj.Add(CurrentStateName);
                  message = "State \"{StateNew}\" was set";
@@ -182,7 +182,7 @@ namespace SimpleStateMachineLibrary
         internal void _CheckStartState()
         {
             string message;
-            if (string.IsNullOrEmpty(_startState))
+            if (object.Equals(_startState, default(TKeyState)))
             {
                 message = "Start state not set";
                 var exception = new NullReferenceException(message: message);
@@ -211,6 +211,10 @@ namespace SimpleStateMachineLibrary
             _logger.LogInformation("End work state machine");
 
         }
-       
+
+        public bool DataExists<TKeyData1>(TKeyData1 nameDate) where TKeyData1:TKeyData
+        {
+            throw new NotImplementedException();
+        }
     }
 }

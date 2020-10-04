@@ -9,12 +9,12 @@ namespace Tests
     public static class ForTest
     {
 
-        static public StateMachine stateMachine = new StateMachine();
-        public static ILogger<StateMachine> GetConsoleLogger()
-        {
-            var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug); });
-            return loggerFactory.CreateLogger<StateMachine>();
-        }
+        //static public StateMachine stateMachine = new StateMachine();
+        //public static ILogger<StateMachine> GetConsoleLogger()
+        //{
+        //    var loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Debug); });
+        //    return loggerFactory.CreateLogger<StateMachine>();
+        //}
 
     }
 }

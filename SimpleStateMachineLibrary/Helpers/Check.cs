@@ -7,9 +7,9 @@ namespace SimpleStateMachineLibrary.Helpers
 {
     internal class Check
     {
-        public static string Name(string name, ILogger logger)
+        public static Tname Name<Tname>(Tname name, ILogger logger)
         {
-            if (String.IsNullOrEmpty(name))
+            if (object.ReferenceEquals(name, default(Tname)))
             {
                 string message = "Name must be not Empty";
                 var ex = new ArgumentNullException(message: message, paramName:"Name");
@@ -35,7 +35,8 @@ namespace SimpleStateMachineLibrary.Helpers
             return objectRequested;
         }
 
-        public static TObject NamedObject<TObject>(TObject objectRequested, ILogger logger) where TObject : NamedObject
+        public static TObject NamedObject<TName, TKeyState, TKeyTransition, TKeyData, TObject>(TObject objectRequested, ILogger logger)
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             Check.Object(objectRequested, logger);
             Check.Name(objectRequested.Name, logger);
@@ -43,17 +44,20 @@ namespace SimpleStateMachineLibrary.Helpers
         }
 
         
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, bool exception = true) where TObject : NamedObject
+        public static bool Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, bool exception = true)
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            nameObject = Contains(dictionary, nameObject, logger, out bool result, exception);
+            nameObject = Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, nameObject, logger, out bool result, exception);
             return result;
         }
-        public static bool Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) where TObject : NamedObject
+        public static bool Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) 
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            objectRequested = Contains(dictionary, objectRequested, logger, out bool result, exception);
+            objectRequested = Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, objectRequested, logger, out bool result, exception);
             return result;
         }
-        public static string Contains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TName Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, out bool result, bool exception = true) 
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             dictionary = Check.Object(dictionary, logger);
             nameObject = Check.Name(nameObject, logger);
@@ -70,7 +74,8 @@ namespace SimpleStateMachineLibrary.Helpers
 
             return nameObject;
         }
-        public static TObject Contains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject objectRequested, ILogger logger, out bool result, bool exception = true) 
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             dictionary = Check.Object(dictionary, logger);
             objectRequested = Check.Object(objectRequested, logger);
@@ -90,17 +95,20 @@ namespace SimpleStateMachineLibrary.Helpers
         }
 
 
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, bool exception = true) where TObject : NamedObject
+        public static bool NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, bool exception = true)
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            nameObject = NotContains(dictionary, nameObject, logger, out bool result, exception);
+            nameObject = NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, nameObject, logger, out bool result, exception);
             return result;
         }
-        public static bool NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) where TObject : NamedObject
+        public static bool NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject objectRequested, ILogger logger, bool exception = true) 
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            objectRequested = NotContains(dictionary, objectRequested, logger, out bool result, exception);
+            objectRequested = NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, objectRequested, logger, out bool result, exception);
             return result;
         }
-        public static string NotContains<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TName NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, out bool result, bool exception = true)
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             dictionary = Check.Object(dictionary, logger);
             nameObject = Check.Name(nameObject, logger);
@@ -117,7 +125,8 @@ namespace SimpleStateMachineLibrary.Helpers
 
             return nameObject;
         }
-        public static TObject NotContains<TObject>(Dictionary<string, TObject> dictionary, TObject objectRequested, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject NotContains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject objectRequested, ILogger logger, out bool result, bool exception = true) 
+            where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             dictionary = Check.Object(dictionary, logger);
             objectRequested = Check.Object(objectRequested, logger);
@@ -136,7 +145,7 @@ namespace SimpleStateMachineLibrary.Helpers
         }
       
         
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject Remove<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             result = false;
             dictionary = Check.Object(dictionary, logger);
@@ -164,11 +173,11 @@ namespace SimpleStateMachineLibrary.Helpers
             result = true;
             return removedObj;
         }
-        public static TObject Remove<TObject>(Dictionary<string, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject Remove<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             result = false;
             dictionary = Check.Object(dictionary, logger);
-            obj = Check.NamedObject(obj, logger);
+            obj = Check.NamedObject<TName, TKeyState, TKeyTransition, TKeyData, TObject>(obj, logger);
 
             TObject removedObj = default(TObject);
             dictionary?.TryGetValue(obj.Name, out removedObj);
@@ -194,22 +203,22 @@ namespace SimpleStateMachineLibrary.Helpers
         }
 
 
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, string nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject GetElement<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TName nameObject, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            result = Contains(dictionary, nameObject, logger, exception);
+            result = Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, nameObject, logger, exception);
             return result ? dictionary[nameObject] : default(TObject);
         }
-        public static TObject GetElement<TObject>(Dictionary<string, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static TObject GetElement<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, TObject obj, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
-            result = Contains(dictionary, obj, logger, exception);
+            result = Contains<TName, TKeyState, TKeyTransition, TKeyData, TObject>(dictionary, obj, logger, exception);
             return result ? obj : default(TObject);
         }
 
 
-        public static Dictionary<string, TObject> GetValuesWhere<TObject>(Dictionary<string, TObject> dictionary, Func<TObject, bool> action, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject
+        public static Dictionary<TName, TObject> GetValuesWhere<TName, TKeyState, TKeyTransition, TKeyData, TObject>(Dictionary<TName, TObject> dictionary, Func<TObject, bool> action, ILogger logger, out bool result, bool exception = true) where TObject : NamedObject<TName, TKeyState, TKeyTransition, TKeyData>
         {
             dictionary = Check.Object(dictionary, logger);
-            Dictionary<string, TObject> foundElements = dictionary.Values.Where(action).ToDictionary(x => x.Name, x => x);
+            Dictionary<TName, TObject> foundElements = dictionary.Values.Where(action).ToDictionary(x => x.Name, x => x);
             result = foundElements.Count > 1;
             if ((exception) && (!result))
             {

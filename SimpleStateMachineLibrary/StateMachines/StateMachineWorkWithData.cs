@@ -5,12 +5,12 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class StateMachine
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
 
-        internal Data _GetData(string nameData, out bool result, bool exception, bool withLog)
+        internal Data _GetData(TKeyData nameData, out bool result, bool exception, bool withLog)
         {
-            var data_ = Check.GetElement(_data, nameData, this._logger, out result, exception);
+            var data_ = Check.GetElement<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, nameData, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -23,31 +23,31 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        internal string _DataExists(string nameData, out bool result, bool exeption, bool withLog)
+        internal TKeyData _DataExists(TKeyData nameData, out bool result, bool exeption, bool withLog)
         {
-            return Check.Contains(_data, nameData, this._logger, out result, exeption);
+            return Check.Contains<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, nameData, this._logger, out result, exeption);
         }
 
-        public bool DataExists(string nameData)
+        public bool DataExists(TKeyData nameData)
         {
             nameData = _DataExists(nameData, out bool result, false, true);
             return result;
         }
 
-        public Data GetData(string nameData)
+        public Data GetData(TKeyData nameData)
         {
             return _GetData(nameData, out bool result, true, true);
         }
 
-        public Data TryGetData(string nameData, out bool result)
+        public Data TryGetData(TKeyData nameData, out bool result)
         {
             return _GetData(nameData, out result, false, true);
         }
 
-        internal Data _AddData(string nameData, object valueData, Action<Data, object> actionOnChange,  out bool result, bool exception, bool withLog)
+        internal Data _AddData(TKeyData nameData, object valueData, Action<Data, object> actionOnChange,  out bool result, bool exception, bool withLog)
         {
             //throw that element already contains  
-            result = Check.NotContains(_data, nameData, this._logger, exception);
+            result = Check.NotContains<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, nameData, this._logger, exception);
             
             if (!result)
                 return null;
@@ -58,7 +58,7 @@ namespace SimpleStateMachineLibrary
         internal Data _AddData(Data data, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains 
-            result = Check.NotContains(_data, data, this._logger, exception);
+            result = Check.NotContains<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, data, this._logger, exception);
             
             if (!result)
                 return null;
@@ -81,12 +81,12 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        public Data AddData(string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
+        public Data AddData(TKeyData nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
         {
             return _AddData(nameData, valueData, actionOnChange, out bool result, true, true);
         }
 
-        public Data TryAddData(out bool result, string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
+        public Data TryAddData(out bool result, TKeyData nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
         {
             return _AddData(nameData, valueData, actionOnChange, out result, false, true);
         }
@@ -95,7 +95,7 @@ namespace SimpleStateMachineLibrary
 
         private Data _DeleteData(Data data, out bool result, bool exception, bool withLog)
         {
-            var data_ = Check.Remove(_data, data, this._logger, out result, exception);
+            var data_ = Check.Remove<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, data, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -108,9 +108,9 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        private Data _DeleteData(string dataName, out bool result, bool exception, bool withLog)
+        private Data _DeleteData(TKeyData dataName, out bool result, bool exception, bool withLog)
         {
-            var data_ = Check.Remove(_data, dataName, this._logger, out result, exception);
+            var data_ = Check.Remove<TKeyData, TKeyState, TKeyTransition, TKeyData, Data>(_data, dataName, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -125,7 +125,7 @@ namespace SimpleStateMachineLibrary
         }
 
 
-        public Data DeleteData(string nameData)
+        public Data DeleteData(TKeyData nameData)
         {
             return _DeleteData(nameData, out bool result,  true, true);
         }
@@ -135,7 +135,7 @@ namespace SimpleStateMachineLibrary
             return _DeleteData(data, out bool result, true, true);
         }
 
-        public Data TryDeleteData(string nameData, out bool result)
+        public Data TryDeleteData(TKeyData nameData, out bool result)
         {
             return _DeleteData(nameData, out result, false, true);
         }

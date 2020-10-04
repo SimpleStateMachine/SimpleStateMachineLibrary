@@ -6,10 +6,10 @@ using System.Xml.Linq;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class StateMachine
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
 
-        internal static XDocument _ToXDocument(StateMachine stateMachine, string nameFile, bool withLog)
+        internal static XDocument _ToXDocument(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine, string nameFile, bool withLog)
         {          
             Check.Object(stateMachine, stateMachine?._logger);
             Check.Name(nameFile, stateMachine?._logger);
@@ -23,8 +23,8 @@ namespace SimpleStateMachineLibrary
             {
                 states.Add(state.Value.ToXElement(withLog));
             }
-
-            if (stateMachine?._startState != null)
+            
+            if (!object.Equals(stateMachine == null ? default(TKeyState) : stateMachine._startState, default(TKeyState)))
             {
                 XElement startState = new XElement("StartState");
                 stateMachineXElement.Add(startState);
@@ -54,18 +54,20 @@ namespace SimpleStateMachineLibrary
 
         public XDocument ToXDocument(string nameFile)
         {
-            return StateMachine._ToXDocument(this, nameFile, true);
+            return StateMachine<TKeyState, TKeyTransition, TKeyData>._ToXDocument(this, nameFile, true);
         }
 
-        internal static StateMachine _FromXDocument(StateMachine stateMachine, XDocument xDocument, bool withLog)
+        internal static StateMachine<TKeyState, TKeyTransition, TKeyData> _FromXDocument(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine, XDocument xDocument, bool withLog)
         {
             XElement stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
             stateMachineXElement = Check.Object(stateMachineXElement, stateMachine?._logger);
             var States = stateMachineXElement.Element("States")?.Elements()?.ToList();
             States?.ForEach(x => stateMachine._AddState(x, true));
             var startState = stateMachineXElement.Element("StartState");
-            string nameStartState = startState?.Attribute("Name").Value;
-            if (!string.IsNullOrEmpty(nameStartState))
+            //GMIKE
+            //string nameStartState = startState?.Attribute("Name").Value;
+            TKeyState nameStartState = default;
+            if (!object.Equals(nameStartState, default(TKeyState)))
                 stateMachine.SetStartState(nameStartState);
 
             var Transitions = stateMachineXElement.Element("Transitions")?.Elements()?.ToList();
@@ -77,22 +79,22 @@ namespace SimpleStateMachineLibrary
             return stateMachine;
         }
 
-        internal static StateMachine _FromXDocument(StateMachine stateMachine, string xDocumentPath, bool withLog)
+        internal static StateMachine<TKeyState, TKeyTransition, TKeyData> _FromXDocument(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine, string xDocumentPath, bool withLog)
         {
             xDocumentPath = Check.Name(xDocumentPath, stateMachine?._logger);
             XDocument xDocument = XDocument.Load(xDocumentPath);
             return _FromXDocument(stateMachine, xDocument, withLog);
         }
 
-        public static StateMachine FromXDocument(XDocument xDocument, ILogger logger = null)
+        public static StateMachine<TKeyState, TKeyTransition, TKeyData> FromXDocument(XDocument xDocument, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine(logger);
+            StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine = new StateMachine<TKeyState, TKeyTransition, TKeyData>(logger);
             return _FromXDocument(stateMachine, xDocument, true);
         }
 
-        public static StateMachine FromXDocument(string xmlFilePath, ILogger logger = null)
+        public static StateMachine<TKeyState, TKeyTransition, TKeyData> FromXDocument(string xmlFilePath, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine(logger);
+            StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine = new StateMachine<TKeyState, TKeyTransition, TKeyData>(logger);
             return _FromXDocument(stateMachine, xmlFilePath, true);
         }
 

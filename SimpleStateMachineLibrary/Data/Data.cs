@@ -4,52 +4,56 @@ using System;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Data : NamedObject
+    public partial class StateMachine<TKeyState, TKeyTransition, TKeyData>
     {
-        private object _value;
+        public partial class Data: NamedObject<TKeyData, TKeyState, TKeyTransition, TKeyData>
+        {
+            private object _value;
 
-        public object Value 
-        {   get { return _value; }
-            set 
+            public object Value
             {
-                _onChange?.Invoke(this, value);
-                _value = value;
+                get { return _value; }
+                set
+                {
+                    _onChange?.Invoke(this, value);
+                    _value = value;
+                }
             }
-        }
 
-        private Action<Data, object> _onChange;
+            private Action<Data, object> _onChange;
 
-        internal Data(StateMachine stateMachine, string nameData, object valueData, Action<Data, object> actionOnChange, bool withLog) : base(stateMachine, nameData)
-        {
-            Value = valueData;
-
-            //stateMachine?._logger.LogDebug("Create data \"{NameData}\" ", nameData);
-
-            stateMachine._AddData(this, out _, true, withLog);
-
-            if (actionOnChange != null)
+            internal Data(StateMachine<TKeyState, TKeyTransition, TKeyData> stateMachine, TKeyData nameData, object valueData, Action<Data, object> actionOnChange, bool withLog) : base(stateMachine, nameData)
             {
-                OnChange(actionOnChange);
-            }  
-        }
+                Value = valueData;
 
-        public Data Delete()
-        {
-            return this.StateMachine.DeleteData(this);
-        }
+                //stateMachine?._logger.LogDebug("Create data \"{NameData}\" ", nameData);
 
-        public Data TryDelete(out bool result)
-        {
-            return this.StateMachine.TryDeleteData(this, out result);
-        }
+                stateMachine._AddData(this, out _, true, withLog);
 
-        public Data OnChange(Action<Data, object> actionOnChange)
-        {
-            actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);
+                if (actionOnChange != null)
+                {
+                    OnChange(actionOnChange);
+                }
+            }
 
-            _onChange += actionOnChange;
-            this.StateMachine._logger.LogDebug("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
-            return this;
+            public Data Delete()
+            {
+                return this.StateMachine.DeleteData(this);
+            }
+
+            public Data TryDelete(out bool result)
+            {
+                return this.StateMachine.TryDeleteData(this, out result);
+            }
+
+            public Data OnChange(Action<Data, object> actionOnChange)
+            {
+                actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);
+
+                _onChange += actionOnChange;
+                this.StateMachine._logger.LogDebug("Method \"{NameMethod}\" subscribe on change data \"{NameData}\"", actionOnChange.Method.Name, this.Name);
+                return this;
+            }
         }
     }
 }
