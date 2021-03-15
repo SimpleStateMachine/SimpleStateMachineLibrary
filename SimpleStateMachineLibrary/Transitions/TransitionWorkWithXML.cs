@@ -10,7 +10,7 @@ namespace SimpleStateMachineLibrary
         internal static XElement _ToXElement(Transition transition, bool withLog)
         {
             Check.NamedObject(transition, transition?.StateMachine?._logger);
-            XElement element = new XElement("Transition");
+            var element = new XElement("Transition");
             element.Add(new XAttribute("Name", transition.Name));
             element.Add(new XAttribute("From", transition.StateFrom));
             element.Add(new XAttribute("To", transition.StateTo));
@@ -31,11 +31,11 @@ namespace SimpleStateMachineLibrary
             stateMachine = Check.Object(stateMachine, stateMachine?._logger);
             transition = Check.Object(transition, stateMachine?._logger);
 
-            string Name = transition.Attribute("Name")?.Value;
-            string From = transition.Attribute("From")?.Value;
-            string To = transition.Attribute("To")?.Value;
+            var Name = transition.Attribute("Name")?.Value;
+            var From = transition.Attribute("From")?.Value;
+            var To = transition.Attribute("To")?.Value;
 
-            Transition transitionObj = stateMachine._AddTransition(Name, From, To, null, out bool result, true, false);
+            var transitionObj = stateMachine._AddTransition(Name, From, To, null, out var result, true, false);
             if((result)&&(withLog))
                 stateMachine?._logger.LogDebug("Initialization transition \"{NameTransition}\" from XElement", Name);
 

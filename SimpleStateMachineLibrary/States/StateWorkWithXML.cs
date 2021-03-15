@@ -10,7 +10,7 @@ namespace SimpleStateMachineLibrary
         internal static XElement ToXElement(State state, bool withLog)
         {
             Check.NamedObject(state, state?.StateMachine?._logger);
-            XElement element = new XElement("State");
+            var element = new XElement("State");
             element.Add(new XAttribute("Name", state.Name));
 
             if(withLog)
@@ -26,10 +26,10 @@ namespace SimpleStateMachineLibrary
 
         internal static State FromXElement(StateMachine stateMachine, XElement state, bool withLog)
         {
-            string Name = state.Attribute("Name")?.Value;
+            var Name = state.Attribute("Name")?.Value;
 
 
-            State stateObj = stateMachine._AddState(Name, null, null, out bool result, true, false);
+            var stateObj = stateMachine._AddState(Name, null, null, out var result, true, false);
 
             if ((result) && (withLog))
                 stateMachine?._logger.LogDebug("Initialization state \"{NameState}\" from XElement", Name);

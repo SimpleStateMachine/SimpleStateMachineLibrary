@@ -10,7 +10,7 @@ namespace SimpleStateMachineLibrary
         internal static XElement _ToXElement(Data data, bool withLog)
         {
             Check.NamedObject(data, data?.StateMachine?._logger);
-            XElement element = new XElement("Data");
+            var element = new XElement("Data");
             element.Add(new XAttribute("Name", data.Name));
             element.Add(new XAttribute("Value", data.Value.ToString()));
 
@@ -25,15 +25,15 @@ namespace SimpleStateMachineLibrary
             return Data._ToXElement(this, withLog);
         }
 
-        internal static Data _FromXElement(StateMachine stateMachine, XElement data, bool withLog)
+        internal static IData _FromXElement(StateMachine stateMachine, XElement data, bool withLog)
         {
             stateMachine = Check.Object(stateMachine, stateMachine?._logger);
             data = Check.Object(data, stateMachine?._logger);
 
-            string Name = data.Attribute("Name")?.Value;
-            string Value = data.Attribute("Value")?.Value;
+            var Name = data.Attribute("Name")?.Value;
+            var Value = data.Attribute("Value")?.Value;
 
-            Data dataObj = stateMachine._AddData(Name, Value, null, result: out bool result, exception:true, withLog: false);
+            var dataObj = stateMachine._AddData(Name, Value, null, result: out var result, exception:true, withLog: false);
 
             if((result)&&(withLog))
                 stateMachine?._logger.LogDebug("Initialization data \"{NameData}\" from XElement", Name);

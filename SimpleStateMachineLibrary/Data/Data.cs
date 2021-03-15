@@ -4,12 +4,12 @@ using System;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class Data : NamedObject
+    public partial class Data : NamedObject, IData
     {
         private object _value;
 
         public object Value 
-        {   get { return _value; }
+        {   get => _value;
             set 
             {
                 _onChange?.Invoke(this, value);
@@ -32,17 +32,7 @@ namespace SimpleStateMachineLibrary
                 OnChange(actionOnChange);
             }  
         }
-
-        public Data Delete()
-        {
-            return this.StateMachine.DeleteData(this);
-        }
-
-        public Data TryDelete(out bool result)
-        {
-            return this.StateMachine.TryDeleteData(this, out result);
-        }
-
+        
         public Data OnChange(Action<Data, object> actionOnChange)
         {
             actionOnChange = Check.Object(actionOnChange, this.StateMachine?._logger);

@@ -7,10 +7,47 @@ namespace SimpleStateMachineLibrary
 {
     public partial class StateMachine
     {
-
-        internal Data _GetData(string nameData, out bool result, bool exception, bool withLog)
+        public bool DataExists(string nameData)
         {
-            var data_ = Check.GetElement(_data, nameData, this._logger, out result, exception);
+            nameData = _DataExists(nameData, out var result, false, true);
+            return result;
+        }
+        public IData GetData(string nameData)
+        {
+            return _GetData(nameData, out var result, true, true);
+        }
+        public IData TryGetData(string nameData, out bool result)
+        {
+            return _GetData(nameData, out result, false, true);
+        }
+        public IData AddData(string nameData, object valueData = default(object), Action<IData, object> actionOnChange = null)
+        {
+            return _AddData(nameData, valueData, actionOnChange, out var result, true, true);
+        }
+        public IData TryAddData(out bool result, string nameData, object valueData = default(object), Action<IData, object> actionOnChange = null)
+        {
+            return _AddData(nameData, valueData, actionOnChange, out result, false, true);
+        }
+        public IData DeleteData(string nameData)
+        {
+            return _DeleteData(nameData, out var result,  true, true);
+        }
+        public IData DeleteData(IData data)
+        {
+            return _DeleteData(data, out var result, true, true);
+        }
+        public IData TryDeleteData(string nameData, out bool result)
+        {
+            return _DeleteData(nameData, out result, false, true);
+        }
+        
+        
+        
+        
+        //TODO AddData without Name
+        internal IData _GetData(string nameData, out bool result, bool exception, bool withLog)
+        {
+            var data_ = Check.GetElement(IData, nameData, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -22,48 +59,31 @@ namespace SimpleStateMachineLibrary
 
             return data_;
         }
-
         internal string _DataExists(string nameData, out bool result, bool exeption, bool withLog)
         {
-            return Check.Contains(_data, nameData, this._logger, out result, exeption);
+            return Check.Contains(IData, nameData, this._logger, out result, exeption);
         }
-
-        public bool DataExists(string nameData)
-        {
-            nameData = _DataExists(nameData, out bool result, false, true);
-            return result;
-        }
-
-        public Data GetData(string nameData)
-        {
-            return _GetData(nameData, out bool result, true, true);
-        }
-
-        public Data TryGetData(string nameData, out bool result)
-        {
-            return _GetData(nameData, out result, false, true);
-        }
-
-        internal Data _AddData(string nameData, object valueData, Action<Data, object> actionOnChange,  out bool result, bool exception, bool withLog)
+        
+        
+        internal IData _AddData(string nameData, object valueData, Action<IData, object> actionOnChange,  out bool result, bool exception, bool withLog)
         {
             //throw that element already contains  
-            result = Check.NotContains(_data, nameData, this._logger, exception);
+            result = Check.NotContains(IData, nameData, this._logger, exception);
             
             if (!result)
                 return null;
 
-            return new Data(this, nameData, valueData, actionOnChange, withLog);
+            return new IData(this, nameData, valueData, actionOnChange, withLog);
         }
-
-        internal Data _AddData(Data data, out bool result, bool exception, bool withLog)
+        internal IData _AddData(IData data, out bool result, bool exception, bool withLog)
         {
             //throw that element already contains 
-            result = Check.NotContains(_data, data, this._logger, exception);
+            result = Check.NotContains(IData, data, this._logger, exception);
             
             if (!result)
                 return null;
 
-            _data.Add(data.Name, data);
+            IData.Add(data.Name, data);
             if (withLog)
             {
                 if (exception)
@@ -74,28 +94,15 @@ namespace SimpleStateMachineLibrary
 
             return data;
         }
-
-        internal Data _AddData(XElement xElement, bool withLog)
+        internal IData _AddData(XElement xElement, bool withLog)
         {
-            return Data._FromXElement(this, Check.Object(xElement, this._logger), withLog);
+            return SimpleStateMachineLibrary.IData._FromXElement(this, Check.Object(xElement, this._logger), withLog);
         }
-
-
-        public Data AddData(string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
+        
+        
+        private IData _DeleteData(IData data, out bool result, bool exception, bool withLog)
         {
-            return _AddData(nameData, valueData, actionOnChange, out bool result, true, true);
-        }
-
-        public Data TryAddData(out bool result, string nameData, object valueData = default(object), Action<Data, object> actionOnChange = null)
-        {
-            return _AddData(nameData, valueData, actionOnChange, out result, false, true);
-        }
-
-     
-
-        private Data _DeleteData(Data data, out bool result, bool exception, bool withLog)
-        {
-            var data_ = Check.Remove(_data, data, this._logger, out result, exception);
+            var data_ = Check.Remove(IData, data, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -108,9 +115,9 @@ namespace SimpleStateMachineLibrary
             return data_;
         }
 
-        private Data _DeleteData(string dataName, out bool result, bool exception, bool withLog)
+        private IData _DeleteData(string dataName, out bool result, bool exception, bool withLog)
         {
-            var data_ = Check.Remove(_data, dataName, this._logger, out result, exception);
+            var data_ = Check.Remove(IData, dataName, this._logger, out result, exception);
 
             if (withLog)
             {
@@ -123,26 +130,6 @@ namespace SimpleStateMachineLibrary
 
             return data_;
         }
-
-
-        public Data DeleteData(string nameData)
-        {
-            return _DeleteData(nameData, out bool result,  true, true);
-        }
-
-        public Data DeleteData(Data data)
-        {
-            return _DeleteData(data, out bool result, true, true);
-        }
-
-        public Data TryDeleteData(string nameData, out bool result)
-        {
-            return _DeleteData(nameData, out result, false, true);
-        }
-
-        public Data TryDeleteData(Data data, out bool result)
-        {
-            return _DeleteData(data, out result, false, true);
-        }
+        
     }
 }

@@ -64,7 +64,7 @@ namespace Tests
         {
             StateMachine stateMachine = ForTest.stateMachine;
             string dataName = "Data1";           
-            Data data1;
+            IData data1;
             bool result;
             Assert.IsFalse(stateMachine.DataExists(dataName));
 

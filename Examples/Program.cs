@@ -33,6 +33,8 @@ namespace Examples
             State state3 = stateMachine.AddState("State3");
             State state4 = stateMachine.AddState("State4");
 
+
+            state1.Delete();
             //Add transitions three ways:
 
             //Standart way

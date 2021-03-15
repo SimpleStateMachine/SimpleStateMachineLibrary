@@ -13,36 +13,36 @@ namespace SimpleStateMachineLibrary
         {          
             Check.Object(stateMachine, stateMachine?._logger);
             Check.Name(nameFile, stateMachine?._logger);
-            XDocument xDocument = new XDocument();  
-            XElement stateMachineXElement = new XElement("StateMachine");
+            var xDocument = new XDocument();  
+            var stateMachineXElement = new XElement("StateMachine");
             xDocument.Add(stateMachineXElement);
             stateMachine?._logger.LogDebug("StateMachine to XDocument");
-            XElement states = new XElement("States");
+            var states = new XElement("States");
             stateMachineXElement.Add(states);
-            foreach(var state in stateMachine._states)
+            foreach(var state in stateMachine.States)
             {
                 states.Add(state.Value.ToXElement(withLog));
             }
 
             if (stateMachine?._startState != null)
             {
-                XElement startState = new XElement("StartState");
+                var startState = new XElement("StartState");
                 stateMachineXElement.Add(startState);
                 startState.Add(new XAttribute("Name", stateMachine._startState));
             }
 
-            XElement transitions = new XElement("Transitions");
+            var transitions = new XElement("Transitions");
             stateMachineXElement.Add(transitions);
 
-            foreach (var transition in stateMachine._transitions)
+            foreach (var transition in stateMachine.Transitions)
             {
                 transitions.Add(transition.Value._ToXElement(withLog));
             }
 
-            XElement datas = new XElement("DATA");
+            var datas = new XElement("DATA");
             stateMachineXElement.Add(datas);
 
-            foreach (var data in stateMachine._data)
+            foreach (var data in stateMachine.Data)
             {
                 datas.Add(data.Value._ToXElement(withLog));
             }
@@ -59,12 +59,12 @@ namespace SimpleStateMachineLibrary
 
         internal static StateMachine _FromXDocument(StateMachine stateMachine, XDocument xDocument, bool withLog)
         {
-            XElement stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
+            var stateMachineXElement = Check.Object(xDocument, stateMachine?._logger).Element("StateMachine");
             stateMachineXElement = Check.Object(stateMachineXElement, stateMachine?._logger);
             var States = stateMachineXElement.Element("States")?.Elements()?.ToList();
             States?.ForEach(x => stateMachine._AddState(x, true));
             var startState = stateMachineXElement.Element("StartState");
-            string nameStartState = startState?.Attribute("Name").Value;
+            var nameStartState = startState?.Attribute("Name").Value;
             if (!string.IsNullOrEmpty(nameStartState))
                 stateMachine.SetStartState(nameStartState);
 
@@ -80,19 +80,19 @@ namespace SimpleStateMachineLibrary
         internal static StateMachine _FromXDocument(StateMachine stateMachine, string xDocumentPath, bool withLog)
         {
             xDocumentPath = Check.Name(xDocumentPath, stateMachine?._logger);
-            XDocument xDocument = XDocument.Load(xDocumentPath);
+            var xDocument = XDocument.Load(xDocumentPath);
             return _FromXDocument(stateMachine, xDocument, withLog);
         }
 
         public static StateMachine FromXDocument(XDocument xDocument, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine(logger);
+            var stateMachine = new StateMachine(logger);
             return _FromXDocument(stateMachine, xDocument, true);
         }
 
         public static StateMachine FromXDocument(string xmlFilePath, ILogger logger = null)
         {
-            StateMachine stateMachine = new StateMachine(logger);
+            var stateMachine = new StateMachine(logger);
             return _FromXDocument(stateMachine, xmlFilePath, true);
         }
 

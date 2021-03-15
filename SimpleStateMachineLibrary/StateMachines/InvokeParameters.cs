@@ -30,7 +30,9 @@ namespace SimpleStateMachineLibrary
 
         public static InvokeParameters AddParameters(this InvokeParameters invokeParameters, Dictionary<string, object> parameters)
         {
-
+            if (parameters == null)
+                return invokeParameters;
+            
             if (invokeParameters.StateMachine._nextParameters == null)
             {
                 invokeParameters.StateMachine._nextParameters = new Dictionary<string, object>();

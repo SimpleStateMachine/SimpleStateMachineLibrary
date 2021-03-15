@@ -10,34 +10,28 @@ using Microsoft.Extensions.Logging;
 namespace SimpleStateMachineLibrary
 {
 
-    public partial class StateMachine
+    public partial class StateMachine: IStateMachine
     {
-       
-        private Dictionary<string, State> _states = new Dictionary<string, State>();
+        private Dictionary<string, IState> States { get; } = new Dictionary<string, IState>();
+        private Dictionary<string, ITransition> Transitions { get; }  = new Dictionary<string, ITransition>();
+        private Dictionary<string, IData> Data { get; }  = new Dictionary<string, IData>();
 
-        private Dictionary<string, Transition> _transitions  = new Dictionary<string, Transition>();
+        public IState CurrentState { get; private set; }
 
-        private Dictionary<string, Data> _data  = new Dictionary<string, Data>();
-
-        public string CurrentStateName { get; private set; }
-
-        public string PreviousStateName{ get; private set; }
-        public string CurrentTransitionName { get; private set; }
-
-        internal string _nextTransition;
-        internal string _startState { get; private set; }
+        public IState PreviousState { get; private set; }
+        
+        public ITransition CurrentTransition { get; private set; }
+        
+        public ITransition NextTransition { get; private set; }
+        
+        public IState StartState { get; private set; }
 
         internal Dictionary<string, object> _currentParameters;
 
         internal Dictionary<string, object> _nextParameters;
 
         internal Action<State, State> _onChangeState;
-
-        public State CurrentState { get { return _GetState(CurrentStateName, out _, true, false); } }
-        public Transition CurrentTransition { get { return _GetTransition(CurrentTransitionName, out _, true, false); } }
-        public State PreviousState { get { return _GetState(PreviousStateName, out _, true, false); } }
-
-
+        
 
 
         internal ILogger _logger;
@@ -84,8 +78,8 @@ namespace SimpleStateMachineLibrary
         
         public State SetStartState(string stateName)
         {
-            State state = _GetState(stateName, out bool result, true, false);
-            _startState = state.Name;
+            var state = _GetState(stateName, out var result, true, false);
+            StartState = state;
 
             if(result)
                 _logger.LogDebug("State \"{NameState}\" set as start", stateName);
@@ -99,19 +93,19 @@ namespace SimpleStateMachineLibrary
 
             _CheckBeforeInvoke(this._logger, true);
 
-            InvokeParameters invokeParameters = new InvokeParameters(this);
-            if(parameters!=null)
-                invokeParameters.AddParameters(parameters);
+            var invokeParameters = new InvokeParameters(this);
+            
+            invokeParameters.AddParameters(parameters);
+            
             return invokeParameters;
         }
 
         internal void _CheckBeforeInvoke(ILogger logger, bool withLog)
         {
-            Transition transition = _GetTransition(_nextTransition, out _, true, false);
-            if (transition.StateFrom!= CurrentStateName)
+            if (NextTransition?.StateFrom!= CurrentState)
             {
-                object[] args = { _nextTransition, CurrentStateName };
-                string message = "Transition \"{0}\" not available from state \"{0}\"";
+                object[] args = { NextTransition.Name, CurrentState.Name  };
+                var message = "Transition \"{0}\" not available from state \"{0}\"";
                 var exception = new ArgumentException(message: String.Format(message, args));
                 _logger.LogError(exception, message, args);
 
@@ -119,7 +113,7 @@ namespace SimpleStateMachineLibrary
             }
 
             if(withLog)
-                _logger.LogDebug("Transition \"{NameTransition}\" set as next", _nextTransition);
+                _logger.LogDebug("Transition \"{NameTransition}\" set as next", NextTransition.Name);
         }
 
         public InvokeParameters InvokeTransition(Transition transition, Dictionary<string, object> parameters = null)
@@ -136,27 +130,26 @@ namespace SimpleStateMachineLibrary
             _nextParameters = null;
 
             //Mark nextTransition as current
-            CurrentTransitionName = _nextTransition;
-            _nextTransition = null;
+            CurrentTransition = NextTransition;
+            NextTransition = null;
 
             //Mark currentState as previous
-            PreviousStateName = CurrentStateName;
-            CurrentStateName = null;
-
-            Transition currentTransition = _GetTransition(CurrentTransitionName, out _, true, false);
-            currentTransition._Invoking(_currentParameters);
-            CurrentStateName = currentTransition.StateTo;
-            CurrentTransitionName = null;
+            PreviousState = CurrentState;
+            CurrentState = null;
+            
+            CurrentTransition._Invoking(_currentParameters);
+            CurrentState = CurrentTransition.StateTo;
+            CurrentTransition = null;
 
             return this;
         }
 
         internal StateMachine _ChangeState()
         {
-            State currentState = _GetState(CurrentStateName, out bool result, true, false);
+            var currentState = _GetState(CurrentStateName, out var result, true, false);
             currentState._Entry(_currentParameters, true);
             State previousState = null;
-            List<object> obj = new List<object>(); 
+            var obj = new List<object>(); 
             string message;
 
             if (string.IsNullOrEmpty(PreviousStateName))
@@ -202,7 +195,7 @@ namespace SimpleStateMachineLibrary
 
             _ChangeState();
 
-            while (_nextTransition != null)
+            while (NextTransition != null)
             {
                 _InvokeTransition();
 
@@ -211,6 +204,6 @@ namespace SimpleStateMachineLibrary
             _logger.LogInformation("End work state machine");
 
         }
-       
+        
     }
 }

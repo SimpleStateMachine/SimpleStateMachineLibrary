@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace SimpleStateMachineLibrary
 {
-    public partial class State : NamedObject
+    public partial class State : NamedObject, IState
     {
-        private Action<State, Dictionary<string, object>> _onEntry;
+        private Action<IState, Dictionary<string, object>> _onEntry;
 
-        private Action<State, Dictionary<string, object>> _onExit;
+        private Action<IState, Dictionary<string, object>> _onExit;
 
-        internal State(StateMachine stateMachine, string nameState, Action<State, Dictionary<string, object>> actionOnEntry, Action<State, Dictionary<string, object>> actionOnExit, bool withLog) : base(stateMachine, nameState)
+        internal State(StateMachine stateMachine, string nameState, Action<IState, Dictionary<string, object>> actionOnEntry, Action<IState, Dictionary<string, object>> actionOnExit, bool withLog) : base(stateMachine, nameState)
         {
             //stateMachine?._logger.LogDebug("Create state \"{NameState}\" ", nameState);
 
-            StateMachine._AddState(this, out bool result, true, withLog);
+            StateMachine._AddState(this, out var result, true, withLog);
 
             if (actionOnEntry != null)
             {
@@ -28,24 +28,8 @@ namespace SimpleStateMachineLibrary
             }
             
         }
-
-        public State Delete()
-        {
-            return this.StateMachine.DeleteState(this);
-        }
-
-        public State TryDelete(out bool result)
-        {
-            return this.StateMachine.TryDeleteState(this, out result);
-        }
-
-        public State SetAsStartState()
-        {
-            this.StateMachine.SetStartState(this);
-            return this;
-        }
-
-        public State OnEntry(Action<State, Dictionary<string, object>> actionOnEntry)
+        
+        public State OnEntry(Action<IState, Dictionary<string, object>> actionOnEntry)
         {
 
             actionOnEntry = Check.Object(actionOnEntry, this.StateMachine?._logger);
@@ -55,7 +39,7 @@ namespace SimpleStateMachineLibrary
             return this;
         }
 
-        public State OnExit(Action<State, Dictionary<string, object>> actionOnExit)
+        public State OnExit(Action<IState, Dictionary<string, object>> actionOnExit)
         {
             actionOnExit = Check.Object(actionOnExit, this.StateMachine?._logger);
 
