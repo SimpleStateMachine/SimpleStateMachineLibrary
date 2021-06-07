@@ -1,4 +1,4 @@
-jobs:
+ jobs:
 - job: Linux
   pool:
     vmImage: 'ubuntu-18.04'
@@ -7,28 +7,24 @@ jobs:
   steps:
   - script: cd $(Build.SourcesDirectory) && bash ./build.sh
     displayName: 'Linux Build and Tests'
- - task: PublishCodeCoverageResults@1
+  - task: PublishTestResults@2
     inputs:
-      summaryFileLocation: $(Build.SourcesDirectory)\artifacts\coverage.cobertura.xml
-      reportDirectory: $(Build.SourcesDirectory)\artifacts
-      codecoverageTool: cobertura
-      
+      testRunner: VSTest
+      testResultsFiles: '**/*.trx'
+
 - job: Windows
   pool:
-    vmImage: 'windows-2021'
+    vmImage: 'windows-2019'
   variables:
     buildConfiguration: 'Release'
   steps:
-  - task: DotNetCoreInstaller@0
-    inputs:
-      version: '3.1.302'
-  - script: cd $(Build.SourcesDirectory) && dotnet build
+  - script: cd $(Build.SourcesDirectory) && powershell -ExecutionPolicy Unrestricted ./build.ps1 --full
     displayName: 'Windows Full Build and Tests'
   - task: PublishTestResults@2
     inputs:
       testRunner: VSTest
       testResultsFiles: '**/*.trx'
-  - task: PublishCodeCoverageResults@2
+  - task: PublishCodeCoverageResults@1
     inputs:
       summaryFileLocation: $(Build.SourcesDirectory)\artifacts\coverage.cobertura.xml
       reportDirectory: $(Build.SourcesDirectory)\artifacts
