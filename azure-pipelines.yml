@@ -1,5 +1,4 @@
 jobs:
-jobs:
 - job: Linux
   pool:
     vmImage: 'ubuntu-18.04'
