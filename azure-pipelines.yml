@@ -1,11 +1,11 @@
- jobs:
+jobs:
 - job: Linux
   pool:
     vmImage: 'ubuntu-18.04'
   variables:
     buildConfiguration: 'Release'
   steps:
-  - script: cd $(Build.SourcesDirectory) && bash ./build.sh
+  - script: cd $(Build.SourcesDirectory) && dotnet build
     displayName: 'Linux Build and Tests'
   - task: PublishTestResults@2
     inputs:
@@ -18,7 +18,10 @@
   variables:
     buildConfiguration: 'Release'
   steps:
-  - script: cd $(Build.SourcesDirectory) && powershell -ExecutionPolicy Unrestricted ./build.ps1 --full
+  - task: DotNetCoreInstaller@0
+    inputs:
+      version: '3.1.302'
+  - script: cd $(Build.SourcesDirectory) && dotnet build
     displayName: 'Windows Full Build and Tests'
   - task: PublishTestResults@2
     inputs:
