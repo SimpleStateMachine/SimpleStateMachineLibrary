@@ -9,7 +9,10 @@ jobs:
   - script: cd $(Build.SourcesDirectory) && bash ./build.sh
     displayName: 'Linux Build and Tests'
  - task: PublishCodeCoverageResults@1
-
+    inputs:
+      summaryFileLocation: $(Build.SourcesDirectory)\artifacts\coverage.cobertura.xml
+      reportDirectory: $(Build.SourcesDirectory)\artifacts
+      codecoverageTool: cobertura
       
 - job: Windows
   pool:
@@ -26,7 +29,7 @@ jobs:
     inputs:
       testRunner: VSTest
       testResultsFiles: '**/*.trx'
-  - task: PublishCodeCoverageResults@1
+  - task: PublishCodeCoverageResults@2
     inputs:
       summaryFileLocation: $(Build.SourcesDirectory)\artifacts\coverage.cobertura.xml
       reportDirectory: $(Build.SourcesDirectory)\artifacts
