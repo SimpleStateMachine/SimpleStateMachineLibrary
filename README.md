@@ -1,6 +1,7 @@
 
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/SimpleStateMachineLibrary.svg)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/stars/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary)  [![NuGet Downloads](https://img.shields.io/nuget/dt/SimpleStateMachineLibrary)](https://www.nuget.org/packages/SimpleStateMachineLibrary) [![](https://img.shields.io/github/license/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/github/languages/code-size/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) 
  [![]( https://img.shields.io/github/last-commit/SimpleStateMachine/SimpleStateMachineLibrary)](https://github.com/SimpleStateMachine/SimpleStateMachineLibrary) [![](https://img.shields.io/badge/chat-slack-blueviolet.svg)](https://join.slack.com/t/simplestatemachine/shared_invite/zt-fnfhvvsx-fTejcpPn~PPb2ojdG_MQBg) [![](https://img.shields.io/badge/chat-telegram-blue.svg)](https://t.me/joinchat/HMLJFkv9do6aDV188rhd0w)
+ [![Build Status](https://dev.azure.com/GMIKE/SimpleStateMachineLibrary/_apis/build/status/SimpleStateMachine.SimpleStateMachineLibrary?branchName=master)](https://dev.azure.com/GMIKE/SimpleStateMachineLibrary/_build/latest?definitionId=2&branchName=master)
  # SimpleStateMachineLibrary
 A C# library for realization simple state-machine on .Net
 
